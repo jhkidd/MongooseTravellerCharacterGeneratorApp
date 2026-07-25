@@ -1,0 +1,64 @@
+.background-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.background-step__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.background-step__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.background-step__label {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.background-step__input,
+.background-step__select {
+  background: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: var(--space-sm);
+}
+
+.background-step__input:focus,
+.background-step__select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.background-step__continue {
+  align-self: flex-end;
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  border: none;
+  padding: var(--space-sm) var(--space-xl);
+  font-size: var(--text-base);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.background-step__continue:hover:not(:disabled) {
+  background: var(--color-accent-light);
+}
+
+.background-step__continue:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

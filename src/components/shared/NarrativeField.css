@@ -1,0 +1,29 @@
+.narrative-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.narrative-field__prompt {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.narrative-field__textarea {
+  background: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: var(--space-sm);
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.narrative-field__textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
