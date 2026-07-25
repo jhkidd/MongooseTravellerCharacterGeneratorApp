@@ -1,6 +1,22 @@
 .app {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--space-xl);
-  text-align: center;
+  display: flex;
+  min-height: 100vh;
+}
+
+.app__sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--color-bg-secondary);
+  border-right: var(--border-width) solid var(--color-border);
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.app__main {
+  flex: 1;
+  display: flex;
+  padding: var(--space-lg);
+  overflow-y: auto;
 }

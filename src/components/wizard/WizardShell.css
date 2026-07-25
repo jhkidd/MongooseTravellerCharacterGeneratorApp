@@ -1,0 +1,17 @@
+.wizard-shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  width: 100%;
+}
+
+.wizard-shell__phase-indicator {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-sm);
+}
