@@ -1,0 +1,302 @@
+{
+  "id": "army",
+  "name": "Army",
+  "description": "Members of the planetary armed fighting forces. Soldiers deal with planetary surface actions, battles and campaigns.",
+  "qualification": {
+    "characteristic": "END",
+    "target": 5,
+    "modifiers": [
+      { "type": "previousCareers", "dmPer": -1 },
+      { "type": "age", "threshold": 30, "dm": -2 }
+    ]
+  },
+  "commission": {
+    "characteristic": "SOC",
+    "target": 8
+  },
+  "assignments": [
+    {
+      "id": "support",
+      "name": "Support",
+      "description": "You are an engineer, technician, medic or other support role.",
+      "survivalCheck": { "characteristic": "END", "target": 5 },
+      "advancementCheck": { "characteristic": "EDU", "target": 7 }
+    },
+    {
+      "id": "infantry",
+      "name": "Infantry",
+      "description": "You are a front-line soldier.",
+      "survivalCheck": { "characteristic": "STR", "target": 6 },
+      "advancementCheck": { "characteristic": "EDU", "target": 6 }
+    },
+    {
+      "id": "cavalry",
+      "name": "Cavalry",
+      "description": "You are a vehicle crew or other mechanised warrior.",
+      "survivalCheck": { "characteristic": "INT", "target": 7 },
+      "advancementCheck": { "characteristic": "INT", "target": 6 }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": { "type": "characteristic", "characteristic": "STR", "value": 1 },
+        "2": { "type": "characteristic", "characteristic": "DEX", "value": 1 },
+        "3": { "type": "characteristic", "characteristic": "END", "value": 1 },
+        "4": { "type": "skill", "skill": "Gambler" },
+        "5": { "type": "skill", "skill": "Medic" },
+        "6": { "type": "skill", "skill": "Melee" }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": { "type": "choice", "options": [{ "type": "skill", "skill": "Drive" }, { "type": "skill", "skill": "Vacc Suit" }] },
+        "2": { "type": "skill", "skill": "Athletics" },
+        "3": { "type": "skill", "skill": "Gun Combat" },
+        "4": { "type": "skill", "skill": "Recon" },
+        "5": { "type": "skill", "skill": "Melee" },
+        "6": { "type": "skill", "skill": "Heavy Weapons" }
+      }
+    },
+    {
+      "id": "advanced-education",
+      "name": "Advanced Education",
+      "restriction": { "type": "minEdu", "value": 8 },
+      "entries": {
+        "1": { "type": "skill", "skill": "Tactics", "specialty": "Military" },
+        "2": { "type": "skill", "skill": "Electronics" },
+        "3": { "type": "skill", "skill": "Navigation" },
+        "4": { "type": "skill", "skill": "Explosives" },
+        "5": { "type": "skill", "skill": "Engineer" },
+        "6": { "type": "skill", "skill": "Survival" }
+      }
+    },
+    {
+      "id": "officer-skills",
+      "name": "Officer Skills",
+      "restriction": { "type": "officer" },
+      "entries": {
+        "1": { "type": "skill", "skill": "Tactics", "specialty": "Military" },
+        "2": { "type": "skill", "skill": "Leadership" },
+        "3": { "type": "skill", "skill": "Advocate" },
+        "4": { "type": "skill", "skill": "Diplomat" },
+        "5": { "type": "skill", "skill": "Electronics" },
+        "6": { "type": "skill", "skill": "Admin" }
+      }
+    },
+    {
+      "id": "support-skills",
+      "name": "Support",
+      "restriction": { "type": "assignment", "assignmentId": "support" },
+      "entries": {
+        "1": { "type": "skill", "skill": "Mechanic" },
+        "2": { "type": "skill", "skill": "Drive" },
+        "3": { "type": "skill", "skill": "Flyer" },
+        "4": { "type": "skill", "skill": "Explosives" },
+        "5": { "type": "skill", "skill": "Electronics", "specialty": "Comms" },
+        "6": { "type": "skill", "skill": "Medic" }
+      }
+    },
+    {
+      "id": "infantry-skills",
+      "name": "Infantry",
+      "restriction": { "type": "assignment", "assignmentId": "infantry" },
+      "entries": {
+        "1": { "type": "skill", "skill": "Gun Combat" },
+        "2": { "type": "skill", "skill": "Melee" },
+        "3": { "type": "skill", "skill": "Heavy Weapons" },
+        "4": { "type": "skill", "skill": "Stealth" },
+        "5": { "type": "skill", "skill": "Athletics" },
+        "6": { "type": "skill", "skill": "Recon" }
+      }
+    },
+    {
+      "id": "cavalry-skills",
+      "name": "Cavalry",
+      "restriction": { "type": "assignment", "assignmentId": "cavalry" },
+      "entries": {
+        "1": { "type": "skill", "skill": "Mechanic" },
+        "2": { "type": "skill", "skill": "Drive" },
+        "3": { "type": "skill", "skill": "Flyer" },
+        "4": { "type": "skill", "skill": "Recon" },
+        "5": { "type": "skill", "skill": "Heavy Weapons", "specialty": "Vehicle" },
+        "6": { "type": "skill", "skill": "Electronics", "specialty": "Sensors" }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "split",
+    "tracks": {
+      "enlisted": {
+        "0": { "title": "Private", "bonus": { "type": "gainSkill", "skill": "Gun Combat", "level": 1 } },
+        "1": { "title": "Lance Corporal", "bonus": { "type": "gainSkill", "skill": "Recon", "level": 1 } },
+        "2": { "title": "Corporal" },
+        "3": { "title": "Lance Sergeant", "bonus": { "type": "gainSkill", "skill": "Leadership", "level": 1 } },
+        "4": { "title": "Sergeant" },
+        "5": { "title": "Gunnery Sergeant" },
+        "6": { "title": "Sergeant Major" }
+      },
+      "officer": {
+        "1": { "title": "Lieutenant", "bonus": { "type": "gainSkill", "skill": "Leadership", "level": 1 } },
+        "2": { "title": "Captain" },
+        "3": { "title": "Major", "bonus": { "type": "gainSkill", "skill": "Tactics", "level": 1 } },
+        "4": { "title": "Lieutenant Colonel" },
+        "5": { "title": "Colonel" },
+        "6": { "title": "General", "bonus": { "type": "ensureCharacteristic", "characteristic": "SOC", "minimum": 10, "fallback": { "type": "modCharacteristic", "characteristic": "SOC", "value": 1 } } }
+      }
+    }
+  },
+  "mishaps": {
+    "1": {
+      "description": "Severely injured in action.",
+      "effects": { "type": "rollOnTable", "table": "injury", "modifier": "takeLower" }
+    },
+    "2": {
+      "description": "A unit is almost wiped out. You survive but you are forced out of the career.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          { "type": "ejectFromCareer" },
+          { "type": "modCharacteristic", "characteristic": "END", "value": -1 }
+        ]
+      }
+    },
+    "3": {
+      "description": "You are sent to a very unpleasant region. Gain one of Survival 1, Recon 1 or Athletics (endurance) 1.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          { "type": "ejectFromCareer" },
+          { "type": "pickSkill", "options": ["Survival", "Recon", "Athletics"], "level": 1 }
+        ]
+      }
+    },
+    "4": {
+      "description": "You discover your commanding officer is engaged in illegal activity. If you report them, gain an Enemy. If you say nothing, gain DM+2 on your next advancement but also gain them as a Rival.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You discover your commanding officer is engaged in illegal activity.",
+        "options": [
+          { "label": "Report them", "effects": [{ "type": "ejectFromCareer" }, { "type": "gainContact", "contactType": "enemy" }] },
+          { "label": "Say nothing", "effects": [{ "type": "ejectFromCareer" }, { "type": "gainAdvancementDM", "value": 2 }, { "type": "gainContact", "contactType": "rival" }] }
+        ]
+      }
+    },
+    "5": {
+      "description": "You are tormented by or quarrel with an officer or fellow soldier. Gain that character as a Rival.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          { "type": "ejectFromCareer" },
+          { "type": "gainContact", "contactType": "rival" }
+        ]
+      }
+    },
+    "6": {
+      "description": "Injured. Roll on the Injury table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          { "type": "ejectFromCareer" },
+          { "type": "rollOnTable", "table": "injury" }
+        ]
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap table but you are not ejected from this career.",
+      "effects": { "type": "rollOnTable", "table": "mishap" }
+    },
+    "3": {
+      "description": "You are assigned to a planet with a hostile or wild environment. Gain one of Vacc Suit 1, Engineer 1, Animals (handling) 1 or Recon 1.",
+      "effects": { "type": "pickSkill", "options": ["Vacc Suit", "Engineer", "Animals", "Recon"], "level": 1 }
+    },
+    "4": {
+      "description": "You are assigned to an urbanised planet torn by war. Gain one of Stealth 1, Streetwise 1, Persuade 1 or Recon 1.",
+      "effects": { "type": "pickSkill", "options": ["Stealth", "Streetwise", "Persuade", "Recon"], "level": 1 }
+    },
+    "5": {
+      "description": "You are given a special assignment. DM+1 to any one Benefit roll.",
+      "effects": { "type": "gainBenefitDM", "value": 1 }
+    },
+    "6": {
+      "description": "You are thrown into a brutal ground war. Roll either Gun Combat 8+ or Stealth 8+. If you succeed, gain one level in the skill you rolled. If you fail, you are injured (roll on the Injury table).",
+      "effects": {
+        "type": "skillCheck",
+        "skill": "Gun Combat",
+        "target": 8,
+        "success": { "type": "pickSkill", "options": ["Gun Combat", "Stealth"], "level": 1 },
+        "failure": { "type": "rollOnTable", "table": "injury" }
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events table.",
+      "effects": { "type": "rollOnTable", "table": "life-events" }
+    },
+    "8": {
+      "description": "You are given advanced training in a specialist field. Roll EDU 8+ to gain any one skill of your choice at level 1.",
+      "effects": {
+        "type": "skillCheck",
+        "characteristic": "EDU",
+        "target": 8,
+        "success": { "type": "increaseExistingSkill", "filter": "owned" },
+        "failure": { "type": "none" }
+      }
+    },
+    "9": {
+      "description": "Surrounded and outnumbered by the enemy, you hold out until relief arrives. Gain DM+2 to your next Advancement roll.",
+      "effects": { "type": "gainAdvancementDM", "value": 2 }
+    },
+    "10": {
+      "description": "You are assigned to a peacekeeping role. Gain one of Admin 1, Investigate 1, Deception 1, or Recon 1.",
+      "effects": { "type": "pickSkill", "options": ["Admin", "Investigate", "Deception", "Recon"], "level": 1 }
+    },
+    "11": {
+      "description": "You are commanding officer takes an interest in your career. Either gain Tactics (military) 1 or DM+4 to your next Advancement roll.",
+      "effects": {
+        "type": "choice",
+        "prompt": "Your commanding officer takes an interest in your career.",
+        "options": [
+          { "label": "Gain Tactics (military) 1", "effects": [{ "type": "gainSpecialty", "skill": "Tactics", "specialty": "Military", "level": 1 }] },
+          { "label": "Gain DM+4 to next Advancement", "effects": [{ "type": "gainAdvancementDM", "value": 4 }] }
+        ]
+      }
+    },
+    "12": {
+      "description": "You display heroism in battle. You may gain a promotion or a commission automatically.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You display heroism in battle! You may gain a promotion or a commission.",
+        "options": [
+          { "label": "Take a commission (become officer rank 1)", "effects": [{ "type": "autoPromote" }] },
+          { "label": "Take a promotion (advance in current track)", "effects": [{ "type": "autoPromote" }] }
+        ]
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 2000,
+      "2": 5000,
+      "3": 10000,
+      "4": 10000,
+      "5": 10000,
+      "6": 20000,
+      "7": 30000
+    },
+    "benefits": {
+      "1": { "description": "Combat Implant", "effects": { "type": "gainEquipment", "item": "Combat Implant" } },
+      "2": { "description": "+1 INT", "effects": { "type": "modCharacteristic", "characteristic": "INT", "value": 1 } },
+      "3": { "description": "+1 EDU", "effects": { "type": "modCharacteristic", "characteristic": "EDU", "value": 1 } },
+      "4": { "description": "Weapon", "effects": { "type": "gainEquipment", "item": "Weapon" } },
+      "5": { "description": "Armour", "effects": { "type": "gainEquipment", "item": "Armour" } },
+      "6": { "description": "+1 END or +1 SOC", "effects": { "type": "pickOne", "prompt": "Choose your benefit:", "options": [{ "label": "+1 END", "effect": { "type": "modCharacteristic", "characteristic": "END", "value": 1 } }, { "label": "+1 SOC", "effect": { "type": "modCharacteristic", "characteristic": "SOC", "value": 1 } }] } },
+      "7": { "description": "+1 SOC", "effects": { "type": "modCharacteristic", "characteristic": "SOC", "value": 1 } }
+    }
+  }
+}

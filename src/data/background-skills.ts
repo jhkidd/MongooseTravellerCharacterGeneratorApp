@@ -1,0 +1,20 @@
+/** The 17 skills available during Background Skills selection. All gained at level 0. */
+export const BACKGROUND_SKILLS: string[] = [
+  'Admin',
+  'Animals',
+  'Art',
+  'Athletics',
+  'Carouse',
+  'Drive',
+  'Electronics',
+  'Flyer',
+  'Language',
+  'Mechanic',
+  'Medic',
+  'Profession',
+  'Science',
+  'Seafarer',
+  'Streetwise',
+  'Survival',
+  'Vacc Suit',
+];
