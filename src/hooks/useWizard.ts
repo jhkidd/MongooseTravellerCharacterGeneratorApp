@@ -15,18 +15,31 @@ interface UseWizardReturn {
 }
 
 export function useWizard(): UseWizardReturn {
-  const [phase, setPhase] = useState<Phase>(Phase.BACKGROUND);
-  const [context, setContext] = useState<PhaseContext>(createInitialContext);
-  const [history, setHistory] = useState<Phase[]>([]);
+  const [wizardState, setWizardState] = useState<{
+    phase: Phase;
+    context: PhaseContext;
+    history: Phase[];
+  }>({
+    phase: Phase.BACKGROUND,
+    context: createInitialContext(),
+    history: [],
+  });
 
   const advance = useCallback((action: PhaseAction) => {
-    setPhase((currentPhase) => {
-      const result = getNextPhase(currentPhase, action, context);
-      setContext(result.context);
-      setHistory((prev) => [...prev, currentPhase]);
-      return result.phase;
+    setWizardState((current) => {
+      const result = getNextPhase(current.phase, action, current.context);
+      return {
+        phase: result.phase,
+        context: result.context,
+        history: [...current.history, current.phase],
+      };
     });
-  }, [context]);
+  }, []);
 
-  return { phase, context, advance, history };
+  return {
+    phase: wizardState.phase,
+    context: wizardState.context,
+    advance,
+    history: wizardState.history,
+  };
 }

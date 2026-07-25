@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { rollD6 } from '../../../engine/dice';
 import { Dice3D } from './Dice3D';
 import './DiceGroup.css';
@@ -31,7 +31,7 @@ export function DiceGroup({
 }: DiceGroupProps) {
   const [results, setResults] = useState<DiceResult[] | null>(null);
   const [rolling, setRolling] = useState(false);
-  const [settledCount, setSettledCount] = useState(0);
+  const settledCountRef = useRef(0);
 
   const handleRoll = useCallback(() => {
     const newResults: DiceResult[] = [];
@@ -44,7 +44,7 @@ export function DiceGroup({
 
     setResults(newResults);
     setRolling(true);
-    setSettledCount(0);
+    settledCountRef.current = 0;
   }, [count]);
 
   useEffect(() => {
@@ -54,19 +54,16 @@ export function DiceGroup({
   }, [autoRoll, handleRoll]);
 
   const handleSettled = useCallback(() => {
-    setSettledCount((prev) => {
-      const next = prev + 1;
+    settledCountRef.current += 1;
+    const next = settledCountRef.current;
 
-      if (next >= (results?.length ?? 0) * 2) {
-        setRolling(false);
+    if (next >= (results?.length ?? 0) * 2) {
+      setRolling(false);
 
-        if (results) {
-          onResult(results);
-        }
+      if (results) {
+        onResult(results);
       }
-
-      return next;
-    });
+    }
   }, [onResult, results]);
 
   return (

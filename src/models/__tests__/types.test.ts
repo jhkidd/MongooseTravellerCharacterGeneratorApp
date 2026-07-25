@@ -3,17 +3,8 @@ import type {
   Characteristics,
   CharacteristicName,
   Contact,
-  ContactType,
-  CareerTerm,
-  TimelineEntry,
-  Species,
 } from '../types';
 import type {
-  CareerData,
-  Assignment,
-  SkillTable,
-  SkillTableEntry,
-  RankStructure,
   QualificationCheck,
 } from '../career-types';
 import type { EffectNode } from '../effect-types';

@@ -1,30 +1,32 @@
-export enum Phase {
-  BACKGROUND = 'BACKGROUND',
-  CHARACTERISTICS = 'CHARACTERISTICS',
-  BACKGROUND_SKILLS = 'BACKGROUND_SKILLS',
-  TERM_START = 'TERM_START',
-  PRE_CAREER_SELECTION = 'PRE_CAREER_SELECTION',
-  EDUCATION_ENTRY_ROLL = 'EDUCATION_ENTRY_ROLL',
-  EDUCATION_EVENTS = 'EDUCATION_EVENTS',
-  GRADUATION_ROLL = 'GRADUATION_ROLL',
-  CAREER_SELECTION = 'CAREER_SELECTION',
-  QUALIFICATION_ROLL = 'QUALIFICATION_ROLL',
-  DRAFT_OR_DRIFTER = 'DRAFT_OR_DRIFTER',
-  CAREER_ACTIVE = 'CAREER_ACTIVE',
-  SURVIVAL_ROLL = 'SURVIVAL_ROLL',
-  MISHAP_RESOLUTION = 'MISHAP_RESOLUTION',
-  EVENT_ROLL = 'EVENT_ROLL',
-  EVENT_RESOLUTION = 'EVENT_RESOLUTION',
-  SKILL_TRAINING = 'SKILL_TRAINING',
-  COMMISSION_OR_ADVANCEMENT = 'COMMISSION_OR_ADVANCEMENT',
-  RANK_BONUS = 'RANK_BONUS',
-  TERM_NARRATIVE = 'TERM_NARRATIVE',
-  AGING_CHECK = 'AGING_CHECK',
-  TERM_END_DECISION = 'TERM_END_DECISION',
-  MUSTERING_OUT = 'MUSTERING_OUT',
-  FINALIZE_CONTACTS = 'FINALIZE_CONTACTS',
-  CHARACTER_SHEET = 'CHARACTER_SHEET',
-}
+export const Phase = {
+  BACKGROUND: 'BACKGROUND',
+  CHARACTERISTICS: 'CHARACTERISTICS',
+  BACKGROUND_SKILLS: 'BACKGROUND_SKILLS',
+  TERM_START: 'TERM_START',
+  PRE_CAREER_SELECTION: 'PRE_CAREER_SELECTION',
+  EDUCATION_ENTRY_ROLL: 'EDUCATION_ENTRY_ROLL',
+  EDUCATION_EVENTS: 'EDUCATION_EVENTS',
+  GRADUATION_ROLL: 'GRADUATION_ROLL',
+  CAREER_SELECTION: 'CAREER_SELECTION',
+  QUALIFICATION_ROLL: 'QUALIFICATION_ROLL',
+  DRAFT_OR_DRIFTER: 'DRAFT_OR_DRIFTER',
+  CAREER_ACTIVE: 'CAREER_ACTIVE',
+  SURVIVAL_ROLL: 'SURVIVAL_ROLL',
+  MISHAP_RESOLUTION: 'MISHAP_RESOLUTION',
+  EVENT_ROLL: 'EVENT_ROLL',
+  EVENT_RESOLUTION: 'EVENT_RESOLUTION',
+  SKILL_TRAINING: 'SKILL_TRAINING',
+  COMMISSION_OR_ADVANCEMENT: 'COMMISSION_OR_ADVANCEMENT',
+  RANK_BONUS: 'RANK_BONUS',
+  TERM_NARRATIVE: 'TERM_NARRATIVE',
+  AGING_CHECK: 'AGING_CHECK',
+  TERM_END_DECISION: 'TERM_END_DECISION',
+  MUSTERING_OUT: 'MUSTERING_OUT',
+  FINALIZE_CONTACTS: 'FINALIZE_CONTACTS',
+  CHARACTER_SHEET: 'CHARACTER_SHEET',
+} as const;
+
+export type Phase = typeof Phase[keyof typeof Phase];
 
 export interface PhaseContext {
   currentTerm: number;
@@ -60,6 +62,7 @@ export type PhaseAction =
   | { type: 'CHOOSE_CAREER' }
   | { type: 'CONTINUE_CAREER' }
   | { type: 'SELECT_CAREER'; careerId: string }
+  | { type: 'SELECT_ASSIGNMENT'; assignmentId: string }
   | { type: 'SELECT_DRIFTER' }
   | { type: 'ROLL_SUCCESS' }
   | { type: 'ROLL_FAILURE' }
@@ -67,6 +70,7 @@ export type PhaseAction =
   | { type: 'MUSTER_OUT' }
   | { type: 'FORCE_TRANSITION'; targetPhase: Phase }
   | { type: 'FORCE_CAREER'; careerId: string }
+  | { type: 'ADD_ADVANCEMENT_DM'; value: number }
   | { type: 'AUTO_PROMOTE' };
 
 export function getNextPhase(
@@ -82,11 +86,18 @@ export function getNextPhase(
 
   if (action.type === 'FORCE_CAREER') {
     ctx.forcedCareer = action.careerId;
+    ctx.currentCareer = action.careerId;
+    ctx.currentAssignment = null;
     return { phase: currentPhase, context: ctx };
   }
 
   if (action.type === 'AUTO_PROMOTE') {
     ctx.autoPromote = true;
+    return { phase: currentPhase, context: ctx };
+  }
+
+  if (action.type === 'ADD_ADVANCEMENT_DM') {
+    ctx.pendingAdvancementDM += action.value;
     return { phase: currentPhase, context: ctx };
   }
 
@@ -153,6 +164,9 @@ export function getNextPhase(
       return { phase: Phase.CAREER_ACTIVE, context: ctx };
 
     case Phase.CAREER_ACTIVE:
+      if (action.type === 'SELECT_ASSIGNMENT') {
+        ctx.currentAssignment = action.assignmentId;
+      }
       return { phase: Phase.SURVIVAL_ROLL, context: ctx };
 
     case Phase.SURVIVAL_ROLL:
@@ -178,6 +192,8 @@ export function getNextPhase(
       return { phase: Phase.COMMISSION_OR_ADVANCEMENT, context: ctx };
 
     case Phase.COMMISSION_OR_ADVANCEMENT:
+      ctx.pendingAdvancementDM = 0;
+      ctx.autoPromote = false;
       if (action.type === 'ROLL_SUCCESS') {
         return { phase: Phase.RANK_BONUS, context: ctx };
       }

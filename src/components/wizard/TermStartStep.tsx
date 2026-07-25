@@ -1,6 +1,8 @@
 import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
+import { ChoicePanel } from '../shared/ChoicePanel';
 import { canAttemptPreCareer } from '../../engine/state-machine';
 import type { PhaseContext, PhaseAction } from '../../engine/state-machine';
+import { getCareerDisplayName } from './career-flow-utils';
 
 interface TermStartStepProps {
   context: PhaseContext;
@@ -9,27 +11,43 @@ interface TermStartStepProps {
 
 export function TermStartStep({ context, onAdvance }: TermStartStepProps) {
   const canPreCareer = canAttemptPreCareer(context);
-  const canContinue = context.currentCareer !== null;
+  const hasContinuingCareer = context.currentCareer !== null;
+
+  const options: { label: string; description?: string; action: PhaseAction }[] = [];
+
+  if (hasContinuingCareer) {
+    options.push({
+      label: `Continue in ${getCareerDisplayName(context.currentCareer)}`,
+      description: 'No qualification roll needed',
+      action: { type: 'CONTINUE_CAREER' },
+    });
+  }
+
+  options.push({
+    label: 'Enter a new career',
+    description: 'Choose a career and roll for qualification',
+    action: { type: 'CHOOSE_CAREER' },
+  });
+
+  if (canPreCareer) {
+    options.push({
+      label: 'Pre-career education',
+      description: 'University or Military Academy (terms 1-3 only)',
+      action: { type: 'CHOOSE_PRE_CAREER' },
+    });
+  }
 
   return (
     <div>
       <ChamferedHeader>Term {context.currentTerm}</ChamferedHeader>
-      <p>Choose how to spend this term.</p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxWidth: '300px' }}>
-        {canPreCareer && (
-          <button onClick={() => onAdvance({ type: 'CHOOSE_PRE_CAREER' })}>
-            Pre-Career Education
-          </button>
-        )}
-        {canContinue && (
-          <button onClick={() => onAdvance({ type: 'CONTINUE_CAREER' })}>
-            Continue in {context.currentCareer}
-          </button>
-        )}
-        <button onClick={() => onAdvance({ type: 'CHOOSE_CAREER' })}>
-          Enter a Career
-        </button>
-      </div>
+      <ChoicePanel
+        prompt="What would you like to do this term?"
+        options={options.map((option) => ({
+          label: option.label,
+          description: option.description,
+        }))}
+        onSelect={(index) => onAdvance(options[index].action)}
+      />
     </div>
   );
 }
