@@ -1,0 +1,42 @@
+.dice3d-scene {
+  width: 54px;
+  height: 54px;
+  perspective: 400px;
+  display: inline-block;
+}
+
+.dice3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateY(0deg);
+}
+
+.dice3d__face {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.18);
+  border-radius: 6px;
+  backface-visibility: hidden;
+}
+
+/* Position each face of the cube (translateZ = half of 54px = 27px) */
+.dice3d__face--1 { transform: translateZ(27px); }
+.dice3d__face--2 { transform: rotateY(180deg)  translateZ(27px); }
+.dice3d__face--3 { transform: rotateY(-90deg)  translateZ(27px); }
+.dice3d__face--4 { transform: rotateX(90deg)   translateZ(27px); }
+.dice3d__face--5 { transform: rotateX(-90deg)  translateZ(27px); }
+.dice3d__face--6 { transform: rotateY(90deg)   translateZ(27px); }
+
+.dice3d__pip {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background-color: var(--color-accent, #c47a2a);
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
