@@ -13,7 +13,7 @@ function renderWithProvider() {
 describe('WizardShell', () => {
   it('renders the initial BACKGROUND phase', () => {
     renderWithProvider();
-    expect(screen.getByRole('heading', { name: /^background$/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /choose your species/i })).toBeInTheDocument();
   });
 
   it('renders within the wizard container', () => {

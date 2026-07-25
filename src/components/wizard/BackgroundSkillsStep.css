@@ -4,6 +4,45 @@
   gap: var(--space-lg);
 }
 
+.background-skills-step__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.background-skills-step__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.background-skills-step__label {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.background-skills-step__input {
+  background: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: var(--space-sm);
+}
+
+.background-skills-step__input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.background-skills-step__divider {
+  height: 1px;
+  background: var(--color-border);
+}
+
 .background-skills-step__info {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);

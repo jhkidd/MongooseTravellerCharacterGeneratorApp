@@ -24,35 +24,37 @@ export function CareerTermStep({ phase, context, onAdvance }: CareerTermStepProp
   const survivalCheck = assignment?.survivalCheck;
   const survivalDM = survivalCheck ? getDM(character.characteristics[survivalCheck.characteristic]) : 0;
 
-  function handleSurvivalRoll() {
-    if (!survivalCheck) {
-      onAdvance({ type: 'ROLL_SUCCESS' });
-      return;
-    }
-
-    const roll = roll2D6();
-    const total = roll + survivalDM;
-    setResult({ roll, total, success: total >= survivalCheck.target });
-  }
-
-  if (phase === Phase.CAREER_ACTIVE) {
+  // ASSIGNMENT_SELECTION phase — choose which assignment to enter
+  if (phase === Phase.ASSIGNMENT_SELECTION) {
     if (isDrifter) {
       return (
         <div>
-          <ChamferedHeader>Drifter Term</ChamferedHeader>
-          <p>This term you drift from job to job, taking what work you can find.</p>
-          <button type="button" onClick={() => onAdvance({ type: 'CONTINUE' })} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}>
-            Begin Term
-          </button>
+          <ChamferedHeader>Drifter Assignment</ChamferedHeader>
+          <p>Choose how you drift through this term.</p>
+          <ChoicePanel
+            prompt="Choose your drifter lifestyle."
+            options={career ? career.assignments.map((option) => ({
+              label: option.name,
+              description: option.description,
+            })) : [
+              { label: 'Barbarian', description: 'Living off the land on primitive worlds.' },
+              { label: 'Wanderer', description: 'Travelling from place to place.' },
+              { label: 'Scavenger', description: 'Picking through the remains of civilisation.' },
+            ]}
+            onSelect={(index) => {
+              const id = career ? career.assignments[index].id : ['barbarian', 'wanderer', 'scavenger'][index];
+              onAdvance({ type: 'SELECT_ASSIGNMENT', assignmentId: id });
+            }}
+          />
         </div>
       );
     }
 
     return (
       <div>
-        <ChamferedHeader>{career.name} Assignment</ChamferedHeader>
+        <ChamferedHeader>{career.name} — Choose Assignment</ChamferedHeader>
         <ChoicePanel
-          prompt={`Choose your ${career.name.toLowerCase()} assignment for term ${context.currentTerm}.`}
+          prompt={`Choose your ${career.name.toLowerCase()} assignment for this career.`}
           options={career.assignments.map((option) => ({
             label: option.name,
             description: option.description,
@@ -63,6 +65,62 @@ export function CareerTermStep({ phase, context, onAdvance }: CareerTermStepProp
     );
   }
 
+  // ASSIGNMENT_CHANGE_ROLL phase — attempting to switch assignment in a flexible career
+  if (phase === Phase.ASSIGNMENT_CHANGE_ROLL) {
+    const qualCheck = career?.qualification;
+    const qualDM = qualCheck ? getDM(character.characteristics[qualCheck.characteristic]) : 0;
+
+    function handleChangeRoll() {
+      if (!qualCheck) {
+        onAdvance({ type: 'ROLL_SUCCESS' });
+        return;
+      }
+      const roll = roll2D6();
+      const total = roll + qualDM;
+      setResult({ roll, total, success: total >= qualCheck.target });
+    }
+
+    return (
+      <div>
+        <ChamferedHeader>Change Assignment</ChamferedHeader>
+        <p>
+          Attempting to transfer to a new assignment within {career?.name ?? 'your career'}.
+          {context.pendingAssignmentChange && ` Target: ${context.pendingAssignmentChange}`}
+        </p>
+
+        {!result && qualCheck && (
+          <div>
+            <p>Qualification: {qualCheck.characteristic} {qualCheck.target}+</p>
+            <SuccessChance baseTarget={qualCheck.target} dm={qualDM} label="Transfer" />
+            <button type="button" onClick={handleChangeRoll} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}>
+              Roll for Transfer
+            </button>
+          </div>
+        )}
+
+        {result && (
+          <div style={{ marginTop: '1rem' }}>
+            <p style={{ color: result.success ? 'var(--color-success-text)' : 'var(--color-failure-text)' }}>
+              Rolled {result.roll}
+              {qualDM !== 0 && ` ${qualDM > 0 ? '+' : '−'} ${Math.abs(qualDM)}`}
+              {' = '}
+              {result.total}
+              {result.success ? ' — Transfer approved!' : ' — Transfer denied, staying in current assignment.'}
+            </p>
+            <button
+              type="button"
+              onClick={() => onAdvance({ type: result.success ? 'ROLL_SUCCESS' : 'ROLL_FAILURE' })}
+              style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
+            >
+              Continue
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // SURVIVAL_ROLL phase
   if (isDrifter) {
     return (
       <div>
@@ -124,4 +182,15 @@ export function CareerTermStep({ phase, context, onAdvance }: CareerTermStepProp
       )}
     </div>
   );
+
+  function handleSurvivalRoll() {
+    if (!survivalCheck) {
+      onAdvance({ type: 'ROLL_SUCCESS' });
+      return;
+    }
+
+    const roll = roll2D6();
+    const total = roll + survivalDM;
+    setResult({ roll, total, success: total >= survivalCheck.target });
+  }
 }

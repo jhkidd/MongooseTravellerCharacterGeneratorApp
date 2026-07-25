@@ -8,14 +8,16 @@ export const Phase = {
   EDUCATION_EVENTS: 'EDUCATION_EVENTS',
   GRADUATION_ROLL: 'GRADUATION_ROLL',
   CAREER_SELECTION: 'CAREER_SELECTION',
+  ASSIGNMENT_SELECTION: 'ASSIGNMENT_SELECTION',
   QUALIFICATION_ROLL: 'QUALIFICATION_ROLL',
   DRAFT_OR_DRIFTER: 'DRAFT_OR_DRIFTER',
-  CAREER_ACTIVE: 'CAREER_ACTIVE',
+  ASSIGNMENT_CHANGE_ROLL: 'ASSIGNMENT_CHANGE_ROLL',
+  BASIC_TRAINING: 'BASIC_TRAINING',
+  SKILL_TRAINING: 'SKILL_TRAINING',
   SURVIVAL_ROLL: 'SURVIVAL_ROLL',
   MISHAP_RESOLUTION: 'MISHAP_RESOLUTION',
   EVENT_ROLL: 'EVENT_ROLL',
   EVENT_RESOLUTION: 'EVENT_RESOLUTION',
-  SKILL_TRAINING: 'SKILL_TRAINING',
   COMMISSION_OR_ADVANCEMENT: 'COMMISSION_OR_ADVANCEMENT',
   RANK_BONUS: 'RANK_BONUS',
   TERM_NARRATIVE: 'TERM_NARRATIVE',
@@ -28,10 +30,23 @@ export const Phase = {
 
 export type Phase = typeof Phase[keyof typeof Phase];
 
+/**
+ * Careers where changing assignment is treated as staying in the same career.
+ * Pass qualification to swap assignment, fail = stay in current assignment, keep rank.
+ */
+export const FLEXIBLE_ASSIGNMENT_CAREERS = ['army', 'marines', 'navy', 'nobility', 'rogue', 'scholar', 'scout'];
+
+/**
+ * Careers where changing assignment is treated as a new career entirely.
+ * Must muster out, re-qualify, start at rank 0.
+ */
+export const RIGID_ASSIGNMENT_CAREERS = ['agent', 'citizen', 'entertainer', 'merchant'];
+
 export interface PhaseContext {
   currentTerm: number;
   currentCareer: string | null;
   currentAssignment: string | null;
+  termsInCurrentCareer: number;
   isOfficer: boolean;
   previousCareers: string[];
   forcedCareer: string | null;
@@ -39,6 +54,8 @@ export interface PhaseContext {
   pendingAdvancementDM: number;
   preCareerCompleted: boolean;
   commissionAttempted: boolean;
+  /** Set when a player requests an assignment change within a flexible career */
+  pendingAssignmentChange: string | null;
 }
 
 export function createInitialContext(): PhaseContext {
@@ -46,6 +63,7 @@ export function createInitialContext(): PhaseContext {
     currentTerm: 0,
     currentCareer: null,
     currentAssignment: null,
+    termsInCurrentCareer: 0,
     isOfficer: false,
     previousCareers: [],
     forcedCareer: null,
@@ -53,6 +71,7 @@ export function createInitialContext(): PhaseContext {
     pendingAdvancementDM: 0,
     preCareerCompleted: false,
     commissionAttempted: false,
+    pendingAssignmentChange: null,
   };
 }
 
@@ -61,6 +80,7 @@ export type PhaseAction =
   | { type: 'CHOOSE_PRE_CAREER' }
   | { type: 'CHOOSE_CAREER' }
   | { type: 'CONTINUE_CAREER' }
+  | { type: 'CONTINUE_CAREER_CHANGE_ASSIGNMENT'; assignmentId: string }
   | { type: 'SELECT_CAREER'; careerId: string }
   | { type: 'SELECT_ASSIGNMENT'; assignmentId: string }
   | { type: 'SELECT_DRIFTER' }
@@ -117,8 +137,16 @@ export function getNextPhase(
         return { phase: Phase.PRE_CAREER_SELECTION, context: ctx };
       }
 
+      // Continuing in the same career
       if (action.type === 'CONTINUE_CAREER') {
-        return { phase: Phase.CAREER_ACTIVE, context: ctx };
+        ctx.termsInCurrentCareer += 1;
+        return { phase: Phase.SKILL_TRAINING, context: ctx };
+      }
+
+      // Continuing in same career but requesting assignment change (flexible)
+      if (action.type === 'CONTINUE_CAREER_CHANGE_ASSIGNMENT') {
+        ctx.pendingAssignmentChange = action.assignmentId;
+        return { phase: Phase.ASSIGNMENT_CHANGE_ROLL, context: ctx };
       }
 
       return { phase: Phase.CAREER_SELECTION, context: ctx };
@@ -143,30 +171,56 @@ export function getNextPhase(
     case Phase.CAREER_SELECTION:
       if (action.type === 'SELECT_DRIFTER') {
         ctx.currentCareer = 'drifter';
-        return { phase: Phase.CAREER_ACTIVE, context: ctx };
+        ctx.termsInCurrentCareer = 1;
+        return { phase: Phase.ASSIGNMENT_SELECTION, context: ctx };
       }
 
       if (action.type === 'SELECT_CAREER') {
         ctx.currentCareer = action.careerId;
-        return { phase: Phase.QUALIFICATION_ROLL, context: ctx };
+        return { phase: Phase.ASSIGNMENT_SELECTION, context: ctx };
       }
 
+      return { phase: Phase.ASSIGNMENT_SELECTION, context: ctx };
+
+    case Phase.ASSIGNMENT_SELECTION:
+      if (action.type === 'SELECT_ASSIGNMENT') {
+        ctx.currentAssignment = action.assignmentId;
+      }
+      // Drifter skips qualification
+      if (ctx.currentCareer === 'drifter') {
+        return { phase: Phase.BASIC_TRAINING, context: ctx };
+      }
       return { phase: Phase.QUALIFICATION_ROLL, context: ctx };
 
     case Phase.QUALIFICATION_ROLL:
       if (action.type === 'ROLL_SUCCESS') {
-        return { phase: Phase.CAREER_ACTIVE, context: ctx };
+        ctx.termsInCurrentCareer = 1;
+        return { phase: Phase.BASIC_TRAINING, context: ctx };
       }
 
       return { phase: Phase.DRAFT_OR_DRIFTER, context: ctx };
 
     case Phase.DRAFT_OR_DRIFTER:
-      return { phase: Phase.CAREER_ACTIVE, context: ctx };
+      ctx.termsInCurrentCareer = 1;
+      return { phase: Phase.BASIC_TRAINING, context: ctx };
 
-    case Phase.CAREER_ACTIVE:
-      if (action.type === 'SELECT_ASSIGNMENT') {
-        ctx.currentAssignment = action.assignmentId;
+    case Phase.ASSIGNMENT_CHANGE_ROLL:
+      if (action.type === 'ROLL_SUCCESS') {
+        // Swap to new assignment, keep rank
+        ctx.currentAssignment = ctx.pendingAssignmentChange;
+        ctx.pendingAssignmentChange = null;
+        ctx.termsInCurrentCareer += 1;
+        return { phase: Phase.SKILL_TRAINING, context: ctx };
       }
+      // Failed — stay in current assignment
+      ctx.pendingAssignmentChange = null;
+      ctx.termsInCurrentCareer += 1;
+      return { phase: Phase.SKILL_TRAINING, context: ctx };
+
+    case Phase.BASIC_TRAINING:
+      return { phase: Phase.SURVIVAL_ROLL, context: ctx };
+
+    case Phase.SKILL_TRAINING:
       return { phase: Phase.SURVIVAL_ROLL, context: ctx };
 
     case Phase.SURVIVAL_ROLL:
@@ -180,15 +234,13 @@ export function getNextPhase(
       ctx.currentCareer = null;
       ctx.currentAssignment = null;
       ctx.isOfficer = false;
+      ctx.termsInCurrentCareer = 0;
       return { phase: Phase.TERM_END_DECISION, context: ctx };
 
     case Phase.EVENT_ROLL:
       return { phase: Phase.EVENT_RESOLUTION, context: ctx };
 
     case Phase.EVENT_RESOLUTION:
-      return { phase: Phase.SKILL_TRAINING, context: ctx };
-
-    case Phase.SKILL_TRAINING:
       return { phase: Phase.COMMISSION_OR_ADVANCEMENT, context: ctx };
 
     case Phase.COMMISSION_OR_ADVANCEMENT:
@@ -223,6 +275,7 @@ export function getNextPhase(
         ctx.currentAssignment = null;
         ctx.isOfficer = false;
         ctx.commissionAttempted = false;
+        ctx.termsInCurrentCareer = 0;
         ctx.currentTerm += 1;
         return { phase: Phase.TERM_START, context: ctx };
       }

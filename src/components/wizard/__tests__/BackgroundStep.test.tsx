@@ -15,38 +15,42 @@ function renderWithProvider(onContinue = vi.fn()) {
 }
 
 describe('BackgroundStep', () => {
-  it('renders the Background heading', () => {
+  it('renders the species selection heading', () => {
     renderWithProvider();
-    expect(screen.getByText(/background/i)).toBeInTheDocument();
+    expect(screen.getByText(/choose your species/i)).toBeInTheDocument();
   });
 
-  it('has a name input field', () => {
+  it('renders species cards for each option', () => {
     renderWithProvider();
-    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
+    expect(screen.getByText('Human')).toBeInTheDocument();
+    expect(screen.getByText('Aslan')).toBeInTheDocument();
+    expect(screen.getByText('Vargr')).toBeInTheDocument();
   });
 
-  it('has a species selector', () => {
+  it('shows characteristic modifiers on species cards', () => {
     renderWithProvider();
-    expect(screen.getByLabelText(/species/i)).toBeInTheDocument();
+    expect(screen.getByText('STR +2')).toBeInTheDocument();
+    expect(screen.getByText('DEX -2')).toBeInTheDocument();
   });
 
-  it('has a homeworld input', () => {
+  it('human is selected by default', () => {
     renderWithProvider();
-    expect(screen.getByLabelText(/homeworld/i)).toBeInTheDocument();
+    const humanBtn = screen.getByRole('button', { pressed: true });
+    expect(humanBtn).toHaveTextContent('Human');
   });
 
-  it('Continue button is disabled until name is provided', async () => {
+  it('allows selecting a different species', async () => {
     const user = userEvent.setup();
     renderWithProvider();
-    expect(screen.getByRole('button', { name: /continue/i })).toBeDisabled();
-    await user.type(screen.getByLabelText(/name/i), 'Marcus');
-    expect(screen.getByRole('button', { name: /continue/i })).not.toBeDisabled();
+    const cards = screen.getAllByRole('button', { name: /aslan/i });
+    const aslanBtn = cards[0];
+    await user.click(aslanBtn);
+    expect(aslanBtn).toHaveAttribute('aria-pressed', 'true');
   });
 
-  it('calls onContinue when form is submitted', async () => {
+  it('calls onContinue when continue is clicked', async () => {
     const user = userEvent.setup();
     const { onContinue } = renderWithProvider();
-    await user.type(screen.getByLabelText(/name/i), 'Marcus');
     await user.click(screen.getByRole('button', { name: /continue/i }));
     expect(onContinue).toHaveBeenCalled();
   });

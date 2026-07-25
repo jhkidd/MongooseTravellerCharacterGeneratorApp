@@ -12,7 +12,29 @@ interface HexBadgeProps {
 function formatDM(dm: number): string {
   if (dm > 0) return `+${dm}`;
   if (dm < 0) return `\u2212${Math.abs(dm)}`;
-  return '';
+  return '+0';
+}
+
+/** SVG hex outline for the empty/drop-target state */
+function HexOutline() {
+  // Points for a flat-top hexagon fitting a 100x100 viewBox
+  const points = '50,0 100,25 100,75 50,100 0,75 0,25';
+  return (
+    <svg
+      className="hex-badge__outline-svg"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <polygon
+        points={points}
+        fill="none"
+        stroke="var(--color-border)"
+        strokeWidth="3"
+        strokeDasharray="6 4"
+      />
+    </svg>
+  );
 }
 
 export function HexBadge({
@@ -34,9 +56,12 @@ export function HexBadge({
 
   return (
     <div className={classes}>
-      <div className="hex-badge__hex">
-        <span className="hex-badge__value">{value}</span>
-        {dm != null && dm !== 0 && (
+      <div className="hex-badge__hex-wrapper">
+        {variant === 'empty' && <HexOutline />}
+        <div className="hex-badge__hex">
+          <span className="hex-badge__value">{value}</span>
+        </div>
+        {dm != null && (
           <span className="hex-badge__dm">{formatDM(dm)}</span>
         )}
       </div>

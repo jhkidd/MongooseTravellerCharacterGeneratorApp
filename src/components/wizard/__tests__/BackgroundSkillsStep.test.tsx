@@ -17,7 +17,13 @@ function renderWithProvider(onContinue = vi.fn()) {
 describe('BackgroundSkillsStep', () => {
   it('renders the heading', () => {
     renderWithProvider();
-    expect(screen.getByText(/background skills/i)).toBeInTheDocument();
+    expect(screen.getByText(/background & skills/i)).toBeInTheDocument();
+  });
+
+  it('has name and homeworld inputs', () => {
+    renderWithProvider();
+    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/homeworld/i)).toBeInTheDocument();
   });
 
   it('shows the skill picker with background skills', () => {
@@ -27,7 +33,7 @@ describe('BackgroundSkillsStep', () => {
     expect(screen.getByText('Vacc Suit')).toBeInTheDocument();
   });
 
-  it('Continue is disabled until correct number of skills picked', () => {
+  it('Continue is disabled until name and skills are provided', () => {
     renderWithProvider();
     expect(screen.getByRole('button', { name: /continue/i })).toBeDisabled();
   });

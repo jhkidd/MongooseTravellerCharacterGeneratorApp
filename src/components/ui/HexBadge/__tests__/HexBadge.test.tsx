@@ -23,9 +23,11 @@ describe('HexBadge', () => {
     expect(screen.getByText('−1')).toBeInTheDocument();
   });
 
-  it('does not render DM when it is zero', () => {
+  it('renders +0 DM when modifier is zero', () => {
     const { container } = render(<HexBadge value={7} dm={0} />);
-    expect(container.querySelector('.hex-badge__dm')).not.toBeInTheDocument();
+    const dmEl = container.querySelector('.hex-badge__dm');
+    expect(dmEl).toBeInTheDocument();
+    expect(dmEl).toHaveTextContent('+0');
   });
 
   it('applies the correct size class', () => {

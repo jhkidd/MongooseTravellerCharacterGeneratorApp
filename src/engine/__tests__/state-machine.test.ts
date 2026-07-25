@@ -3,6 +3,8 @@ import {
   getNextPhase,
   createInitialContext,
   canAttemptPreCareer,
+  FLEXIBLE_ASSIGNMENT_CAREERS,
+  RIGID_ASSIGNMENT_CAREERS,
   type PhaseContext,
 } from '../state-machine';
 
@@ -17,14 +19,16 @@ describe('Phase enum', () => {
     expect(Phase.EDUCATION_EVENTS).toBe('EDUCATION_EVENTS');
     expect(Phase.GRADUATION_ROLL).toBe('GRADUATION_ROLL');
     expect(Phase.CAREER_SELECTION).toBe('CAREER_SELECTION');
+    expect(Phase.ASSIGNMENT_SELECTION).toBe('ASSIGNMENT_SELECTION');
     expect(Phase.QUALIFICATION_ROLL).toBe('QUALIFICATION_ROLL');
     expect(Phase.DRAFT_OR_DRIFTER).toBe('DRAFT_OR_DRIFTER');
-    expect(Phase.CAREER_ACTIVE).toBe('CAREER_ACTIVE');
+    expect(Phase.ASSIGNMENT_CHANGE_ROLL).toBe('ASSIGNMENT_CHANGE_ROLL');
+    expect(Phase.BASIC_TRAINING).toBe('BASIC_TRAINING');
+    expect(Phase.SKILL_TRAINING).toBe('SKILL_TRAINING');
     expect(Phase.SURVIVAL_ROLL).toBe('SURVIVAL_ROLL');
     expect(Phase.MISHAP_RESOLUTION).toBe('MISHAP_RESOLUTION');
     expect(Phase.EVENT_ROLL).toBe('EVENT_ROLL');
     expect(Phase.EVENT_RESOLUTION).toBe('EVENT_RESOLUTION');
-    expect(Phase.SKILL_TRAINING).toBe('SKILL_TRAINING');
     expect(Phase.COMMISSION_OR_ADVANCEMENT).toBe('COMMISSION_OR_ADVANCEMENT');
     expect(Phase.RANK_BONUS).toBe('RANK_BONUS');
     expect(Phase.TERM_NARRATIVE).toBe('TERM_NARRATIVE');
@@ -42,6 +46,7 @@ describe('createInitialContext', () => {
     expect(ctx.currentTerm).toBe(0);
     expect(ctx.currentCareer).toBeNull();
     expect(ctx.currentAssignment).toBeNull();
+    expect(ctx.termsInCurrentCareer).toBe(0);
     expect(ctx.isOfficer).toBe(false);
     expect(ctx.previousCareers).toEqual([]);
     expect(ctx.forcedCareer).toBeNull();
@@ -49,6 +54,23 @@ describe('createInitialContext', () => {
     expect(ctx.pendingAdvancementDM).toBe(0);
     expect(ctx.preCareerCompleted).toBe(false);
     expect(ctx.commissionAttempted).toBe(false);
+    expect(ctx.pendingAssignmentChange).toBeNull();
+  });
+});
+
+describe('assignment career categorisation', () => {
+  it('flexible careers include army, marines, navy, nobility, rogue, scholar, scout', () => {
+    expect(FLEXIBLE_ASSIGNMENT_CAREERS).toContain('army');
+    expect(FLEXIBLE_ASSIGNMENT_CAREERS).toContain('marines');
+    expect(FLEXIBLE_ASSIGNMENT_CAREERS).toContain('navy');
+    expect(FLEXIBLE_ASSIGNMENT_CAREERS).toContain('scout');
+  });
+
+  it('rigid careers include agent, citizen, entertainer, merchant', () => {
+    expect(RIGID_ASSIGNMENT_CAREERS).toContain('agent');
+    expect(RIGID_ASSIGNMENT_CAREERS).toContain('citizen');
+    expect(RIGID_ASSIGNMENT_CAREERS).toContain('entertainer');
+    expect(RIGID_ASSIGNMENT_CAREERS).toContain('merchant');
   });
 });
 
@@ -86,10 +108,18 @@ describe('getNextPhase — term start branching', () => {
     expect(result.phase).toBe(Phase.CAREER_SELECTION);
   });
 
-  it('TERM_START → CAREER_ACTIVE when continuing same career', () => {
-    const ctx = { ...createInitialContext(), currentTerm: 2, currentCareer: 'army' };
+  it('TERM_START → SKILL_TRAINING when continuing same career (later term)', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 2, currentCareer: 'army', currentAssignment: 'infantry', termsInCurrentCareer: 1 };
     const result = getNextPhase(Phase.TERM_START, { type: 'CONTINUE_CAREER' }, ctx);
-    expect(result.phase).toBe(Phase.CAREER_ACTIVE);
+    expect(result.phase).toBe(Phase.SKILL_TRAINING);
+    expect(result.context.termsInCurrentCareer).toBe(2);
+  });
+
+  it('TERM_START → ASSIGNMENT_CHANGE_ROLL when requesting assignment change in flexible career', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 2, currentCareer: 'army', currentAssignment: 'infantry', termsInCurrentCareer: 1 };
+    const result = getNextPhase(Phase.TERM_START, { type: 'CONTINUE_CAREER_CHANGE_ASSIGNMENT', assignmentId: 'cavalry' }, ctx);
+    expect(result.phase).toBe(Phase.ASSIGNMENT_CHANGE_ROLL);
+    expect(result.context.pendingAssignmentChange).toBe('cavalry');
   });
 });
 
@@ -126,25 +156,40 @@ describe('getNextPhase — pre-career education path', () => {
   });
 });
 
-describe('getNextPhase — career selection path', () => {
-  it('CAREER_SELECTION → QUALIFICATION_ROLL for normal career', () => {
+describe('getNextPhase — career selection and qualification', () => {
+  it('CAREER_SELECTION → ASSIGNMENT_SELECTION for normal career', () => {
     const ctx = { ...createInitialContext(), currentTerm: 1 };
     const result = getNextPhase(Phase.CAREER_SELECTION, { type: 'SELECT_CAREER', careerId: 'army' }, ctx);
-    expect(result.phase).toBe(Phase.QUALIFICATION_ROLL);
+    expect(result.phase).toBe(Phase.ASSIGNMENT_SELECTION);
     expect(result.context.currentCareer).toBe('army');
   });
 
-  it('CAREER_SELECTION → CAREER_ACTIVE for Drifter (no qualification)', () => {
+  it('CAREER_SELECTION → ASSIGNMENT_SELECTION for Drifter (no qualification needed)', () => {
     const ctx = { ...createInitialContext(), currentTerm: 1 };
     const result = getNextPhase(Phase.CAREER_SELECTION, { type: 'SELECT_DRIFTER' }, ctx);
-    expect(result.phase).toBe(Phase.CAREER_ACTIVE);
+    expect(result.phase).toBe(Phase.ASSIGNMENT_SELECTION);
     expect(result.context.currentCareer).toBe('drifter');
   });
 
-  it('QUALIFICATION_ROLL → CAREER_ACTIVE on success', () => {
+  it('ASSIGNMENT_SELECTION → QUALIFICATION_ROLL for normal career', () => {
     const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army' };
+    const result = getNextPhase(Phase.ASSIGNMENT_SELECTION, { type: 'SELECT_ASSIGNMENT', assignmentId: 'infantry' }, ctx);
+    expect(result.phase).toBe(Phase.QUALIFICATION_ROLL);
+    expect(result.context.currentAssignment).toBe('infantry');
+  });
+
+  it('ASSIGNMENT_SELECTION → BASIC_TRAINING for Drifter (skips qualification)', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'drifter' };
+    const result = getNextPhase(Phase.ASSIGNMENT_SELECTION, { type: 'SELECT_ASSIGNMENT', assignmentId: 'barbarian' }, ctx);
+    expect(result.phase).toBe(Phase.BASIC_TRAINING);
+    expect(result.context.currentAssignment).toBe('barbarian');
+  });
+
+  it('QUALIFICATION_ROLL → BASIC_TRAINING on success', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army', currentAssignment: 'infantry' };
     const result = getNextPhase(Phase.QUALIFICATION_ROLL, { type: 'ROLL_SUCCESS' }, ctx);
-    expect(result.phase).toBe(Phase.CAREER_ACTIVE);
+    expect(result.phase).toBe(Phase.BASIC_TRAINING);
+    expect(result.context.termsInCurrentCareer).toBe(1);
   });
 
   it('QUALIFICATION_ROLL → DRAFT_OR_DRIFTER on failure', () => {
@@ -153,10 +198,31 @@ describe('getNextPhase — career selection path', () => {
     expect(result.phase).toBe(Phase.DRAFT_OR_DRIFTER);
   });
 
-  it('DRAFT_OR_DRIFTER → CAREER_ACTIVE', () => {
+  it('DRAFT_OR_DRIFTER → BASIC_TRAINING', () => {
     const ctx = { ...createInitialContext(), currentTerm: 1 };
     const result = getNextPhase(Phase.DRAFT_OR_DRIFTER, { type: 'CONTINUE' }, ctx);
-    expect(result.phase).toBe(Phase.CAREER_ACTIVE);
+    expect(result.phase).toBe(Phase.BASIC_TRAINING);
+    expect(result.context.termsInCurrentCareer).toBe(1);
+  });
+});
+
+describe('getNextPhase — assignment change within flexible career', () => {
+  it('ASSIGNMENT_CHANGE_ROLL → SKILL_TRAINING on success (assignment swapped)', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 2, currentCareer: 'army', currentAssignment: 'infantry', termsInCurrentCareer: 1, pendingAssignmentChange: 'cavalry' };
+    const result = getNextPhase(Phase.ASSIGNMENT_CHANGE_ROLL, { type: 'ROLL_SUCCESS' }, ctx);
+    expect(result.phase).toBe(Phase.SKILL_TRAINING);
+    expect(result.context.currentAssignment).toBe('cavalry');
+    expect(result.context.pendingAssignmentChange).toBeNull();
+    expect(result.context.termsInCurrentCareer).toBe(2);
+  });
+
+  it('ASSIGNMENT_CHANGE_ROLL → SKILL_TRAINING on failure (stays in current assignment)', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 2, currentCareer: 'army', currentAssignment: 'infantry', termsInCurrentCareer: 1, pendingAssignmentChange: 'cavalry' };
+    const result = getNextPhase(Phase.ASSIGNMENT_CHANGE_ROLL, { type: 'ROLL_FAILURE' }, ctx);
+    expect(result.phase).toBe(Phase.SKILL_TRAINING);
+    expect(result.context.currentAssignment).toBe('infantry');
+    expect(result.context.pendingAssignmentChange).toBeNull();
+    expect(result.context.termsInCurrentCareer).toBe(2);
   });
 });
 
@@ -166,11 +232,17 @@ describe('getNextPhase — career term flow (corrected order)', () => {
     currentTerm: 1,
     currentCareer: 'army',
     currentAssignment: 'infantry',
+    termsInCurrentCareer: 1,
     commissionAttempted: false,
   };
 
-  it('CAREER_ACTIVE → SURVIVAL_ROLL', () => {
-    const result = getNextPhase(Phase.CAREER_ACTIVE, { type: 'CONTINUE' }, baseCtx);
+  it('BASIC_TRAINING → SURVIVAL_ROLL (first term in career)', () => {
+    const result = getNextPhase(Phase.BASIC_TRAINING, { type: 'CONTINUE' }, baseCtx);
+    expect(result.phase).toBe(Phase.SURVIVAL_ROLL);
+  });
+
+  it('SKILL_TRAINING → SURVIVAL_ROLL (later terms)', () => {
+    const result = getNextPhase(Phase.SKILL_TRAINING, { type: 'CONTINUE' }, baseCtx);
     expect(result.phase).toBe(Phase.SURVIVAL_ROLL);
   });
 
@@ -195,13 +267,8 @@ describe('getNextPhase — career term flow (corrected order)', () => {
     expect(result.phase).toBe(Phase.EVENT_RESOLUTION);
   });
 
-  it('EVENT_RESOLUTION → SKILL_TRAINING', () => {
+  it('EVENT_RESOLUTION → COMMISSION_OR_ADVANCEMENT', () => {
     const result = getNextPhase(Phase.EVENT_RESOLUTION, { type: 'CONTINUE' }, baseCtx);
-    expect(result.phase).toBe(Phase.SKILL_TRAINING);
-  });
-
-  it('SKILL_TRAINING → COMMISSION_OR_ADVANCEMENT', () => {
-    const result = getNextPhase(Phase.SKILL_TRAINING, { type: 'CONTINUE' }, baseCtx);
     expect(result.phase).toBe(Phase.COMMISSION_OR_ADVANCEMENT);
   });
 
@@ -233,19 +300,20 @@ describe('getNextPhase — career term flow (corrected order)', () => {
 
 describe('getNextPhase — term end decisions', () => {
   it('TERM_END_DECISION → TERM_START when continuing (increments term)', () => {
-    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army' };
+    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army', termsInCurrentCareer: 1 };
     const result = getNextPhase(Phase.TERM_END_DECISION, { type: 'CONTINUE_CAREER' }, ctx);
     expect(result.phase).toBe(Phase.TERM_START);
     expect(result.context.currentTerm).toBe(2);
   });
 
   it('TERM_END_DECISION → TERM_START when switching career', () => {
-    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army' };
+    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army', termsInCurrentCareer: 1 };
     const result = getNextPhase(Phase.TERM_END_DECISION, { type: 'SWITCH_CAREER' }, ctx);
     expect(result.phase).toBe(Phase.TERM_START);
     expect(result.context.currentTerm).toBe(2);
     expect(result.context.currentCareer).toBeNull();
     expect(result.context.previousCareers).toContain('army');
+    expect(result.context.termsInCurrentCareer).toBe(0);
   });
 
   it('TERM_END_DECISION → MUSTERING_OUT when choosing to muster out', () => {

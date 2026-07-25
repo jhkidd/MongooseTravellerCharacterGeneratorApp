@@ -46,11 +46,18 @@ export function WizardShell() {
         return <GraduationRollStep onAdvance={advance} />;
       case Phase.CAREER_SELECTION:
         return <CareerSelectionStep context={context} onAdvance={advance} />;
+      case Phase.ASSIGNMENT_SELECTION:
+        return <CareerTermStep phase={phase} context={context} onAdvance={advance} />;
       case Phase.QUALIFICATION_ROLL:
         return <QualificationRollStep context={context} onAdvance={advance} />;
       case Phase.DRAFT_OR_DRIFTER:
         return <DraftOrDrifterStep context={context} onAdvance={advance} />;
-      case Phase.CAREER_ACTIVE:
+      case Phase.ASSIGNMENT_CHANGE_ROLL:
+        return <CareerTermStep phase={phase} context={context} onAdvance={advance} />;
+      case Phase.BASIC_TRAINING:
+        return <SkillTrainingStep context={context} onAdvance={advance} isBasicTraining={true} />;
+      case Phase.SKILL_TRAINING:
+        return <SkillTrainingStep context={context} onAdvance={advance} isBasicTraining={false} />;
       case Phase.SURVIVAL_ROLL:
         return <CareerTermStep phase={phase} context={context} onAdvance={advance} />;
       case Phase.MISHAP_RESOLUTION:
@@ -58,8 +65,6 @@ export function WizardShell() {
       case Phase.EVENT_ROLL:
       case Phase.EVENT_RESOLUTION:
         return <EventResolutionStep phase={phase} context={context} onAdvance={advance} />;
-      case Phase.SKILL_TRAINING:
-        return <SkillTrainingStep context={context} onAdvance={advance} />;
       case Phase.COMMISSION_OR_ADVANCEMENT:
         return <AdvancementStep context={context} onAdvance={advance} />;
       case Phase.RANK_BONUS:

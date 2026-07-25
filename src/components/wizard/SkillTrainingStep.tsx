@@ -8,12 +8,13 @@ import type { PhaseAction, PhaseContext } from '../../engine/state-machine';
 interface SkillTrainingStepProps {
   context: PhaseContext;
   onAdvance: (action: PhaseAction) => void;
+  isBasicTraining?: boolean;
 }
 
 const DRIFTER_SKILLS: SkillGrantOption[] = ['Streetwise', 'Survival', 'Recon', 'Carouse', 'Mechanic', 'Drive']
   .map((skill) => ({ label: skill, skill }));
 
-export function SkillTrainingStep({ context, onAdvance }: SkillTrainingStepProps) {
+export function SkillTrainingStep({ context, onAdvance, isBasicTraining = false }: SkillTrainingStepProps) {
   const { dispatch } = useCharacter();
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
 
@@ -24,6 +25,14 @@ export function SkillTrainingStep({ context, onAdvance }: SkillTrainingStepProps
   ), [serviceTable]);
 
   const selectedOption = skillOptions.find((option) => option.label === selectedLabel) ?? null;
+
+  function handleBasicTraining() {
+    // Basic training: gain all service skills at level 0
+    for (const option of skillOptions) {
+      dispatch({ type: 'GAIN_SKILL', skill: option.skill, level: 0 });
+    }
+    onAdvance({ type: 'CONTINUE' });
+  }
 
   function handleContinue() {
     if (!selectedOption) {
@@ -42,6 +51,32 @@ export function SkillTrainingStep({ context, onAdvance }: SkillTrainingStepProps
     }
 
     onAdvance({ type: 'CONTINUE' });
+  }
+
+  if (isBasicTraining) {
+    return (
+      <div>
+        <ChamferedHeader>Basic Training</ChamferedHeader>
+        <p>
+          As a new recruit, you receive basic training in your career&apos;s core skills.
+          You gain all of the following at level 0:
+        </p>
+        <ul style={{ listStyle: 'none', padding: 0, margin: '1rem 0' }}>
+          {skillOptions.map((option) => (
+            <li key={option.label} style={{ padding: '0.25rem 0', color: 'var(--color-text-secondary)' }}>
+              • {option.label}
+            </li>
+          ))}
+        </ul>
+        <button
+          type="button"
+          onClick={handleBasicTraining}
+          style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}
+        >
+          Continue
+        </button>
+      </div>
+    );
   }
 
   return (
