@@ -180,7 +180,32 @@ On failed entry: must immediately attempt a career (or Drifter/draft on that fai
 - Sans-serif typography, uppercase headers with letter-spacing
 - Progress bar showing phase completion
 
+### Success Probability Display
+
+For any 2D6 skill/characteristic check, the app displays the percentage chance of success (rounded to nearest integer). The probability is computed from the static 2D6 distribution — the 36 possible outcomes map to cumulative "N or higher" probabilities:
+
+| Need to roll | Probability |
+|---|---|
+| 2+ | 100% |
+| 3+ | 97% |
+| 4+ | 92% |
+| 5+ | 83% |
+| 6+ | 72% |
+| 7+ | 58% |
+| 8+ | 42% |
+| 9+ | 28% |
+| 10+ | 17% |
+| 11+ | 8% |
+| 12+ | 3% |
+
+The effective target = base target − total DM (characteristic DM + any situational modifiers). For example, EDU 8+ with EDU DM +1 means the player needs a raw 7+, which is 58%.
+
+This is shown via a reusable `SuccessChance` component displayed alongside any check — qualification rolls, survival rolls, advancement rolls, skill checks within events, graduation rolls, etc. Not used for random result tables (mishap/event rolls) since those aren't pass/fail.
+
+For tiered outcomes (e.g., university graduation vs. graduation with honors), the component shows two separate probabilities stacked: "Graduate: 72%" and "With Honors: 42%".
+
 ### Key Components
+- `SuccessChance` — displays percentage chance of success for 2D6 checks, with optional tiered outcomes
 - `HexBadge` — hexagonal characteristic display with value + DM
 - `ChamferedHeader` — angled section headers
 - `DiceRoller` — 3D CSS dice (ported from existing Svelte component) with spin → settle animation
