@@ -1,0 +1,42 @@
+.skill-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.skill-picker__count {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.skill-picker__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.skill-picker__skill {
+  background: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  color: var(--color-text-primary);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.skill-picker__skill:hover:not(:disabled) {
+  border-color: var(--color-accent-dim);
+}
+
+.skill-picker__skill--selected {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+.skill-picker__skill:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

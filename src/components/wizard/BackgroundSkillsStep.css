@@ -1,0 +1,33 @@
+.background-skills-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.background-skills-step__info {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.background-skills-step__continue {
+  align-self: flex-end;
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  border: none;
+  padding: var(--space-sm) var(--space-xl);
+  font-size: var(--text-base);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.background-skills-step__continue:hover:not(:disabled) {
+  background: var(--color-accent-light);
+}
+
+.background-skills-step__continue:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
