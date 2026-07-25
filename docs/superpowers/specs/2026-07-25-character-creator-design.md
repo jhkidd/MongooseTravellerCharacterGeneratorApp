@@ -142,6 +142,19 @@ interface Character {
 
 **Skills and specialties** are stored separately. `skills["Animals"] = 0` means base competency; `specialties["Animals:Handling"] = 1` means trained specialty. Incrementing a skill with specialties always increments a chosen specialty instead.
 
+## Characteristic Assignment (Drag & Drop)
+
+Per the rules, the player rolls 2D6 six times and assigns the results to characteristics in any order they choose. The UI for this is:
+
+1. **Roll phase:** Player clicks "Roll" → all 6 pairs of 3D dice spin simultaneously with staggered settle times → results appear in a pool
+2. **Assignment pool:** Each result displays as `[die₁] [die₂] = ⬡total` — the hexagonal total is the draggable element, matching the shape of the drop targets
+3. **Drop targets:** 6 hexagonal slots labeled STR, DEX, END, INT, EDU, SOC — empty slots show dashed borders with "Drop" text, filled slots show the value + calculated DM
+4. **Unassign:** Filled slots have an "unassign" link to return the value to the pool for reassignment
+5. **Species modifiers:** Applied automatically after all 6 are assigned (e.g., Aslan STR +2, DEX -2), displayed as a separate modifier on the hex
+6. **Continue:** Only enabled once all 6 slots are filled
+
+Uses HTML Drag and Drop API. The hex-to-hex visual affordance makes the interaction self-explanatory.
+
 ## Background Skills
 
 Available in the BACKGROUND_SKILLS phase. Player freely picks from: Admin, Animals, Art, Athletics, Carouse, Drive, Electronics, Flyer, Language, Mechanic, Medic, Profession, Science, Seafarer, Streetwise, Survival, Vacc Suit.
@@ -206,6 +219,7 @@ For tiered outcomes (e.g., university graduation vs. graduation with honors), th
 
 ### Key Components
 - `SuccessChance` — displays percentage chance of success for 2D6 checks, with optional tiered outcomes
+- `CharacteristicAssigner` — drag-and-drop hex results into hex characteristic slots
 - `HexBadge` — hexagonal characteristic display with value + DM
 - `ChamferedHeader` — angled section headers
 - `DiceRoller` — 3D CSS dice (ported from existing Svelte component) with spin → settle animation
