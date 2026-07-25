@@ -1,0 +1,103 @@
+.hex-badge {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hex-badge__hex {
+  clip-path: var(--hex-clip);
+  background-color: var(--color-bg-elevated);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hex-badge__hex::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: var(--hex-clip);
+  background: var(--color-accent);
+  z-index: -1;
+  transform: scale(1.06);
+}
+
+.hex-badge__value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.hex-badge__dm {
+  position: absolute;
+  bottom: -2px;
+  right: -4px;
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--color-accent-light);
+  background: var(--color-bg-primary);
+  padding: 0 3px;
+  border-radius: var(--radius-sm);
+  line-height: 1.2;
+}
+
+.hex-badge__label {
+  margin-top: var(--space-xs);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+}
+
+.hex-badge--sm .hex-badge__hex {
+  width: 40px;
+  height: 44px;
+}
+
+.hex-badge--sm .hex-badge__value {
+  font-size: var(--text-sm);
+}
+
+.hex-badge--md .hex-badge__hex {
+  width: 56px;
+  height: 62px;
+}
+
+.hex-badge--md .hex-badge__value {
+  font-size: var(--text-xl);
+}
+
+.hex-badge--lg .hex-badge__hex {
+  width: 72px;
+  height: 80px;
+}
+
+.hex-badge--lg .hex-badge__value {
+  font-size: var(--text-2xl);
+}
+
+.hex-badge--empty .hex-badge__hex {
+  background-color: transparent;
+  border: 2px dashed var(--color-border);
+}
+
+.hex-badge--empty .hex-badge__hex::before {
+  display: none;
+}
+
+.hex-badge--empty .hex-badge__value {
+  color: var(--color-text-muted);
+}
+
+.hex-badge--success .hex-badge__hex::before {
+  background: var(--color-success-border);
+}
+
+.hex-badge--failure .hex-badge__hex::before {
+  background: var(--color-failure-border);
+}

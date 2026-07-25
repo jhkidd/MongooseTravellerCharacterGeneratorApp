@@ -1,0 +1,22 @@
+.chamfered-header {
+  background: var(--chamfer-bg);
+  padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-lg);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-md);
+}
+
+.chamfered-header--1 {
+  font-size: var(--text-2xl);
+  padding: var(--space-md) var(--space-lg) var(--space-md) var(--space-xl);
+}
+
+.chamfered-header--2 {
+  font-size: var(--text-lg);
+}
+
+.chamfered-header--3 {
+  font-size: var(--text-base);
+  padding: var(--space-xs) var(--space-sm) var(--space-xs) var(--space-md);
+}
