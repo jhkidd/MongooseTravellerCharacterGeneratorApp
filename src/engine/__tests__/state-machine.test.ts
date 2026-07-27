@@ -259,10 +259,11 @@ describe('getNextPhase — career term flow (corrected order)', () => {
     expect(result.phase).toBe(Phase.EVENT_ROLL);
   });
 
-  it('MISHAP_RESOLUTION → CAREER_BENEFIT_ROLLS (ejected from career)', () => {
+  it('MISHAP_RESOLUTION → AGING_CHECK (ejected from career, still ages)', () => {
     const result = getNextPhase(Phase.MISHAP_RESOLUTION, { type: 'CONTINUE' }, baseCtx);
-    expect(result.phase).toBe(Phase.CAREER_BENEFIT_ROLLS);
+    expect(result.phase).toBe(Phase.AGING_CHECK);
     expect(result.context.currentCareer).toBe('army');
+    expect(result.context.ejectedFromCareer).toBe(true);
   });
 
   it('MISHAP_RESOLUTION → EVENT_ROLL when mishap allows staying', () => {
@@ -304,6 +305,13 @@ describe('getNextPhase — career term flow (corrected order)', () => {
   it('AGING_CHECK → TERM_END_DECISION', () => {
     const result = getNextPhase(Phase.AGING_CHECK, { type: 'CONTINUE' }, baseCtx);
     expect(result.phase).toBe(Phase.TERM_END_DECISION);
+  });
+
+  it('AGING_CHECK → CAREER_BENEFIT_ROLLS when ejected from career', () => {
+    const ctx = { ...baseCtx, ejectedFromCareer: true };
+    const result = getNextPhase(Phase.AGING_CHECK, { type: 'CONTINUE' }, ctx);
+    expect(result.phase).toBe(Phase.CAREER_BENEFIT_ROLLS);
+    expect(result.context.ejectedFromCareer).toBe(false);
   });
 });
 

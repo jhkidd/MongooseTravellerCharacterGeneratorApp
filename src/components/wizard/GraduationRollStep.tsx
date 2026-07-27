@@ -10,10 +10,16 @@ interface GraduationRollStepProps {
 }
 
 export function GraduationRollStep({ onAdvance }: GraduationRollStepProps) {
-  const { character } = useCharacter();
+  const { character, dispatch } = useCharacter();
   const [result, setResult] = useState<{ total: number; success: boolean; roll: number } | null>(null);
   const dm = getDM(character.characteristics.INT);
   const target = 7;
+
+  function handleContinue() {
+    // Education is a full term - age the traveller
+    dispatch({ type: 'INCREMENT_AGE', years: 4 });
+    onAdvance({ type: 'CONTINUE' });
+  }
 
   return (
     <div>
@@ -38,7 +44,7 @@ export function GraduationRollStep({ onAdvance }: GraduationRollStepProps) {
             {result.total}
             {result.success ? ' — Graduated!' : ' — Did not graduate.'}
           </p>
-          <button type="button" onClick={() => onAdvance({ type: 'CONTINUE' })} style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}>
+          <button type="button" onClick={handleContinue} style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}>
             Continue
           </button>
         </div>

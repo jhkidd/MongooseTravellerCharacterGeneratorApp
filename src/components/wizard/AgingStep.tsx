@@ -14,6 +14,14 @@ export function AgingStep({ phase, context, onAdvance }: AgingStepProps) {
   const { character, dispatch } = useCharacter();
   const ageApplied = useRef(false);
 
+  // Must be called unconditionally (rules of hooks)
+  useEffect(() => {
+    if (phase !== Phase.AGING_CHECK) return;
+    if (ageApplied.current) return;
+    ageApplied.current = true;
+    dispatch({ type: 'INCREMENT_AGE', years: 4 });
+  }, [phase, dispatch]);
+
   if (phase === Phase.RANK_BONUS) {
     return (
       <div>
@@ -39,13 +47,6 @@ export function AgingStep({ phase, context, onAdvance }: AgingStepProps) {
       </div>
     );
   }
-
-  // AGING_CHECK phase: apply age increment once
-  useEffect(() => {
-    if (ageApplied.current) return;
-    ageApplied.current = true;
-    dispatch({ type: 'INCREMENT_AGE', years: 4 });
-  }, [dispatch]);
 
   const newAge = character.age + 4;
   const needsAgingRoll = newAge >= 34;

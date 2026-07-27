@@ -58,6 +58,8 @@ export interface PhaseContext {
   commissionAttempted: boolean;
   /** Set when a player requests an assignment change within a flexible career */
   pendingAssignmentChange: string | null;
+  /** Set when ejected from career via mishap - skip TERM_END_DECISION */
+  ejectedFromCareer: boolean;
 }
 
 export function createInitialContext(): PhaseContext {
@@ -74,6 +76,7 @@ export function createInitialContext(): PhaseContext {
     preCareerCompleted: false,
     commissionAttempted: false,
     pendingAssignmentChange: null,
+    ejectedFromCareer: false,
   };
 }
 
@@ -238,7 +241,9 @@ export function getNextPhase(
       if (action.type === 'ROLL_SUCCESS') {
         return { phase: Phase.EVENT_ROLL, context: ctx };
       }
-      return { phase: Phase.CAREER_BENEFIT_ROLLS, context: ctx };
+      // Ejected from career - still age, then collect benefits
+      ctx.ejectedFromCareer = true;
+      return { phase: Phase.AGING_CHECK, context: ctx };
 
     case Phase.EVENT_ROLL:
       return { phase: Phase.EVENT_RESOLUTION, context: ctx };
@@ -262,6 +267,10 @@ export function getNextPhase(
       return { phase: Phase.AGING_CHECK, context: ctx };
 
     case Phase.AGING_CHECK:
+      if (ctx.ejectedFromCareer) {
+        ctx.ejectedFromCareer = false;
+        return { phase: Phase.CAREER_BENEFIT_ROLLS, context: ctx };
+      }
       return { phase: Phase.TERM_END_DECISION, context: ctx };
 
     case Phase.TERM_END_DECISION:
