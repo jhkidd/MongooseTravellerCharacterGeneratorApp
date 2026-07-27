@@ -97,19 +97,19 @@
 }
 
 .dice-group__result-glow.dice-group__result--dm-plus1 {
-  filter: drop-shadow(0 0 6px rgba(80, 200, 120, 0.6));
+  filter: drop-shadow(0 0 10px rgba(80, 200, 120, 0.7));
 }
 
 .dice-group__result-glow.dice-group__result--dm-plus2 {
-  filter: drop-shadow(0 0 10px rgba(80, 200, 120, 0.9));
+  filter: drop-shadow(0 0 14px rgba(80, 200, 120, 1));
 }
 
 .dice-group__result-glow.dice-group__result--dm-minus1 {
-  filter: drop-shadow(0 0 6px rgba(220, 60, 60, 0.6));
+  filter: drop-shadow(0 0 10px rgba(220, 60, 60, 0.7));
 }
 
 .dice-group__result-glow.dice-group__result--dm-minus2 {
-  filter: drop-shadow(0 0 10px rgba(220, 60, 60, 0.9));
+  filter: drop-shadow(0 0 14px rgba(220, 60, 60, 1));
 }
 
 @keyframes result-reveal {
