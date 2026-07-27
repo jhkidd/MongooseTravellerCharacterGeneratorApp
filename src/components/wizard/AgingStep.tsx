@@ -48,7 +48,7 @@ export function AgingStep({ phase, context, onAdvance }: AgingStepProps) {
     );
   }
 
-  const newAge = character.age + 4;
+  const newAge = character.age;
   const needsAgingRoll = newAge >= 34;
 
   return (
