@@ -32,8 +32,8 @@ export function EventResolutionStep({ phase, context, onAdvance }: EventResoluti
       if (signal.startsWith('advancementDM:')) {
         const value = Number.parseInt(signal.slice('advancementDM:'.length), 10);
         if (!Number.isNaN(value)) {
+          // Apply the DM first (stays on same phase), then advance
           onAdvance({ type: 'ADD_ADVANCEMENT_DM', value });
-          return;
         }
       }
     }
