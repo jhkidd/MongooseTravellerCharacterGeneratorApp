@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useCharacter } from '../../context/CharacterContext';
-import { getDM, roll2D6 } from '../../engine/dice';
+import { getDM } from '../../engine/dice';
 import { SuccessChance } from '../ui/SuccessChance/SuccessChance';
 import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
+import { DiceCheckRoll } from '../ui/Dice3D/DiceCheckRoll';
+import type { DiceCheckDM, DiceCheckResult } from '../ui/Dice3D/DiceCheckRoll';
 import type { PhaseAction } from '../../engine/state-machine';
 
 interface GraduationRollStepProps {
@@ -11,12 +13,20 @@ interface GraduationRollStepProps {
 
 export function GraduationRollStep({ onAdvance }: GraduationRollStepProps) {
   const { character, dispatch } = useCharacter();
-  const [result, setResult] = useState<{ total: number; success: boolean; roll: number } | null>(null);
+  const [result, setResult] = useState<DiceCheckResult | null>(null);
   const dm = getDM(character.characteristics.INT);
   const target = 7;
 
+  const dms: DiceCheckDM[] = [];
+  if (dm !== 0) {
+    dms.push({ label: 'INT DM', value: dm });
+  }
+
+  function handleResult(r: DiceCheckResult) {
+    setResult(r);
+  }
+
   function handleContinue() {
-    // Education is a full term - age the traveller
     dispatch({ type: 'INCREMENT_AGE', years: 4 });
     onAdvance({ type: 'CONTINUE' });
   }
@@ -24,25 +34,20 @@ export function GraduationRollStep({ onAdvance }: GraduationRollStepProps) {
   return (
     <div>
       <ChamferedHeader>Graduation</ChamferedHeader>
-      <p>Roll INT {target}+ to graduate successfully from your education term.</p>
       <SuccessChance baseTarget={target} dm={dm} label="Graduation" />
 
       {!result ? (
-        <button type="button" onClick={() => {
-          const roll = roll2D6();
-          const total = roll + dm;
-          setResult({ roll, total, success: total >= target });
-        }} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}>
-          Roll for Graduation
-        </button>
+        <DiceCheckRoll
+          target={target}
+          dms={dms}
+          label="Graduation"
+          characteristic="INT"
+          onResult={handleResult}
+        />
       ) : (
         <div style={{ marginTop: '1rem' }}>
-          <p>
-            Rolled {result.roll}
-            {dm !== 0 && ` ${dm > 0 ? '+' : '−'} ${Math.abs(dm)}`}
-            {' = '}
-            {result.total}
-            {result.success ? ' — Graduated!' : ' — Did not graduate.'}
+          <p style={{ color: result.success ? 'var(--color-success-text)' : 'var(--color-failure-text)' }}>
+            {result.success ? 'Graduated!' : 'Did not graduate.'}
           </p>
           <button type="button" onClick={handleContinue} style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}>
             Continue

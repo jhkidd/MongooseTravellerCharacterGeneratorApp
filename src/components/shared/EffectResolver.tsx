@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useCharacter } from '../../context/CharacterContext';
 import { interpretEffect, resolveImmediate } from '../../engine/effect-interpreter';
-import { getDM, roll2D6, rollD6 } from '../../engine/dice';
+import { getDM, rollD6 } from '../../engine/dice';
 import { getSharedTable, getTableEntry } from '../../data/table-loader';
 import { ChoicePanel } from './ChoicePanel';
 import { SkillPicker } from './SkillPicker';
+import { DiceCheckRoll } from '../ui/Dice3D/DiceCheckRoll';
+import type { DiceCheckDM, DiceCheckResult } from '../ui/Dice3D/DiceCheckRoll';
 import type { EffectNode } from '../../models/effect-types';
 import type { EffectSignal, InterpretedEffect } from '../../engine/effect-interpreter';
 import type { Character } from '../../models/types';
@@ -314,38 +316,38 @@ function SkillCheckResolver({
   setFollowOn: React.Dispatch<React.SetStateAction<EffectNode | null>>;
   onComplete: (result: EffectResolverResult) => void;
 }) {
-  const [rollResult, setRollResult] = useState<{ raw: number; total: number; success: boolean; isNatTwo: boolean } | null>(null);
+  const [rollResult, setRollResult] = useState<DiceCheckResult | null>(null);
 
   if (effectNode.type !== 'skillCheck') return null;
 
   const { skill, characteristic, target, success, failure, naturalTwo } = effectNode;
   const checkLabel = skill ?? characteristic ?? 'Check';
 
-  // Calculate DM from characteristic
-  let dm = 0;
+  // Calculate DM from characteristic or skill
+  let dmValue = 0;
+  let dmLabel = '';
   if (characteristic && character.characteristics[characteristic] !== undefined) {
-    dm = getDM(character.characteristics[characteristic]);
+    dmValue = getDM(character.characteristics[characteristic]);
+    dmLabel = `${characteristic} DM`;
   } else if (skill && character.skills[skill] !== undefined) {
-    // Use skill level as DM (simplified — full rules would add characteristic)
-    dm = character.skills[skill];
+    dmValue = character.skills[skill];
+    dmLabel = `${skill} skill`;
   }
 
-  function handleRoll() {
-    const raw = roll2D6();
-    const isNatTwo = raw === 2;
-    const total = raw + dm;
-    const passed = total >= target;
-    setRollResult({ raw, total, success: passed, isNatTwo });
+  const dms: DiceCheckDM[] = [];
+  if (dmValue !== 0) {
+    dms.push({ label: dmLabel, value: dmValue });
   }
 
-  function handleContinue() {
-    if (!rollResult) return;
+  function handleDiceResult(result: DiceCheckResult) {
+    const isNatTwo = result.raw === 2;
+    setRollResult({ ...result, success: result.total >= target });
 
     // Determine which branch to follow
     let branchEffect: EffectNode;
-    if (rollResult.isNatTwo && naturalTwo) {
+    if (isNatTwo && naturalTwo) {
       branchEffect = naturalTwo;
-    } else if (rollResult.success) {
+    } else if (result.total >= target) {
       branchEffect = success;
     } else {
       branchEffect = failure;
@@ -366,42 +368,18 @@ function SkillCheckResolver({
     }
   }
 
+  if (rollResult) {
+    return null;
+  }
+
   return (
-    <div>
-      <p>
-        Roll {checkLabel} {target}+
-        {dm !== 0 && ` (DM ${dm > 0 ? '+' : ''}${dm})`}
-      </p>
-
-      {!rollResult && (
-        <button
-          type="button"
-          onClick={handleRoll}
-          style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
-        >
-          Roll
-        </button>
-      )}
-
-      {rollResult && (
-        <div style={{ marginTop: '0.5rem' }}>
-          <p style={{ color: rollResult.success ? 'var(--color-success-text)' : 'var(--color-failure-text)' }}>
-            Rolled {rollResult.raw}
-            {dm !== 0 && ` ${dm > 0 ? '+' : '−'} ${Math.abs(dm)} = ${rollResult.total}`}
-            {rollResult.isNatTwo && naturalTwo && ' (Natural 2!)'}
-            {' — '}
-            {rollResult.success ? 'Success!' : 'Failed.'}
-          </p>
-          <button
-            type="button"
-            onClick={handleContinue}
-            style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
-          >
-            Continue
-          </button>
-        </div>
-      )}
-    </div>
+    <DiceCheckRoll
+      target={target}
+      dms={dms}
+      label={checkLabel}
+      characteristic={characteristic}
+      onResult={handleDiceResult}
+    />
   );
 }
 

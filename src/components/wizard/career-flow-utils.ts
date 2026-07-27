@@ -31,29 +31,49 @@ export function getCareerDisplayName(careerId: string | null): string {
   return career?.name ?? titleCase(careerId ?? 'career');
 }
 
+export interface ItemisedDM {
+  label: string;
+  value: number;
+}
+
+export function getQualificationDMs(
+  qualification: QualificationCheck | null | undefined,
+  character: Character,
+  context: Pick<PhaseContext, 'previousCareers'>,
+): ItemisedDM[] {
+  if (!qualification) return [];
+
+  const items: ItemisedDM[] = [];
+
+  const charDM = getDM(character.characteristics[qualification.characteristic]);
+  if (charDM !== 0) {
+    items.push({ label: `${qualification.characteristic} DM`, value: charDM });
+  }
+
+  for (const modifier of qualification.modifiers ?? []) {
+    if (modifier.type === 'previousCareers' && context.previousCareers.length > 0) {
+      const value = (modifier.dmPer ?? 0) * context.previousCareers.length;
+      if (value !== 0) {
+        items.push({ label: `Previous careers (${context.previousCareers.length})`, value });
+      }
+    } else if (modifier.type === 'age' && character.age >= (modifier.threshold ?? Number.MAX_SAFE_INTEGER)) {
+      const value = modifier.dm ?? 0;
+      if (value !== 0) {
+        items.push({ label: `Age ${character.age}+`, value });
+      }
+    }
+  }
+
+  return items;
+}
+
 export function getQualificationDM(
   qualification: QualificationCheck | null | undefined,
   character: Character,
   context: Pick<PhaseContext, 'previousCareers'>,
 ): number {
-  if (!qualification) {
-    return 0;
-  }
-
-  let dm = getDM(character.characteristics[qualification.characteristic]);
-
-  for (const modifier of qualification.modifiers ?? []) {
-    if (modifier.type === 'previousCareers') {
-      dm += (modifier.dmPer ?? 0) * context.previousCareers.length;
-      continue;
-    }
-
-    if (modifier.type === 'age' && character.age >= (modifier.threshold ?? Number.MAX_SAFE_INTEGER)) {
-      dm += modifier.dm ?? 0;
-    }
-  }
-
-  return dm;
+  return getQualificationDMs(qualification, character, context)
+    .reduce((sum, dm) => sum + dm.value, 0);
 }
 
 export function extractSkillGrantOptions(entries: Record<number, SkillTableEntry>): SkillGrantOption[] {

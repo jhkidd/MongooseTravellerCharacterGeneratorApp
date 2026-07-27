@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
-import { useCharacter } from '../../context/CharacterContext';
-import { roll2D6 } from '../../engine/dice';
+import { useMemo } from 'react';
 import { SuccessChance } from '../ui/SuccessChance/SuccessChance';
 import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
-import { getQualificationDM, tryLoadCareer } from './career-flow-utils';
+import { DiceCheckRoll } from '../ui/Dice3D/DiceCheckRoll';
+import { useCharacter } from '../../context/CharacterContext';
+import { getQualificationDM, getQualificationDMs, tryLoadCareer } from './career-flow-utils';
 import type { PhaseAction, PhaseContext } from '../../engine/state-machine';
 
 interface QualificationRollStepProps {
@@ -13,29 +13,11 @@ interface QualificationRollStepProps {
 
 export function QualificationRollStep({ context, onAdvance }: QualificationRollStepProps) {
   const { character } = useCharacter();
-  const [result, setResult] = useState<{ roll: number; success: boolean; total: number } | null>(null);
 
   const career = useMemo(() => tryLoadCareer(context.currentCareer), [context.currentCareer]);
   const qualification = career?.qualification ?? null;
   const dm = getQualificationDM(qualification, character, context);
-
-  function handleRoll() {
-    if (!qualification) {
-      return;
-    }
-
-    const roll = roll2D6();
-    const total = roll + dm;
-    setResult({ roll, total, success: total >= qualification.target });
-  }
-
-  function handleContinue() {
-    if (!result) {
-      return;
-    }
-
-    onAdvance({ type: result.success ? 'ROLL_SUCCESS' : 'ROLL_FAILURE' });
-  }
+  const dms = useMemo(() => getQualificationDMs(qualification, character, context), [qualification, character, context]);
 
   if (!career || !qualification) {
     return (
@@ -53,30 +35,16 @@ export function QualificationRollStep({ context, onAdvance }: QualificationRollS
     <div>
       <ChamferedHeader>Qualification: {career.name}</ChamferedHeader>
       <div style={{ marginBottom: '1rem' }}>
-        <p>Roll {qualification.characteristic} {qualification.target}+ to qualify.</p>
         <SuccessChance baseTarget={qualification.target} dm={dm} label="Qualification" />
       </div>
 
-      {!result && (
-        <button type="button" onClick={handleRoll} style={{ padding: '0.5rem 1.5rem', fontSize: '1rem' }}>
-          Roll for Qualification
-        </button>
-      )}
-
-      {result && (
-        <div style={{ marginTop: '1rem' }}>
-          <p>
-            Rolled {result.roll}
-            {dm !== 0 && ` ${dm > 0 ? '+' : '−'} ${Math.abs(dm)}`}
-            {' = '}
-            {result.total}
-            {result.success ? ' — Qualified!' : ' — Failed to qualify.'}
-          </p>
-          <button type="button" onClick={handleContinue} style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}>
-            Continue
-          </button>
-        </div>
-      )}
+      <DiceCheckRoll
+        target={qualification.target}
+        dms={dms}
+        label="Qualification"
+        characteristic={qualification.characteristic}
+        onResult={(result) => onAdvance({ type: result.success ? 'ROLL_SUCCESS' : 'ROLL_FAILURE' })}
+      />
     </div>
   );
 }

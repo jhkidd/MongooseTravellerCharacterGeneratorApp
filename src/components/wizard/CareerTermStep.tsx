@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useCharacter } from '../../context/CharacterContext';
 import { Phase } from '../../engine/state-machine';
-import { getDM, roll2D6 } from '../../engine/dice';
+import { getDM } from '../../engine/dice';
 import { ChoicePanel } from '../shared/ChoicePanel';
 import { SuccessChance } from '../ui/SuccessChance/SuccessChance';
 import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
-import { tryLoadCareer } from './career-flow-utils';
+import { DiceCheckRoll } from '../ui/Dice3D/DiceCheckRoll';
+import { tryLoadCareer, getQualificationDMs } from './career-flow-utils';
+import type { DiceCheckDM, DiceCheckResult } from '../ui/Dice3D/DiceCheckRoll';
 import type { PhaseAction, PhaseContext } from '../../engine/state-machine';
 
 interface CareerTermStepProps {
@@ -16,7 +18,8 @@ interface CareerTermStepProps {
 
 export function CareerTermStep({ phase, context, onAdvance }: CareerTermStepProps) {
   const { character } = useCharacter();
-  const [result, setResult] = useState<{ roll: number; total: number; success: boolean } | null>(null);
+  const [survivalResult, setSurvivalResult] = useState<DiceCheckResult | null>(null);
+  const [changeResult, setChangeResult] = useState<DiceCheckResult | null>(null);
 
   const career = useMemo(() => tryLoadCareer(context.currentCareer), [context.currentCareer]);
   const assignment = career?.assignments.find((option) => option.id === context.currentAssignment) ?? null;
@@ -24,7 +27,7 @@ export function CareerTermStep({ phase, context, onAdvance }: CareerTermStepProp
   const survivalCheck = assignment?.survivalCheck;
   const survivalDM = survivalCheck ? getDM(character.characteristics[survivalCheck.characteristic]) : 0;
 
-  // ASSIGNMENT_SELECTION phase — choose which assignment to enter
+  // ASSIGNMENT_SELECTION phase
   if (phase === Phase.ASSIGNMENT_SELECTION) {
     if (isDrifter) {
       return (
@@ -65,19 +68,22 @@ export function CareerTermStep({ phase, context, onAdvance }: CareerTermStepProp
     );
   }
 
-  // ASSIGNMENT_CHANGE_ROLL phase — attempting to switch assignment in a flexible career
+  // ASSIGNMENT_CHANGE_ROLL phase
   if (phase === Phase.ASSIGNMENT_CHANGE_ROLL) {
     const qualCheck = career?.qualification;
     const qualDM = qualCheck ? getDM(character.characteristics[qualCheck.characteristic]) : 0;
+    const changeDMs = useMemo(() => getQualificationDMs(qualCheck, character, context), [qualCheck, character, context]);
 
-    function handleChangeRoll() {
-      if (!qualCheck) {
-        onAdvance({ type: 'ROLL_SUCCESS' });
-        return;
-      }
-      const roll = roll2D6();
-      const total = roll + qualDM;
-      setResult({ roll, total, success: total >= qualCheck.target });
+    if (!qualCheck) {
+      return (
+        <div>
+          <ChamferedHeader>Change Assignment</ChamferedHeader>
+          <p>Transfer approved automatically.</p>
+          <button type="button" onClick={() => onAdvance({ type: 'ROLL_SUCCESS' })} style={{ padding: '0.5rem 1.5rem' }}>
+            Continue
+          </button>
+        </div>
+      );
     }
 
     return (
@@ -87,29 +93,24 @@ export function CareerTermStep({ phase, context, onAdvance }: CareerTermStepProp
           Attempting to transfer to a new assignment within {career?.name ?? 'your career'}.
           {context.pendingAssignmentChange && ` Target: ${context.pendingAssignmentChange}`}
         </p>
+        <SuccessChance baseTarget={qualCheck.target} dm={qualDM} label="Transfer" />
 
-        {!result && qualCheck && (
-          <div>
-            <p>Qualification: {qualCheck.characteristic} {qualCheck.target}+</p>
-            <SuccessChance baseTarget={qualCheck.target} dm={qualDM} label="Transfer" />
-            <button type="button" onClick={handleChangeRoll} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}>
-              Roll for Transfer
-            </button>
-          </div>
-        )}
-
-        {result && (
+        {!changeResult ? (
+          <DiceCheckRoll
+            target={qualCheck.target}
+            dms={changeDMs}
+            label="Transfer"
+            characteristic={qualCheck.characteristic}
+            onResult={setChangeResult}
+          />
+        ) : (
           <div style={{ marginTop: '1rem' }}>
-            <p style={{ color: result.success ? 'var(--color-success-text)' : 'var(--color-failure-text)' }}>
-              Rolled {result.roll}
-              {qualDM !== 0 && ` ${qualDM > 0 ? '+' : '−'} ${Math.abs(qualDM)}`}
-              {' = '}
-              {result.total}
-              {result.success ? ' — Transfer approved!' : ' — Transfer denied, staying in current assignment.'}
+            <p style={{ color: changeResult.success ? 'var(--color-success-text)' : 'var(--color-failure-text)' }}>
+              {changeResult.success ? 'Transfer approved!' : 'Transfer denied, staying in current assignment.'}
             </p>
             <button
               type="button"
-              onClick={() => onAdvance({ type: result.success ? 'ROLL_SUCCESS' : 'ROLL_FAILURE' })}
+              onClick={() => onAdvance({ type: changeResult.success ? 'ROLL_SUCCESS' : 'ROLL_FAILURE' })}
               style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
             >
               Continue
@@ -145,52 +146,41 @@ export function CareerTermStep({ phase, context, onAdvance }: CareerTermStepProp
     );
   }
 
+  const survivalDMs: DiceCheckDM[] = [];
+  if (survivalDM !== 0) {
+    survivalDMs.push({ label: `${survivalCheck.characteristic} DM`, value: survivalDM });
+  }
+
   return (
     <div>
       <ChamferedHeader>
         {career?.name ?? 'Career'} — {assignment.name}
       </ChamferedHeader>
+      <p>{assignment.description}</p>
+      <SuccessChance baseTarget={survivalCheck.target} dm={survivalDM} label="Survival" />
 
-      {!result && (
-        <div>
-          <p>{assignment.description}</p>
-          <p>Survival Check: {survivalCheck.characteristic} {survivalCheck.target}+</p>
-          <SuccessChance baseTarget={survivalCheck.target} dm={survivalDM} label="Survival" />
-          <button type="button" onClick={handleSurvivalRoll} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}>
-            Roll for Survival
-          </button>
-        </div>
-      )}
-
-      {result && (
+      {!survivalResult ? (
+        <DiceCheckRoll
+          target={survivalCheck.target}
+          dms={survivalDMs}
+          label="Survival"
+          characteristic={survivalCheck.characteristic}
+          onResult={setSurvivalResult}
+        />
+      ) : (
         <div style={{ marginTop: '1rem' }}>
-          <p style={{ color: result.success ? 'var(--color-success-text)' : 'var(--color-failure-text)' }}>
-            Rolled {result.roll}
-            {survivalDM !== 0 && ` ${survivalDM > 0 ? '+' : '−'} ${Math.abs(survivalDM)}`}
-            {' = '}
-            {result.total}
-            {result.success ? ' — Survived!' : ' — Mishap!'}
+          <p style={{ color: survivalResult.success ? 'var(--color-success-text)' : 'var(--color-failure-text)' }}>
+            {survivalResult.success ? 'Survived!' : 'Mishap!'}
           </p>
           <button
             type="button"
-            onClick={() => onAdvance({ type: result.success ? 'ROLL_SUCCESS' : 'ROLL_FAILURE' })}
+            onClick={() => onAdvance({ type: survivalResult.success ? 'ROLL_SUCCESS' : 'ROLL_FAILURE' })}
             style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
           >
-            {result.success ? 'Continue to Events' : 'Continue to Mishap'}
+            {survivalResult.success ? 'Continue to Events' : 'Continue to Mishap'}
           </button>
         </div>
       )}
     </div>
   );
-
-  function handleSurvivalRoll() {
-    if (!survivalCheck) {
-      onAdvance({ type: 'ROLL_SUCCESS' });
-      return;
-    }
-
-    const roll = roll2D6();
-    const total = roll + survivalDM;
-    setResult({ roll, total, success: total >= survivalCheck.target });
-  }
 }

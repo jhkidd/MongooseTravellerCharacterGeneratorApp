@@ -1,0 +1,125 @@
+.dice-check {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.dice-check__description {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.dice-check__dm-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+}
+
+.dice-check__dm-item {
+  color: var(--color-text-secondary);
+}
+
+.dice-check__dm-item--positive {
+  color: var(--color-success-text, #4caf50);
+}
+
+.dice-check__dm-item--negative {
+  color: var(--color-failure-text, #f44336);
+}
+
+.dice-check__dm-total {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  padding-top: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.dice-check__dice-area {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  min-height: 60px;
+}
+
+.dice-check__roll-btn {
+  padding: var(--space-sm) var(--space-xl);
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.dice-check__roll-btn:hover {
+  background: var(--color-accent-light);
+  transform: scale(1.02);
+}
+
+.dice-check__result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  animation: dice-check-reveal 0.4s ease-out;
+}
+
+.dice-check__result--success {
+  color: var(--color-success-text, #4caf50);
+}
+
+.dice-check__result--failure {
+  color: var(--color-failure-text, #f44336);
+}
+
+.dice-check__result-breakdown {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+.dice-check__result-dm {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.dice-check__result-label {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dice-check__continue-btn {
+  padding: var(--space-sm) var(--space-xl);
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.dice-check__continue-btn:hover {
+  background: var(--color-accent-light);
+  transform: scale(1.02);
+}
+
+@keyframes dice-check-reveal {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}

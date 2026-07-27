@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
 import { useCharacter } from '../../context/CharacterContext';
-import { getDM, roll2D6 } from '../../engine/dice';
+import { getDM } from '../../engine/dice';
 import { SuccessChance } from '../ui/SuccessChance/SuccessChance';
 import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
 import { ChoicePanel } from '../shared/ChoicePanel';
+import { DiceCheckRoll } from '../ui/Dice3D/DiceCheckRoll';
 import { tryLoadCareer } from './career-flow-utils';
+import type { DiceCheckDM, DiceCheckResult } from '../ui/Dice3D/DiceCheckRoll';
 import type { PhaseAction, PhaseContext } from '../../engine/state-machine';
 
 interface AdvancementStepProps {
@@ -12,12 +14,10 @@ interface AdvancementStepProps {
   onAdvance: (action: PhaseAction) => void;
 }
 
-type RollResult = { roll: number; total: number; success: boolean };
-
 export function AdvancementStep({ context, onAdvance }: AdvancementStepProps) {
   const { character } = useCharacter();
   const [choice, setChoice] = useState<'commission' | 'advancement' | null>(null);
-  const [rollResult, setRollResult] = useState<RollResult | null>(null);
+  const [rollResult, setRollResult] = useState<DiceCheckResult | null>(null);
 
   const career = useMemo(() => tryLoadCareer(context.currentCareer), [context.currentCareer]);
   const assignment = career?.assignments.find((option) => option.id === context.currentAssignment)
@@ -27,8 +27,6 @@ export function AdvancementStep({ context, onAdvance }: AdvancementStepProps) {
   const commissionCheck = career?.commission ?? null;
   const advancementCheck = assignment?.advancementCheck ?? null;
 
-  // Commission is available if the career has one, the traveller isn't already an officer,
-  // hasn't already attempted this career, and it's the first term (unless SOC 9+)
   const canAttemptCommission = commissionCheck !== null
     && !context.isOfficer
     && !context.commissionAttempted
@@ -38,23 +36,37 @@ export function AdvancementStep({ context, onAdvance }: AdvancementStepProps) {
     ? getDM(character.characteristics[commissionCheck.characteristic])
     : 0;
 
-  const advancementDM = (advancementCheck
+  const advancementCharDM = advancementCheck
     ? getDM(character.characteristics[advancementCheck.characteristic])
-    : 0) + context.pendingAdvancementDM;
+    : 0;
 
-  function handleRoll() {
+  // If no commission available, skip straight to advancement choice
+  const effectiveChoice = canAttemptCommission ? choice : 'advancement';
+
+  // Build itemised DMs for the current choice
+  const currentDMs: DiceCheckDM[] = useMemo(() => {
     if (effectiveChoice === 'commission' && commissionCheck) {
-      const roll = roll2D6();
-      const total = roll + commissionDM;
-      setRollResult({ roll, total, success: total >= commissionCheck.target });
-    } else if (effectiveChoice === 'advancement' && advancementCheck) {
-      const roll = roll2D6();
-      const total = roll + advancementDM;
-      setRollResult({ roll, total, success: total >= advancementCheck.target });
-    } else {
-      onAdvance({ type: 'ROLL_FAILURE' });
+      const items: DiceCheckDM[] = [];
+      if (commissionDM !== 0) {
+        items.push({ label: `${commissionCheck.characteristic} DM`, value: commissionDM });
+      }
+      return items;
     }
-  }
+    if (effectiveChoice === 'advancement' && advancementCheck) {
+      const items: DiceCheckDM[] = [];
+      if (advancementCharDM !== 0) {
+        items.push({ label: `${advancementCheck.characteristic} DM`, value: advancementCharDM });
+      }
+      if (context.pendingAdvancementDM !== 0) {
+        items.push({ label: 'Term bonus', value: context.pendingAdvancementDM });
+      }
+      return items;
+    }
+    return [];
+  }, [effectiveChoice, commissionCheck, commissionDM, advancementCheck, advancementCharDM, context.pendingAdvancementDM]);
+
+  const totalDM = currentDMs.reduce((sum, dm) => sum + dm.value, 0);
+  const currentCheck = effectiveChoice === 'commission' ? commissionCheck : advancementCheck;
 
   if (context.autoPromote) {
     return (
@@ -69,9 +81,6 @@ export function AdvancementStep({ context, onAdvance }: AdvancementStepProps) {
       </div>
     );
   }
-
-  // If no commission available, skip straight to advancement choice
-  const effectiveChoice = canAttemptCommission ? choice : 'advancement';
 
   return (
     <div>
@@ -96,30 +105,29 @@ export function AdvancementStep({ context, onAdvance }: AdvancementStepProps) {
       )}
 
       {/* Roll phase */}
-      {effectiveChoice && !rollResult && (
+      {effectiveChoice && !rollResult && currentCheck && (
         <div>
-          {effectiveChoice === 'commission' && commissionCheck && (
-            <>
-              <p>Roll {commissionCheck.characteristic} {commissionCheck.target}+ to earn a commission.</p>
-              <SuccessChance baseTarget={commissionCheck.target} dm={commissionDM} label="Commission" />
-            </>
-          )}
-          {effectiveChoice === 'advancement' && advancementCheck && (
-            <>
-              <p>Roll {advancementCheck.characteristic} {advancementCheck.target}+ to advance.</p>
-              {context.pendingAdvancementDM !== 0 && (
-                <p style={{ color: 'var(--color-text-secondary)' }}>
-                  Term bonus: {context.pendingAdvancementDM > 0 ? '+' : ''}{context.pendingAdvancementDM} DM
-                </p>
-              )}
-              <SuccessChance baseTarget={advancementCheck.target} dm={advancementDM} label="Advancement" />
-            </>
-          )}
-          {effectiveChoice === 'advancement' && !advancementCheck && (
-            <p>No advancement roll is available for this assignment.</p>
-          )}
-          <button type="button" onClick={handleRoll} style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}>
-            Roll
+          <SuccessChance
+            baseTarget={currentCheck.target}
+            dm={totalDM}
+            label={effectiveChoice === 'commission' ? 'Commission' : 'Advancement'}
+          />
+          <DiceCheckRoll
+            target={currentCheck.target}
+            dms={currentDMs}
+            label={effectiveChoice === 'commission' ? 'Commission' : 'Advancement'}
+            characteristic={currentCheck.characteristic}
+            onResult={setRollResult}
+          />
+        </div>
+      )}
+
+      {/* No advancement check available */}
+      {effectiveChoice === 'advancement' && !advancementCheck && !rollResult && (
+        <div>
+          <p>No advancement roll is available for this assignment.</p>
+          <button type="button" onClick={() => onAdvance({ type: 'ROLL_FAILURE' })} style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}>
+            Continue
           </button>
         </div>
       )}
@@ -128,19 +136,20 @@ export function AdvancementStep({ context, onAdvance }: AdvancementStepProps) {
       {rollResult && (
         <div style={{ marginTop: '1rem' }}>
           <p style={{ color: rollResult.success ? 'var(--color-success-text)' : 'var(--color-failure-text)' }}>
-            Rolled {rollResult.roll}
-            {(() => {
-              const dm = effectiveChoice === 'commission' ? commissionDM : advancementDM;
-              return dm !== 0 ? ` ${dm > 0 ? '+' : '−'} ${Math.abs(dm)}` : '';
-            })()}
-            {' = '}
-            {rollResult.total}
             {rollResult.success
-              ? (effectiveChoice === 'commission' ? ' — Commissioned!' : ' — Promoted!')
-              : (effectiveChoice === 'commission' ? ' — Commission denied.' : ' — No promotion this term.')
+              ? (effectiveChoice === 'commission' ? 'Commissioned!' : 'Promoted!')
+              : (effectiveChoice === 'commission' ? 'Commission denied.' : 'No promotion this term.')
             }
           </p>
-          <button type="button" onClick={() => onAdvance({ type: rollResult.success ? (effectiveChoice === 'commission' ? 'COMMISSION_SUCCESS' : 'ROLL_SUCCESS') : 'ROLL_FAILURE' })} style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}>
+          <button
+            type="button"
+            onClick={() => onAdvance({
+              type: rollResult.success
+                ? (effectiveChoice === 'commission' ? 'COMMISSION_SUCCESS' : 'ROLL_SUCCESS')
+                : 'ROLL_FAILURE',
+            })}
+            style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
+          >
             Continue
           </button>
         </div>
