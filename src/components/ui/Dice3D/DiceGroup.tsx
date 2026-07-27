@@ -136,12 +136,14 @@ export function DiceGroup({
                   onSettled={pairSettledHandlers[i]}
                 />
                 <span className={`dice-group__equals${showResult ? '' : ' dice-group__equals--hidden'}`}>=</span>
-                <div
-                  className={`dice-group__result${showResult ? ' dice-group__result--revealed' + getDmClass(result.total) : ' dice-group__result--hidden'}${isDraggable ? ' dice-group__result--draggable' : ''}`}
-                  draggable={isDraggable}
-                  onDragStart={isDraggable ? (e) => handleDragStart(i, e) : undefined}
-                >
-                  <span className="dice-group__result-value">{result.total}</span>
+                <div className={`dice-group__result-glow${showResult ? getDmClass(result.total) : ''}`}>
+                  <div
+                    className={`dice-group__result${showResult ? ' dice-group__result--revealed' : ' dice-group__result--hidden'}${isDraggable ? ' dice-group__result--draggable' : ''}`}
+                    draggable={isDraggable}
+                    onDragStart={isDraggable ? (e) => handleDragStart(i, e) : undefined}
+                  >
+                    <span className="dice-group__result-value">{result.total}</span>
+                  </div>
                 </div>
               </div>
             );
