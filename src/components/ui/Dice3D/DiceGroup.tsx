@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { rollD6 } from '../../../engine/dice';
+import { useCallback, useEffect, useRef, useState, type DragEvent } from 'react';
+import { getDM, rollD6 } from '../../../engine/dice';
 import { Dice3D } from './Dice3D';
 import './DiceGroup.css';
 
@@ -18,6 +18,12 @@ interface DiceGroupProps {
   label?: string;
   /** If true, roll immediately on mount. */
   autoRoll?: boolean;
+  /** When true, results are draggable in-place. */
+  draggable?: boolean;
+  /** Indices of results that have been consumed (assigned elsewhere). */
+  consumedIndices?: Set<number>;
+  /** Called when a result starts being dragged. */
+  onResultDragStart?: (index: number, event: DragEvent<HTMLDivElement>) => void;
 }
 
 const BASE_SETTLE_DELAY = 800;
@@ -28,10 +34,16 @@ export function DiceGroup({
   onResult,
   label,
   autoRoll = false,
+  draggable: draggableResults = false,
+  consumedIndices,
+  onResultDragStart,
 }: DiceGroupProps) {
   const [results, setResults] = useState<DiceResult[] | null>(null);
   const [rolling, setRolling] = useState(false);
+  const [settled, setSettled] = useState(false);
+  const [settledPairs, setSettledPairs] = useState<Set<number>>(new Set());
   const settledCountRef = useRef(0);
+  const pairSettleCountRef = useRef<number[]>([]);
 
   const handleRoll = useCallback(() => {
     const newResults: DiceResult[] = [];
@@ -44,7 +56,10 @@ export function DiceGroup({
 
     setResults(newResults);
     setRolling(true);
+    setSettled(false);
+    setSettledPairs(new Set());
     settledCountRef.current = 0;
+    pairSettleCountRef.current = new Array(count).fill(0);
   }, [count]);
 
   useEffect(() => {
@@ -53,18 +68,39 @@ export function DiceGroup({
     }
   }, [autoRoll, handleRoll]);
 
-  const handleSettled = useCallback(() => {
-    settledCountRef.current += 1;
-    const next = settledCountRef.current;
-
-    if (next >= (results?.length ?? 0) * 2) {
-      setRolling(false);
-
-      if (results) {
-        onResult(results);
+  const createPairSettledHandler = useCallback((pairIndex: number) => {
+    return () => {
+      // Track per-pair settling
+      pairSettleCountRef.current[pairIndex] += 1;
+      if (pairSettleCountRef.current[pairIndex] >= 2) {
+        setSettledPairs((prev) => new Set(prev).add(pairIndex));
       }
-    }
+
+      // Track global settling
+      settledCountRef.current += 1;
+      if (settledCountRef.current >= (results?.length ?? 0) * 2) {
+        setRolling(false);
+        setSettled(true);
+
+        if (results) {
+          onResult(results);
+        }
+      }
+    };
   }, [onResult, results]);
+
+  function handleDragStart(index: number, event: DragEvent<HTMLDivElement>) {
+    event.dataTransfer.setData('text/plain', index.toString());
+    event.dataTransfer.effectAllowed = 'move';
+    onResultDragStart?.(index, event);
+  }
+
+  function getDmClass(total: number): string {
+    const dm = getDM(total);
+    if (dm === 0) return '';
+    const sign = dm > 0 ? 'plus' : 'minus';
+    return ` dice-group__result--dm-${sign}${Math.abs(dm)}`;
+  }
 
   return (
     <div className="dice-group">
@@ -72,37 +108,53 @@ export function DiceGroup({
 
       {results && (
         <div className="dice-group__pairs">
-          {results.map((result, i) => (
-            <div key={i} className="dice-group__pair">
-              <Dice3D
-                targetValue={result.die1}
-                rolling={rolling}
-                settleDelay={BASE_SETTLE_DELAY + i * STAGGER_PER_PAIR}
-                onSettled={handleSettled}
-              />
-              <Dice3D
-                targetValue={result.die2}
-                rolling={rolling}
-                settleDelay={BASE_SETTLE_DELAY + i * STAGGER_PER_PAIR + 100}
-                onSettled={handleSettled}
-              />
-              <span className="dice-group__equals">=</span>
-              <div className="dice-group__result">
-                <span className="dice-group__result-value">{result.total}</span>
+          {results.map((result, i) => {
+            const isConsumed = consumedIndices?.has(i) ?? false;
+            const isPairSettled = settledPairs.has(i);
+            const isDraggable = draggableResults && settled && !isConsumed;
+            const showResult = isPairSettled && !isConsumed;
+
+            return (
+              <div
+                key={i}
+                className={`dice-group__pair${isConsumed ? ' dice-group__pair--consumed' : ''}`}
+              >
+                <Dice3D
+                  targetValue={result.die1}
+                  rolling={rolling}
+                  settleDelay={BASE_SETTLE_DELAY + i * STAGGER_PER_PAIR}
+                  onSettled={createPairSettledHandler(i)}
+                />
+                <Dice3D
+                  targetValue={result.die2}
+                  rolling={rolling}
+                  settleDelay={BASE_SETTLE_DELAY + i * STAGGER_PER_PAIR + 100}
+                  onSettled={createPairSettledHandler(i)}
+                />
+                <span className={`dice-group__equals${showResult ? '' : ' dice-group__equals--hidden'}`}>=</span>
+                <div
+                  className={`dice-group__result${showResult ? ' dice-group__result--revealed' + getDmClass(result.total) : ' dice-group__result--hidden'}${isDraggable ? ' dice-group__result--draggable' : ''}`}
+                  draggable={isDraggable}
+                  onDragStart={isDraggable ? (e) => handleDragStart(i, e) : undefined}
+                >
+                  <span className="dice-group__result-value">{result.total}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      <button
-        type="button"
-        className="dice-group__roll-btn"
-        onClick={handleRoll}
-        disabled={rolling}
-      >
-        {rolling ? 'Rolling...' : 'Roll'}
-      </button>
+      {!settled && (
+        <button
+          type="button"
+          className="dice-group__roll-btn"
+          onClick={handleRoll}
+          disabled={rolling}
+        >
+          {rolling ? 'Rolling...' : 'Roll'}
+        </button>
+      )}
     </div>
   );
 }

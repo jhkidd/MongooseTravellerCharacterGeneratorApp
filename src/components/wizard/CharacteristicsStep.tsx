@@ -13,28 +13,33 @@ interface CharacteristicsStepProps {
 }
 
 const CHARS: CharacteristicName[] = ['STR', 'DEX', 'END', 'INT', 'EDU', 'SOC'];
+const DRAG_ENABLE_DELAY = 1200;
 
 export function CharacteristicsStep({ onContinue }: CharacteristicsStepProps) {
   const { character, dispatch } = useCharacter();
-  const [pool, setPool] = useState<DiceResult[]>([]);
+  const [results, setResults] = useState<DiceResult[]>([]);
   const [assignments, setAssignments] = useState<Record<CharacteristicName, number | null>>({
-    STR: character.characteristics.STR || null,
-    DEX: character.characteristics.DEX || null,
-    END: character.characteristics.END || null,
-    INT: character.characteristics.INT || null,
-    EDU: character.characteristics.EDU || null,
-    SOC: character.characteristics.SOC || null,
+    STR: character.characteristics.STR ? 0 : null,
+    DEX: character.characteristics.DEX ? 1 : null,
+    END: character.characteristics.END ? 2 : null,
+    INT: character.characteristics.INT ? 3 : null,
+    EDU: character.characteristics.EDU ? 4 : null,
+    SOC: character.characteristics.SOC ? 5 : null,
   });
+  const [draggable, setDraggable] = useState(false);
   const [dragOverSlot, setDragOverSlot] = useState<CharacteristicName | null>(null);
-  const [hasRolled, setHasRolled] = useState(false);
 
-  const handleDiceResult = useCallback((results: DiceResult[]) => {
-    setPool(results);
-    setHasRolled(true);
+  const consumedIndices = new Set(
+    Object.values(assignments).filter((v): v is number => v !== null)
+  );
+
+  const handleDiceResult = useCallback((_results: DiceResult[]) => {
+    setResults(_results);
+    setTimeout(() => setDraggable(true), DRAG_ENABLE_DELAY);
   }, []);
 
-  function handleDragStart(event: DragEvent<HTMLDivElement>, poolIndex: number) {
-    event.dataTransfer.setData('text/plain', poolIndex.toString());
+  function handleDragStart(index: number, event: DragEvent<HTMLDivElement>) {
+    event.dataTransfer.setData('text/plain', index.toString());
     event.dataTransfer.effectAllowed = 'move';
   }
 
@@ -53,29 +58,19 @@ export function CharacteristicsStep({ onContinue }: CharacteristicsStepProps) {
     setDragOverSlot(null);
 
     const poolIndex = Number.parseInt(event.dataTransfer.getData('text/plain'), 10);
-    if (Number.isNaN(poolIndex) || poolIndex < 0 || poolIndex >= pool.length) {
+    if (Number.isNaN(poolIndex) || poolIndex < 0 || poolIndex >= results.length) {
       return;
     }
 
-    const previousValue = assignments[char];
-    setAssignments((prev) => ({ ...prev, [char]: pool[poolIndex].total }));
-    setPool((prev) => {
-      const next = prev.filter((_, index) => index !== poolIndex);
-      if (previousValue !== null) {
-        next.push({ die1: 0, die2: 0, total: previousValue });
-      }
-      return next;
-    });
+    // If this slot already had a value, free up the old index
+    setAssignments((prev) => ({ ...prev, [char]: poolIndex }));
   }
 
   function handleUnassign(char: CharacteristicName) {
-    const value = assignments[char];
-    if (value === null) {
+    if (assignments[char] === null) {
       return;
     }
-
     setAssignments((prev) => ({ ...prev, [char]: null }));
-    setPool((prev) => [...prev, { die1: 0, die2: 0, total: value }]);
   }
 
   const allAssigned = CHARS.every((char) => assignments[char] !== null);
@@ -85,7 +80,8 @@ export function CharacteristicsStep({ onContinue }: CharacteristicsStepProps) {
     const characteristics = {} as Record<CharacteristicName, number>;
 
     for (const char of CHARS) {
-      const base = assignments[char] ?? 0;
+      const idx = assignments[char];
+      const base = idx !== null ? results[idx].total : 0;
       const mod = speciesMods?.[char] ?? 0;
       characteristics[char] = Math.max(0, base + mod);
     }
@@ -99,28 +95,19 @@ export function CharacteristicsStep({ onContinue }: CharacteristicsStepProps) {
       <ChamferedHeader>Characteristics</ChamferedHeader>
       <p>Roll 2D6 six times, then drag each result into the characteristic you want.</p>
 
-      {!hasRolled && (
-        <DiceGroup count={6} onResult={handleDiceResult} label="Roll 6 × 2D6" />
-      )}
-
-      {hasRolled && pool.length > 0 && (
-        <div className="characteristics-step__pool">
-          {pool.map((result, index) => (
-            <div
-              key={`${result.total}-${index}`}
-              className="characteristics-step__draggable"
-              draggable
-              onDragStart={(event) => handleDragStart(event, index)}
-            >
-              <HexBadge value={result.total} size="md" />
-            </div>
-          ))}
-        </div>
-      )}
+      <DiceGroup
+        count={6}
+        onResult={handleDiceResult}
+        label="Roll 6 × 2D6"
+        draggable={draggable}
+        consumedIndices={consumedIndices}
+        onResultDragStart={handleDragStart}
+      />
 
       <div className="characteristics-step__slots">
         {CHARS.map((char) => {
-          const value = assignments[char];
+          const idx = assignments[char];
+          const value = idx !== null ? results[idx]?.total ?? null : null;
           const mod = speciesMods?.[char] ?? 0;
           const finalValue = value !== null ? Math.max(0, value + mod) : null;
 

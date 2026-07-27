@@ -4,28 +4,6 @@
   gap: var(--space-lg);
 }
 
-.characteristics-step__pool {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-md);
-  justify-content: center;
-  min-height: 100px;
-  padding: var(--space-md);
-  background: var(--color-bg-surface);
-  border: var(--border-width) dashed var(--color-border);
-  border-radius: var(--radius-md);
-}
-
-.characteristics-step__draggable {
-  cursor: grab;
-  transition: transform 0.15s;
-}
-
-.characteristics-step__draggable:active {
-  cursor: grabbing;
-  transform: scale(1.1);
-}
-
 .characteristics-step__slots {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
