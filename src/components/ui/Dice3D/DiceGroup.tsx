@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type DragEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from 'react';
 import { getDM, rollD6 } from '../../../engine/dice';
 import { Dice3D } from './Dice3D';
 import './DiceGroup.css';
@@ -44,6 +44,9 @@ export function DiceGroup({
   const [settledPairs, setSettledPairs] = useState<Set<number>>(new Set());
   const settledCountRef = useRef(0);
   const pairSettleCountRef = useRef<number[]>([]);
+  const resultsRef = useRef<DiceResult[] | null>(null);
+  const onResultRef = useRef(onResult);
+  onResultRef.current = onResult;
 
   const handleRoll = useCallback(() => {
     const newResults: DiceResult[] = [];
@@ -54,6 +57,7 @@ export function DiceGroup({
       newResults.push({ die1, die2, total: die1 + die2 });
     }
 
+    resultsRef.current = newResults;
     setResults(newResults);
     setRolling(true);
     setSettled(false);
@@ -68,26 +72,26 @@ export function DiceGroup({
     }
   }, [autoRoll, handleRoll]);
 
-  const createPairSettledHandler = useCallback((pairIndex: number) => {
-    return () => {
-      // Track per-pair settling
+  // Stable per-pair settle handlers that won't cause Dice3D useEffect to re-run
+  const pairSettledHandlers = useMemo(() => {
+    return Array.from({ length: count }, (_, pairIndex) => () => {
       pairSettleCountRef.current[pairIndex] += 1;
       if (pairSettleCountRef.current[pairIndex] >= 2) {
         setSettledPairs((prev) => new Set(prev).add(pairIndex));
       }
 
-      // Track global settling
       settledCountRef.current += 1;
-      if (settledCountRef.current >= (results?.length ?? 0) * 2) {
+      const totalDice = (resultsRef.current?.length ?? 0) * 2;
+      if (settledCountRef.current >= totalDice) {
         setRolling(false);
         setSettled(true);
 
-        if (results) {
-          onResult(results);
+        if (resultsRef.current) {
+          onResultRef.current(resultsRef.current);
         }
       }
-    };
-  }, [onResult, results]);
+    });
+  }, [count]);
 
   function handleDragStart(index: number, event: DragEvent<HTMLDivElement>) {
     event.dataTransfer.setData('text/plain', index.toString());
@@ -123,13 +127,13 @@ export function DiceGroup({
                   targetValue={result.die1}
                   rolling={rolling}
                   settleDelay={BASE_SETTLE_DELAY + i * STAGGER_PER_PAIR}
-                  onSettled={createPairSettledHandler(i)}
+                  onSettled={pairSettledHandlers[i]}
                 />
                 <Dice3D
                   targetValue={result.die2}
                   rolling={rolling}
                   settleDelay={BASE_SETTLE_DELAY + i * STAGGER_PER_PAIR + 100}
-                  onSettled={createPairSettledHandler(i)}
+                  onSettled={pairSettledHandlers[i]}
                 />
                 <span className={`dice-group__equals${showResult ? '' : ' dice-group__equals--hidden'}`}>=</span>
                 <div
