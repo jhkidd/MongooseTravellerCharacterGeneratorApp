@@ -23,8 +23,10 @@ export const Phase = {
   TERM_NARRATIVE: 'TERM_NARRATIVE',
   AGING_CHECK: 'AGING_CHECK',
   TERM_END_DECISION: 'TERM_END_DECISION',
+  CAREER_BENEFIT_ROLLS: 'CAREER_BENEFIT_ROLLS',
   MUSTERING_OUT: 'MUSTERING_OUT',
   FINALIZE_CONTACTS: 'FINALIZE_CONTACTS',
+  PENSION_AND_DEBT: 'PENSION_AND_DEBT',
   CHARACTER_SHEET: 'CHARACTER_SHEET',
 } as const;
 
@@ -166,7 +168,8 @@ export function getNextPhase(
 
     case Phase.GRADUATION_ROLL:
       ctx.preCareerCompleted = true;
-      return { phase: Phase.TERM_END_DECISION, context: ctx };
+      ctx.currentTerm += 1;
+      return { phase: Phase.TERM_START, context: ctx };
 
     case Phase.CAREER_SELECTION:
       if (action.type === 'SELECT_DRIFTER') {
@@ -231,11 +234,11 @@ export function getNextPhase(
       return { phase: Phase.EVENT_ROLL, context: ctx };
 
     case Phase.MISHAP_RESOLUTION:
-      ctx.currentCareer = null;
-      ctx.currentAssignment = null;
-      ctx.isOfficer = false;
-      ctx.termsInCurrentCareer = 0;
-      return { phase: Phase.TERM_END_DECISION, context: ctx };
+      // Some mishaps allow staying in the career
+      if (action.type === 'ROLL_SUCCESS') {
+        return { phase: Phase.EVENT_ROLL, context: ctx };
+      }
+      return { phase: Phase.CAREER_BENEFIT_ROLLS, context: ctx };
 
     case Phase.EVENT_ROLL:
       return { phase: Phase.EVENT_RESOLUTION, context: ctx };
@@ -263,23 +266,39 @@ export function getNextPhase(
 
     case Phase.TERM_END_DECISION:
       if (action.type === 'MUSTER_OUT') {
-        return { phase: Phase.MUSTERING_OUT, context: ctx };
+        return { phase: Phase.CAREER_BENEFIT_ROLLS, context: ctx };
       }
 
       if (action.type === 'SWITCH_CAREER') {
+        return { phase: Phase.CAREER_BENEFIT_ROLLS, context: ctx };
+      }
+
+      ctx.currentTerm += 1;
+      return { phase: Phase.TERM_START, context: ctx };
+
+    case Phase.CAREER_BENEFIT_ROLLS:
+      if (action.type === 'MUSTER_OUT') {
+        // Final muster out - done with careers
         if (ctx.currentCareer) {
           ctx.previousCareers = [...ctx.previousCareers, ctx.currentCareer];
         }
-
         ctx.currentCareer = null;
         ctx.currentAssignment = null;
         ctx.isOfficer = false;
         ctx.commissionAttempted = false;
         ctx.termsInCurrentCareer = 0;
-        ctx.currentTerm += 1;
-        return { phase: Phase.TERM_START, context: ctx };
+        return { phase: Phase.FINALIZE_CONTACTS, context: ctx };
       }
 
+      // Continue to next term (switching career or after mishap)
+      if (ctx.currentCareer) {
+        ctx.previousCareers = [...ctx.previousCareers, ctx.currentCareer];
+      }
+      ctx.currentCareer = null;
+      ctx.currentAssignment = null;
+      ctx.isOfficer = false;
+      ctx.commissionAttempted = false;
+      ctx.termsInCurrentCareer = 0;
       ctx.currentTerm += 1;
       return { phase: Phase.TERM_START, context: ctx };
 
@@ -287,6 +306,9 @@ export function getNextPhase(
       return { phase: Phase.FINALIZE_CONTACTS, context: ctx };
 
     case Phase.FINALIZE_CONTACTS:
+      return { phase: Phase.PENSION_AND_DEBT, context: ctx };
+
+    case Phase.PENSION_AND_DEBT:
       return { phase: Phase.CHARACTER_SHEET, context: ctx };
 
     default:

@@ -102,7 +102,7 @@ career_creation:
   				to: roll_for_benefits_and_muster_out
 
   	start_new_term:
-  		action: "Increase your age by +4 years. If aged 34 or older roll for aging effects. If you are continuing a previous career, go to gain_skills, otheriwse if you do not currently have a career, go to choose_career."
+  		action: "If you are continuing a previous career, go to gain_skills, otherwise if you do not currently have a career, go to choose_career. At the end of each term, increase your age by +4 years. If aged 34 or older, roll for aging effects."
   		edges:
   			- condition: "continuing career"
   				to: gain_skills

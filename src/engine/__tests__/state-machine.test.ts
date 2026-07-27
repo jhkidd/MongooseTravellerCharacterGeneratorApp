@@ -34,8 +34,10 @@ describe('Phase enum', () => {
     expect(Phase.TERM_NARRATIVE).toBe('TERM_NARRATIVE');
     expect(Phase.AGING_CHECK).toBe('AGING_CHECK');
     expect(Phase.TERM_END_DECISION).toBe('TERM_END_DECISION');
+    expect(Phase.CAREER_BENEFIT_ROLLS).toBe('CAREER_BENEFIT_ROLLS');
     expect(Phase.MUSTERING_OUT).toBe('MUSTERING_OUT');
     expect(Phase.FINALIZE_CONTACTS).toBe('FINALIZE_CONTACTS');
+    expect(Phase.PENSION_AND_DEBT).toBe('PENSION_AND_DEBT');
     expect(Phase.CHARACTER_SHEET).toBe('CHARACTER_SHEET');
   });
 });
@@ -148,11 +150,12 @@ describe('getNextPhase — pre-career education path', () => {
     expect(result.phase).toBe(Phase.GRADUATION_ROLL);
   });
 
-  it('GRADUATION_ROLL → TERM_END_DECISION on any outcome', () => {
+  it('GRADUATION_ROLL → TERM_START (next term, no benefit rolls for education)', () => {
     const ctx = { ...createInitialContext(), currentTerm: 1 };
     const result = getNextPhase(Phase.GRADUATION_ROLL, { type: 'CONTINUE' }, ctx);
-    expect(result.phase).toBe(Phase.TERM_END_DECISION);
+    expect(result.phase).toBe(Phase.TERM_START);
     expect(result.context.preCareerCompleted).toBe(true);
+    expect(result.context.currentTerm).toBe(2);
   });
 });
 
@@ -256,10 +259,16 @@ describe('getNextPhase — career term flow (corrected order)', () => {
     expect(result.phase).toBe(Phase.EVENT_ROLL);
   });
 
-  it('MISHAP_RESOLUTION → TERM_END_DECISION (ejected from career)', () => {
+  it('MISHAP_RESOLUTION → CAREER_BENEFIT_ROLLS (ejected from career)', () => {
     const result = getNextPhase(Phase.MISHAP_RESOLUTION, { type: 'CONTINUE' }, baseCtx);
-    expect(result.phase).toBe(Phase.TERM_END_DECISION);
-    expect(result.context.currentCareer).toBeNull();
+    expect(result.phase).toBe(Phase.CAREER_BENEFIT_ROLLS);
+    expect(result.context.currentCareer).toBe('army');
+  });
+
+  it('MISHAP_RESOLUTION → EVENT_ROLL when mishap allows staying', () => {
+    const result = getNextPhase(Phase.MISHAP_RESOLUTION, { type: 'ROLL_SUCCESS' }, baseCtx);
+    expect(result.phase).toBe(Phase.EVENT_ROLL);
+    expect(result.context.currentCareer).toBe('army');
   });
 
   it('EVENT_ROLL → EVENT_RESOLUTION', () => {
@@ -306,9 +315,23 @@ describe('getNextPhase — term end decisions', () => {
     expect(result.context.currentTerm).toBe(2);
   });
 
-  it('TERM_END_DECISION → TERM_START when switching career', () => {
+  it('TERM_END_DECISION → CAREER_BENEFIT_ROLLS when switching career', () => {
     const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army', termsInCurrentCareer: 1 };
     const result = getNextPhase(Phase.TERM_END_DECISION, { type: 'SWITCH_CAREER' }, ctx);
+    expect(result.phase).toBe(Phase.CAREER_BENEFIT_ROLLS);
+    // Career preserved for benefit rolls
+    expect(result.context.currentCareer).toBe('army');
+  });
+
+  it('TERM_END_DECISION → CAREER_BENEFIT_ROLLS when choosing to muster out', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army' };
+    const result = getNextPhase(Phase.TERM_END_DECISION, { type: 'MUSTER_OUT' }, ctx);
+    expect(result.phase).toBe(Phase.CAREER_BENEFIT_ROLLS);
+  });
+
+  it('CAREER_BENEFIT_ROLLS → TERM_START when continuing', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army', termsInCurrentCareer: 1 };
+    const result = getNextPhase(Phase.CAREER_BENEFIT_ROLLS, { type: 'CONTINUE' }, ctx);
     expect(result.phase).toBe(Phase.TERM_START);
     expect(result.context.currentTerm).toBe(2);
     expect(result.context.currentCareer).toBeNull();
@@ -316,10 +339,12 @@ describe('getNextPhase — term end decisions', () => {
     expect(result.context.termsInCurrentCareer).toBe(0);
   });
 
-  it('TERM_END_DECISION → MUSTERING_OUT when choosing to muster out', () => {
-    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army' };
-    const result = getNextPhase(Phase.TERM_END_DECISION, { type: 'MUSTER_OUT' }, ctx);
-    expect(result.phase).toBe(Phase.MUSTERING_OUT);
+  it('CAREER_BENEFIT_ROLLS → FINALIZE_CONTACTS when mustering out', () => {
+    const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army', termsInCurrentCareer: 1 };
+    const result = getNextPhase(Phase.CAREER_BENEFIT_ROLLS, { type: 'MUSTER_OUT' }, ctx);
+    expect(result.phase).toBe(Phase.FINALIZE_CONTACTS);
+    expect(result.context.currentCareer).toBeNull();
+    expect(result.context.previousCareers).toContain('army');
   });
 });
 
@@ -330,9 +355,15 @@ describe('getNextPhase — mustering out and end', () => {
     expect(result.phase).toBe(Phase.FINALIZE_CONTACTS);
   });
 
-  it('FINALIZE_CONTACTS → CHARACTER_SHEET', () => {
+  it('FINALIZE_CONTACTS → PENSION_AND_DEBT', () => {
     const ctx = createInitialContext();
     const result = getNextPhase(Phase.FINALIZE_CONTACTS, { type: 'CONTINUE' }, ctx);
+    expect(result.phase).toBe(Phase.PENSION_AND_DEBT);
+  });
+
+  it('PENSION_AND_DEBT → CHARACTER_SHEET', () => {
+    const ctx = createInitialContext();
+    const result = getNextPhase(Phase.PENSION_AND_DEBT, { type: 'CONTINUE' }, ctx);
     expect(result.phase).toBe(Phase.CHARACTER_SHEET);
   });
 });

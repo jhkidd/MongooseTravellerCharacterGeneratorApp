@@ -18,8 +18,10 @@ import { SkillTrainingStep } from './SkillTrainingStep';
 import { AdvancementStep } from './AdvancementStep';
 import { AgingStep } from './AgingStep';
 import { TermEndStep } from './TermEndStep';
+import { CareerBenefitRollsStep } from './CareerBenefitRollsStep';
 import { MusteringOutStep } from './MusteringOutStep';
 import { FinalizeStep } from './FinalizeStep';
+import { PensionAndDebtStep } from './PensionAndDebtStep';
 import { CharacterSheetStep } from './CharacterSheetStep';
 import './WizardShell.css';
 
@@ -73,10 +75,14 @@ export function WizardShell() {
         return <AgingStep phase={phase} context={context} onAdvance={advance} />;
       case Phase.TERM_END_DECISION:
         return <TermEndStep context={context} onAdvance={advance} />;
+      case Phase.CAREER_BENEFIT_ROLLS:
+        return <CareerBenefitRollsStep context={context} onAdvance={advance} />;
       case Phase.MUSTERING_OUT:
         return <MusteringOutStep context={context} onAdvance={advance} />;
       case Phase.FINALIZE_CONTACTS:
         return <FinalizeStep onAdvance={advance} />;
+      case Phase.PENSION_AND_DEBT:
+        return <PensionAndDebtStep onAdvance={advance} />;
       case Phase.CHARACTER_SHEET:
         return <CharacterSheetStep />;
       default:

@@ -39,16 +39,25 @@ export function TermEndStep({ context, onAdvance }: TermEndStepProps) {
       });
       nextOptions.push({
         label: 'Switch career',
-        description: 'Leave your current career and try something new next term',
+        description: 'Leave your current career, collect benefits, and try something new',
         action: { type: 'SWITCH_CAREER' },
       });
+      nextOptions.push({
+        label: 'Muster out and finish',
+        description: 'Collect benefits and finish character creation',
+        action: { type: 'MUSTER_OUT' },
+      });
+    } else {
+      nextOptions.push({
+        label: 'Continue to next term',
+        description: 'Choose a new career',
+        action: { type: 'CONTINUE_CAREER' },
+      });
+      nextOptions.push({
+        label: 'Finish character creation',
+        action: { type: 'MUSTER_OUT' },
+      });
     }
-
-    nextOptions.push({
-      label: 'Muster out',
-      description: 'End career generation and collect your benefits',
-      action: { type: 'MUSTER_OUT' },
-    });
 
     return nextOptions;
   }, [context.currentCareer, hasCurrent]);
@@ -59,7 +68,6 @@ export function TermEndStep({ context, onAdvance }: TermEndStepProps) {
     }
 
     initialized.current = true;
-    dispatch({ type: 'INCREMENT_AGE', years: 4 });
     dispatch({ type: 'INCREMENT_TERM' });
 
     if (context.currentCareer) {
