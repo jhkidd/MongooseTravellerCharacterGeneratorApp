@@ -1,0 +1,73 @@
+{
+  "table": "injury",
+  "description": "Roll on this table when a mishap or event causes injury.",
+  "rollType": "1D6",
+  "entries": {
+    "1": {
+      "description": "Nearly killed. Reduce one physical characteristic by 1D6, and two others by 2 each.",
+      "severity": "critical",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          { "type": "narrative", "prompt": "You were nearly killed. Describe how it happened." }
+        ]
+      }
+    },
+    "2": {
+      "description": "Severely injured. Reduce one physical characteristic by 1D6.",
+      "severity": "severe",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Which physical characteristic is reduced by 1D6?",
+        "options": [
+          { "label": "STR", "effect": { "type": "modCharacteristic", "characteristic": "STR", "value": -3 } },
+          { "label": "DEX", "effect": { "type": "modCharacteristic", "characteristic": "DEX", "value": -3 } },
+          { "label": "END", "effect": { "type": "modCharacteristic", "characteristic": "END", "value": -3 } }
+        ]
+      }
+    },
+    "3": {
+      "description": "Lost eye or limb. Reduce STR or DEX by 2.",
+      "severity": "major",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Which characteristic is reduced by 2?",
+        "options": [
+          { "label": "STR -2", "effect": { "type": "modCharacteristic", "characteristic": "STR", "value": -2 } },
+          { "label": "DEX -2", "effect": { "type": "modCharacteristic", "characteristic": "DEX", "value": -2 } }
+        ]
+      }
+    },
+    "4": {
+      "description": "Scarred. Reduce any one physical characteristic by 2.",
+      "severity": "moderate",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Which physical characteristic is reduced by 2?",
+        "options": [
+          { "label": "STR -2", "effect": { "type": "modCharacteristic", "characteristic": "STR", "value": -2 } },
+          { "label": "DEX -2", "effect": { "type": "modCharacteristic", "characteristic": "DEX", "value": -2 } },
+          { "label": "END -2", "effect": { "type": "modCharacteristic", "characteristic": "END", "value": -2 } }
+        ]
+      }
+    },
+    "5": {
+      "description": "Injured. Reduce any one physical characteristic by 1.",
+      "severity": "minor",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Which physical characteristic is reduced by 1?",
+        "options": [
+          { "label": "STR -1", "effect": { "type": "modCharacteristic", "characteristic": "STR", "value": -1 } },
+          { "label": "DEX -1", "effect": { "type": "modCharacteristic", "characteristic": "DEX", "value": -1 } },
+          { "label": "END -1", "effect": { "type": "modCharacteristic", "characteristic": "END", "value": -1 } }
+        ]
+      }
+    },
+    "6": {
+      "description": "Lightly injured. No permanent effect.",
+      "severity": "light",
+      "effects": { "type": "none" }
+    }
+  }
+}

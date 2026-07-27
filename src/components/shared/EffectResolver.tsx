@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useCharacter } from '../../context/CharacterContext';
 import { interpretEffect, resolveImmediate } from '../../engine/effect-interpreter';
 import { getDM, roll2D6, rollD6 } from '../../engine/dice';
+import { getSharedTable, getTableEntry } from '../../data/table-loader';
 import { ChoicePanel } from './ChoicePanel';
 import { SkillPicker } from './SkillPicker';
 import type { EffectNode } from '../../models/effect-types';
@@ -577,24 +578,83 @@ function FallbackResolver({
     );
   }
 
-  // rollOnTable: stub for now (injury, life events, etc.)
+  // rollOnTable: resolve using shared tables when available
   if (effectNode.type === 'rollOnTable') {
     const tableName = effectNode.table.replace(/-/g, ' ');
+    const table = getSharedTable(effectNode.table);
+
+    if (!table) {
+      // Table not implemented yet
+      return (
+        <div>
+          <p style={{ fontStyle: 'italic', color: 'var(--color-text-secondary)' }}>
+            Roll on the <strong>{tableName}</strong> table.
+          </p>
+          <p style={{ color: 'var(--color-text-muted)' }}>
+            (Table not yet implemented - no mechanical effect applied.)
+          </p>
+          <button
+            type="button"
+            onClick={() => onComplete({ signals: accumulatedSignals })}
+            style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
+          >
+            Continue
+          </button>
+        </div>
+      );
+    }
+
+    // Table exists - roll and resolve
+    if (diceResult === null) {
+      return (
+        <div>
+          <p>Roll on the <strong>{tableName}</strong> table:</p>
+          <button
+            type="button"
+            onClick={() => {
+              let result: number;
+              if (effectNode.fixedResult) {
+                result = effectNode.fixedResult;
+              } else {
+                result = rollD6();
+              }
+              setDiceResult(result);
+            }}
+            style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
+          >
+            Roll
+          </button>
+        </div>
+      );
+    }
+
+    // Have a roll result - show entry and resolve its effects
+    const entry = getTableEntry(effectNode.table, diceResult);
+    if (!entry) {
+      return (
+        <div>
+          <p>Rolled {diceResult} on the {tableName} table - no entry found.</p>
+          <button
+            type="button"
+            onClick={() => onComplete({ signals: accumulatedSignals })}
+            style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
+          >
+            Continue
+          </button>
+        </div>
+      );
+    }
+
     return (
       <div>
-        <p style={{ fontStyle: 'italic', color: 'var(--color-text-secondary)' }}>
-          Roll on the <strong>{tableName}</strong> table.
-        </p>
-        <p style={{ color: 'var(--color-text-muted)' }}>
-          (Table not yet implemented - no mechanical effect applied.)
-        </p>
-        <button
-          type="button"
-          onClick={() => onComplete({ signals: accumulatedSignals })}
-          style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
-        >
-          Continue
-        </button>
+        <p>Rolled {diceResult} on the {tableName} table:</p>
+        <p style={{ color: 'var(--color-text-secondary)' }}>{entry.description}</p>
+        <EffectResolver
+          effect={entry.effects}
+          onComplete={(result) => {
+            onComplete({ signals: [...accumulatedSignals, ...result.signals] });
+          }}
+        />
       </div>
     );
   }
