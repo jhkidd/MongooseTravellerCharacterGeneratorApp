@@ -214,7 +214,7 @@ describe('interpretEffect — interactive effects (pause)', () => {
     const result = interpretEffect(node, char);
     expect(result.type).toBe('pause');
     if (result.type === 'pause') {
-      expect(result.pauseType).toBe('pickSkill');
+      expect(result.pauseType).toBe('increaseExistingSkill');
       expect(result.options).toContain('Recon');
       expect(result.options).toContain('Stealth');
     }
@@ -240,7 +240,7 @@ describe('interpretEffect — interactive effects (pause)', () => {
     const result = interpretEffect(node, makeCharacter());
     expect(result.type).toBe('pause');
     if (result.type === 'pause') {
-      expect(result.pauseType).toBe('skillCheck');
+      expect(result.pauseType).toBe('rollOnTable');
     }
   });
 

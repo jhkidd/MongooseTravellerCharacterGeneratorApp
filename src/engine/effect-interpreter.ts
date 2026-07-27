@@ -17,7 +17,7 @@ export type InterpretedEffect =
     }
   | {
       type: 'pause';
-      pauseType: 'choice' | 'pickSkill' | 'pickOne' | 'narrative' | 'skillCheck';
+      pauseType: 'choice' | 'pickSkill' | 'pickOne' | 'narrative' | 'skillCheck' | 'increaseExistingSkill' | 'diceRoll' | 'rollOnTable';
       prompt?: string;
       options?: unknown[];
       immediateActions?: CharacterAction[];
@@ -141,7 +141,7 @@ export function interpretEffect(node: EffectNode, character: Character): Interpr
     case 'increaseExistingSkill':
       return {
         type: 'pause',
-        pauseType: 'pickSkill',
+        pauseType: 'increaseExistingSkill',
         options: Object.keys(character.skills),
         effectNode: node,
       };
@@ -149,7 +149,7 @@ export function interpretEffect(node: EffectNode, character: Character): Interpr
     case 'diceRoll':
       return {
         type: 'pause',
-        pauseType: 'skillCheck',
+        pauseType: 'diceRoll',
         prompt: `Roll ${node.dice}`,
         effectNode: node,
       };
@@ -157,7 +157,7 @@ export function interpretEffect(node: EffectNode, character: Character): Interpr
     case 'rollOnTable':
       return {
         type: 'pause',
-        pauseType: 'skillCheck',
+        pauseType: 'rollOnTable',
         prompt: `Roll on ${node.table}`,
         effectNode: node,
       };
