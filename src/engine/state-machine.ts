@@ -292,8 +292,10 @@ export function getNextPhase(
         return { phase: Phase.CAREER_BENEFIT_ROLLS, context: ctx };
       }
 
+      // Continue in same career - skip TERM_START, go straight to skill training
       ctx.currentTerm += 1;
-      return { phase: Phase.TERM_START, context: ctx };
+      ctx.termsInCurrentCareer += 1;
+      return { phase: Phase.SKILL_TRAINING, context: ctx };
 
     case Phase.CAREER_BENEFIT_ROLLS:
       if (action.type === 'MUSTER_OUT') {

@@ -316,11 +316,12 @@ describe('getNextPhase — career term flow (corrected order)', () => {
 });
 
 describe('getNextPhase — term end decisions', () => {
-  it('TERM_END_DECISION → TERM_START when continuing (increments term)', () => {
+  it('TERM_END_DECISION → SKILL_TRAINING when continuing (increments term and termsInCurrentCareer)', () => {
     const ctx = { ...createInitialContext(), currentTerm: 1, currentCareer: 'army', termsInCurrentCareer: 1 };
     const result = getNextPhase(Phase.TERM_END_DECISION, { type: 'CONTINUE_CAREER' }, ctx);
-    expect(result.phase).toBe(Phase.TERM_START);
+    expect(result.phase).toBe(Phase.SKILL_TRAINING);
     expect(result.context.currentTerm).toBe(2);
+    expect(result.context.termsInCurrentCareer).toBe(2);
   });
 
   it('TERM_END_DECISION → CAREER_BENEFIT_ROLLS when switching career', () => {
