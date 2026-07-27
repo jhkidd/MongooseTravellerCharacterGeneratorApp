@@ -36,7 +36,7 @@ export function CareerBenefitRollsStep({ context, onAdvance }: CareerBenefitRoll
   const career = useMemo(() => tryLoadCareer(context.currentCareer), [context.currentCareer]);
   const cashTable = career?.musteringOut.cash ?? FALLBACK_CASH;
 
-  const rank = 0; // TODO: track rank properly in context
+  const rank = context.currentRank;
   const { extraRolls, dm: rankDM } = getRankBenefitBonus(rank);
   const benefitRolls = context.termsInCurrentCareer > 0
     ? context.termsInCurrentCareer + extraRolls

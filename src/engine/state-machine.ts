@@ -50,6 +50,7 @@ export interface PhaseContext {
   currentAssignment: string | null;
   termsInCurrentCareer: number;
   isOfficer: boolean;
+  currentRank: number;
   previousCareers: string[];
   forcedCareer: string | null;
   autoPromote: boolean;
@@ -69,6 +70,7 @@ export function createInitialContext(): PhaseContext {
     currentAssignment: null,
     termsInCurrentCareer: 0,
     isOfficer: false,
+    currentRank: 0,
     previousCareers: [],
     forcedCareer: null,
     autoPromote: false,
@@ -91,6 +93,7 @@ export type PhaseAction =
   | { type: 'SELECT_DRIFTER' }
   | { type: 'ROLL_SUCCESS' }
   | { type: 'ROLL_FAILURE' }
+  | { type: 'COMMISSION_SUCCESS' }
   | { type: 'SWITCH_CAREER' }
   | { type: 'MUSTER_OUT' }
   | { type: 'FORCE_TRANSITION'; targetPhase: Phase }
@@ -254,7 +257,14 @@ export function getNextPhase(
     case Phase.COMMISSION_OR_ADVANCEMENT:
       ctx.pendingAdvancementDM = 0;
       ctx.autoPromote = false;
+      if (action.type === 'COMMISSION_SUCCESS') {
+        ctx.isOfficer = true;
+        ctx.commissionAttempted = true;
+        ctx.currentRank = 1; // Officer rank starts at 1
+        return { phase: Phase.RANK_BONUS, context: ctx };
+      }
       if (action.type === 'ROLL_SUCCESS') {
+        ctx.currentRank += 1;
         return { phase: Phase.RANK_BONUS, context: ctx };
       }
 
@@ -295,6 +305,7 @@ export function getNextPhase(
         ctx.currentAssignment = null;
         ctx.isOfficer = false;
         ctx.commissionAttempted = false;
+        ctx.currentRank = 0;
         ctx.termsInCurrentCareer = 0;
         return { phase: Phase.FINALIZE_CONTACTS, context: ctx };
       }
@@ -307,6 +318,7 @@ export function getNextPhase(
       ctx.currentAssignment = null;
       ctx.isOfficer = false;
       ctx.commissionAttempted = false;
+      ctx.currentRank = 0;
       ctx.termsInCurrentCareer = 0;
       ctx.currentTerm += 1;
       return { phase: Phase.TERM_START, context: ctx };
