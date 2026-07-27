@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
-import { useCharacter } from '../../context/CharacterContext';
-import { interpretEffect } from '../../engine/effect-interpreter';
 import { Phase } from '../../engine/state-machine';
 import { roll2D6 } from '../../engine/dice';
 import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
+import { EffectResolver } from '../shared/EffectResolver';
 import { getCareerDisplayName, tryLoadCareer } from './career-flow-utils';
 import type { PhaseAction, PhaseContext } from '../../engine/state-machine';
+import type { EffectResolverResult } from '../shared/EffectResolver';
 
 interface EventResolutionStepProps {
   phase: Phase;
@@ -14,44 +14,29 @@ interface EventResolutionStepProps {
 }
 
 export function EventResolutionStep({ phase, context, onAdvance }: EventResolutionStepProps) {
-  const { character, dispatch } = useCharacter();
   const [eventRoll, setEventRoll] = useState<number | null>(null);
   const career = useMemo(() => tryLoadCareer(context.currentCareer), [context.currentCareer]);
   const event = career && eventRoll ? career.events[eventRoll] : null;
 
-  function applySignals(signals: string[]) {
-    signals.forEach((signal) => {
+  function handleEffectComplete(result: EffectResolverResult) {
+    // Process signals from the effect resolver
+    for (const signal of result.signals) {
       if (signal === 'autoPromote') {
         onAdvance({ type: 'AUTO_PROMOTE' });
         return;
       }
-
       if (signal.startsWith('forceCareer:')) {
         onAdvance({ type: 'FORCE_CAREER', careerId: signal.slice('forceCareer:'.length) });
         return;
       }
-
       if (signal.startsWith('advancementDM:')) {
         const value = Number.parseInt(signal.slice('advancementDM:'.length), 10);
         if (!Number.isNaN(value)) {
           onAdvance({ type: 'ADD_ADVANCEMENT_DM', value });
+          return;
         }
       }
-    });
-  }
-
-  function handleContinue() {
-    if (event) {
-      const interpreted = interpretEffect(event.effects, character);
-
-      if (interpreted.type === 'immediate') {
-        interpreted.actions.forEach(dispatch);
-        applySignals(interpreted.signals);
-      } else if (interpreted.immediateActions?.length) {
-        interpreted.immediateActions.forEach(dispatch);
-      }
     }
-
     onAdvance({ type: 'CONTINUE' });
   }
 
@@ -77,27 +62,32 @@ export function EventResolutionStep({ phase, context, onAdvance }: EventResoluti
     );
   }
 
+  // EVENT_RESOLUTION phase
+  if (!event) {
+    return (
+      <div>
+        <ChamferedHeader>Event Resolution</ChamferedHeader>
+        <p>An event occurred during your term in {getCareerDisplayName(context.currentCareer)}.</p>
+        <p style={{ color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
+          Event details are not available for this career yet.
+        </p>
+        <button type="button" onClick={() => onAdvance({ type: 'CONTINUE' })} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}>
+          Continue
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
       <ChamferedHeader>Event Resolution</ChamferedHeader>
-      {event ? (
-        <>
-          <p>{event.description}</p>
-          <p style={{ color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
-            Interactive event branches are still lightweight in this phase, but immediate effects are applied.
-          </p>
-        </>
-      ) : (
-        <>
-          <p>An event occurred during your term in {getCareerDisplayName(context.currentCareer)}.</p>
-          <p style={{ color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
-            Event details are not available for this career yet.
-          </p>
-        </>
-      )}
-      <button type="button" onClick={handleContinue} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}>
-        Continue
-      </button>
+      <p>{event.description}</p>
+      <div style={{ marginTop: '1rem' }}>
+        <EffectResolver
+          effect={event.effects}
+          onComplete={handleEffectComplete}
+        />
+      </div>
     </div>
   );
 }

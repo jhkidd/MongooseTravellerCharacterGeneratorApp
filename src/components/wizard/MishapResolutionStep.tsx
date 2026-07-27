@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
-import { useCharacter } from '../../context/CharacterContext';
-import { interpretEffect } from '../../engine/effect-interpreter';
 import { rollD6 } from '../../engine/dice';
 import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
+import { EffectResolver } from '../shared/EffectResolver';
 import { getCareerDisplayName, tryLoadCareer } from './career-flow-utils';
 import type { PhaseAction, PhaseContext } from '../../engine/state-machine';
+import type { EffectResolverResult } from '../shared/EffectResolver';
 
 interface MishapResolutionStepProps {
   context: PhaseContext;
@@ -12,44 +12,24 @@ interface MishapResolutionStepProps {
 }
 
 export function MishapResolutionStep({ context, onAdvance }: MishapResolutionStepProps) {
-  const { character, dispatch } = useCharacter();
   const [mishapRoll, setMishapRoll] = useState<number | null>(null);
+  const [resolving, setResolving] = useState(false);
   const career = useMemo(() => tryLoadCareer(context.currentCareer), [context.currentCareer]);
   const mishap = career && mishapRoll ? career.mishaps[mishapRoll] : null;
 
-  function applySignals(signals: string[]) {
-    signals.forEach((signal) => {
+  function handleEffectComplete(result: EffectResolverResult) {
+    // Check for signals that affect the flow
+    for (const signal of result.signals) {
       if (signal === 'autoPromote') {
-        onAdvance({ type: 'AUTO_PROMOTE' });
+        onAdvance({ type: 'ROLL_SUCCESS' });
         return;
       }
-
       if (signal.startsWith('forceCareer:')) {
         onAdvance({ type: 'FORCE_CAREER', careerId: signal.slice('forceCareer:'.length) });
         return;
       }
-
-      if (signal.startsWith('advancementDM:')) {
-        const value = Number.parseInt(signal.slice('advancementDM:'.length), 10);
-        if (!Number.isNaN(value)) {
-          onAdvance({ type: 'ADD_ADVANCEMENT_DM', value });
-        }
-      }
-    });
-  }
-
-  function handleContinue() {
-    if (mishap) {
-      const interpreted = interpretEffect(mishap.effects, character);
-
-      if (interpreted.type === 'immediate') {
-        interpreted.actions.forEach(dispatch);
-        applySignals(interpreted.signals);
-      } else if (interpreted.immediateActions?.length) {
-        interpreted.immediateActions.forEach(dispatch);
-      }
     }
-
+    // Default: ejected from career (continue to aging check)
     onAdvance({ type: 'CONTINUE' });
   }
 
@@ -62,24 +42,39 @@ export function MishapResolutionStep({ context, onAdvance }: MishapResolutionSte
         <button type="button" onClick={() => setMishapRoll(rollD6())} style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}>
           Roll Mishap
         </button>
-      ) : (
+      ) : !resolving ? (
         <div style={{ marginTop: '1rem' }}>
           <p>Mishap roll: {mishapRoll}</p>
           {mishap ? (
-            <>
-              <p>{mishap.description}</p>
-              <p style={{ color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
-                Immediate mishap effects are applied automatically; deeper branches will be expanded later.
-              </p>
-            </>
+            <p>{mishap.description}</p>
           ) : (
             <p>No mishap data is available for this career.</p>
           )}
-          <button type="button" onClick={handleContinue} style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}>
-            Continue
+          <button
+            type="button"
+            onClick={() => {
+              if (mishap) {
+                setResolving(true);
+              } else {
+                onAdvance({ type: 'CONTINUE' });
+              }
+            }}
+            style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
+          >
+            {mishap ? 'Resolve' : 'Continue'}
           </button>
         </div>
-      )}
+      ) : mishap ? (
+        <div style={{ marginTop: '1rem' }}>
+          <p>{mishap.description}</p>
+          <div style={{ marginTop: '0.5rem' }}>
+            <EffectResolver
+              effect={mishap.effects}
+              onComplete={handleEffectComplete}
+            />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
