@@ -23,3 +23,49 @@ or in a more condensed form:
 - Engineer (Power) 2
 
 The base skill cannot be increased beyond 0. To reitterate, if a skill has Specialties, it cannot be increased above 0, only the specific specialties can.
+
+## Quick reference
+
+Here's a table to quickly reference all the listed skills and their specialities. You can get more detailed descriptions of them and how they work in Skills List.md
+
+| Skill Name | Specialities |
+|---:|---|
+| Admin |  |
+| Advocate |  |
+| Animals | Handling, Veterinary, Training |
+| Art | Performer, Holography, Instrument, Visual Media, Write |
+| Astrogation |  |
+| Athletics | Strength, Dexterity, Endurance |
+| Broker |  |
+| Carouse |  |
+| Deception |  |
+| Diplomat |  |
+| Drive | Hovercraft, Mole, Track Walker, Wheel |
+| Electronics | Comms, Computers, Remote Ops, Sensors |
+| Engineer | M-Drive, J-Drive, Life Support, Power |
+| Explosives |  |
+| Flyer | Airship, Grav, Ornithopter, Rotor, Wing |
+| Gambler |  |
+| Gunner | Turret, Ortillery, Screen, Capital |
+| Gun Combat | Archaic, Energy, Slug |
+| Heavy Weapons | Artillery, Man Portable, Vehicle |
+| Investigate |  |
+| Jack-of-all-trades |  |
+| Language | Anglic, Vilani, Zdetl, Oynprith, Trokh |
+| Leadership |  |
+| Mechanic |  |
+| Medic |  |
+| Melee | Unarmed, Blade, Bludgeon, Natural |
+| Navigation |  |
+| Persuade |  |
+| Pilot | Small Craft, Spacecraft, Capital Ships |
+| Profession | Belter, Biologicals, Civil Engineering, Construction, Hydroponics, Polymers |
+| Recon |  |
+| Science | Archaeology, Astronomy, Biology, Chemistry, Cosmology, Cybernetics, Economics, Genetics, History, Linguistics, Philosophy, Physics, Planetology, Psionicology, Psycology, Robotics, Sophontology, Xenology |
+| Sea Farer | Ocean Ships, Personal, Sail, Submarine |
+| Stealth |  |
+| Steward |  |
+| Streetwise |  |
+| Survival |  |
+| Tactics | Military, Naval |
+| Vacc Suit |  |
