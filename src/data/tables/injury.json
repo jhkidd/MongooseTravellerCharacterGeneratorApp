@@ -9,7 +9,37 @@
       "effects": {
         "type": "compound",
         "effects": [
-          { "type": "narrative", "prompt": "You were nearly killed. Describe how it happened." }
+          { "type": "narrative", "prompt": "You were nearly killed. Describe how it happened." },
+          {
+            "type": "choice",
+            "prompt": "Which physical characteristic takes the worst of the damage (reduced by 1D6)?",
+            "options": [
+              {
+                "label": "STR (STR -1D6, DEX -2, END -2)",
+                "effects": [
+                  { "type": "modCharacteristic", "characteristic": "STR", "value": -3 },
+                  { "type": "modCharacteristic", "characteristic": "DEX", "value": -2 },
+                  { "type": "modCharacteristic", "characteristic": "END", "value": -2 }
+                ]
+              },
+              {
+                "label": "DEX (DEX -1D6, STR -2, END -2)",
+                "effects": [
+                  { "type": "modCharacteristic", "characteristic": "DEX", "value": -3 },
+                  { "type": "modCharacteristic", "characteristic": "STR", "value": -2 },
+                  { "type": "modCharacteristic", "characteristic": "END", "value": -2 }
+                ]
+              },
+              {
+                "label": "END (END -1D6, STR -2, DEX -2)",
+                "effects": [
+                  { "type": "modCharacteristic", "characteristic": "END", "value": -3 },
+                  { "type": "modCharacteristic", "characteristic": "STR", "value": -2 },
+                  { "type": "modCharacteristic", "characteristic": "DEX", "value": -2 }
+                ]
+              }
+            ]
+          }
         ]
       }
     },

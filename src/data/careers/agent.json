@@ -241,7 +241,14 @@
               "type": "skillCheck",
               "skill": "Investigate",
               "target": 8,
-              "success": { "type": "pickSkill", "options": ["Investigate", "Streetwise"], "level": 1 },
+              "success": {
+                "type": "pickOne",
+                "prompt": "Choose a skill to increase by one level:",
+                "options": [
+                  { "label": "Investigate", "effect": { "type": "increaseSkill", "skill": "Investigate" } },
+                  { "label": "Streetwise", "effect": { "type": "increaseSkill", "skill": "Streetwise" } }
+                ]
+              },
               "failure": { "type": "rollOnTable", "table": "mishap" }
             }]
           },
@@ -251,7 +258,14 @@
               "type": "skillCheck",
               "skill": "Streetwise",
               "target": 8,
-              "success": { "type": "pickSkill", "options": ["Investigate", "Streetwise"], "level": 1 },
+              "success": {
+                "type": "pickOne",
+                "prompt": "Choose a skill to increase by one level:",
+                "options": [
+                  { "label": "Investigate", "effect": { "type": "increaseSkill", "skill": "Investigate" } },
+                  { "label": "Streetwise", "effect": { "type": "increaseSkill", "skill": "Streetwise" } }
+                ]
+              },
               "failure": { "type": "rollOnTable", "table": "mishap" }
             }]
           }
