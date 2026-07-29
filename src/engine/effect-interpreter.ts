@@ -17,7 +17,7 @@ export type InterpretedEffect =
     }
   | {
       type: 'pause';
-      pauseType: 'choice' | 'pickSkill' | 'pickOne' | 'narrative' | 'skillCheck' | 'increaseExistingSkill' | 'diceRoll' | 'rollOnTable';
+      pauseType: 'choice' | 'pickSkill' | 'pickOne' | 'narrative' | 'skillCheck' | 'increaseExistingSkill' | 'diceRoll' | 'rollOnTable' | 'gainContact';
       prompt?: string;
       options?: unknown[];
       immediateActions?: CharacterAction[];
@@ -163,6 +163,14 @@ export function interpretEffect(node: EffectNode, character: Character): Interpr
         effectNode: node,
       };
 
+    case 'gainContact':
+      return {
+        type: 'pause',
+        pauseType: 'gainContact',
+        prompt: `Gain a new ${node.contactType}`,
+        effectNode: node,
+      };
+
     case 'ejectFromCareer':
       return { type: 'immediate', actions: [], signals: ['ejectFromCareer'] };
 
@@ -226,6 +234,7 @@ const INTERACTIVE_TYPES = new Set<EffectNode['type']>([
   'increaseExistingSkill',
   'diceRoll',
   'rollOnTable',
+  'gainContact',
 ]);
 
 function isInteractive(node: EffectNode): boolean {

@@ -19,7 +19,7 @@ A browser-based character creator for the Mongoose Traveller 2nd Edition tableto
 
 - React 19 + TypeScript
 - Vite 5
-- Vitest + Testing Library (238 tests)
+- Vitest + Testing Library (311 tests)
 - CSS custom properties (no framework)
 - GitHub Pages via GitHub Actions
 
@@ -44,6 +44,32 @@ src/
 ├── models/         # TypeScript types
 └── theme/          # CSS variables
 ```
+
+## Reusable Components
+
+Before creating new components, check whether one of these already covers your use case.
+
+### UI Primitives (`components/ui/`)
+
+| Component | Purpose |
+|-----------|---------|
+| `ChamferedHeader` | Styled section header with angled/chamfered corners |
+| `Dice3D` | Single 3D animated die |
+| `DiceGroup` | Renders multiple `Dice3D` together |
+| `DiceCheckRoll` | Full skill/characteristic check UI (roll button, DMs, pass/fail result) |
+| `HexBadge` | Hexagonal badge for displaying characteristic scores |
+| `SuccessChance` | Displays probability percentage for a given target number |
+
+### Shared Components (`components/shared/`)
+
+| Component | Purpose |
+|-----------|---------|
+| `EffectResolver` | Master effect handler - interprets the effect DSL, routes to sub-resolvers, chains compound/interactive effects |
+| `ChoicePanel` | Renders a list of labelled options for the player to pick from |
+| `SkillPicker` | Multi-select skill list with toggle buttons |
+| `NarrativeField` | Freeform text area for narrative/roleplay input |
+
+`EffectResolver` also contains internal sub-resolvers (ChoiceResolver, PickSkillResolver, SkillCheckResolver, PickOneResolver, NarrativeResolver, GainContactResolver, FallbackResolver) which handle specific effect types but are not exported individually.
 
 ## Deployment
 

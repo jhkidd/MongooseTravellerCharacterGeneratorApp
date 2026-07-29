@@ -217,6 +217,19 @@ function CharacterPanel() {
           ))}
         </select>
       </div>
+
+      {character.contacts.length > 0 && (
+        <>
+          <h4>Contacts</h4>
+          <div className="effect-gallery__skills">
+            {character.contacts.map((contact) => (
+              <span key={contact.id} className="effect-gallery__skill-tag">
+                {contact.name} ({contact.type})
+              </span>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

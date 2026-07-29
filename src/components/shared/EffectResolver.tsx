@@ -185,9 +185,11 @@ function PauseResolver({
       return (
         <PickOneResolver
           effectNode={effectNode}
+          character={character}
           dispatch={dispatch}
           accumulatedSignals={accumulatedSignals}
           onComplete={handleChainComplete}
+          careerId={careerId}
         />
       );
 
@@ -195,6 +197,16 @@ function PauseResolver({
       return (
         <NarrativeResolver
           effectNode={effectNode}
+          accumulatedSignals={accumulatedSignals}
+          onComplete={handleChainComplete}
+        />
+      );
+
+    case 'gainContact':
+      return (
+        <GainContactResolver
+          effectNode={effectNode}
+          dispatch={dispatch}
           accumulatedSignals={accumulatedSignals}
           onComplete={handleChainComplete}
         />
@@ -417,24 +429,50 @@ function SkillCheckResolver({
 // PickOne: like choice but for single-effect items
 function PickOneResolver({
   effectNode,
+  character,
   dispatch,
   accumulatedSignals,
   onComplete,
+  careerId,
 }: {
   effectNode: EffectNode;
+  character: Character;
   dispatch: ReturnType<typeof useCharacter>['dispatch'];
   accumulatedSignals: EffectSignal[];
   onComplete: (result: EffectResolverResult) => void;
+  careerId?: string;
 }) {
+  const [selectedEffect, setSelectedEffect] = useState<EffectNode | null>(null);
+
   if (effectNode.type !== 'pickOne') return null;
+
+  // If user has picked an option with an interactive effect, render nested resolver
+  if (selectedEffect) {
+    return (
+      <EffectResolver
+        effect={selectedEffect}
+        careerId={careerId}
+        onComplete={(result) => {
+          onComplete({ signals: [...accumulatedSignals, ...result.signals] });
+        }}
+      />
+    );
+  }
 
   function handleSelect(index: number) {
     const option = (effectNode as Extract<EffectNode, { type: 'pickOne' }>).options[index];
     if (!option) return;
 
-    const actions = resolveImmediate(option.effect, {} as Character);
-    actions.forEach(dispatch);
-    onComplete({ signals: accumulatedSignals });
+    const result = interpretEffect(option.effect, character);
+    if (result.type === 'immediate') {
+      result.actions.forEach(dispatch);
+      onComplete({ signals: [...accumulatedSignals, ...result.signals] });
+    } else {
+      if (result.immediateActions?.length) {
+        result.immediateActions.forEach(dispatch);
+      }
+      setSelectedEffect(option.effect);
+    }
   }
 
   return (
@@ -469,6 +507,74 @@ function NarrativeResolver({
         style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem' }}
       >
         Continue
+      </button>
+    </div>
+  );
+}
+
+// GainContact: prompt user for contact name and description
+function GainContactResolver({
+  effectNode,
+  dispatch,
+  accumulatedSignals,
+  onComplete,
+}: {
+  effectNode: EffectNode;
+  dispatch: ReturnType<typeof useCharacter>['dispatch'];
+  accumulatedSignals: EffectSignal[];
+  onComplete: (result: EffectResolverResult) => void;
+}) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  if (effectNode.type !== 'gainContact') return null;
+
+  const contactType = effectNode.contactType;
+  const typeLabel = contactType.charAt(0).toUpperCase() + contactType.slice(1);
+
+  function handleConfirm() {
+    dispatch({
+      type: 'GAIN_CONTACT',
+      contactType,
+      name: name.trim() || `Unnamed ${typeLabel}`,
+      description: description.trim(),
+    });
+    onComplete({ signals: accumulatedSignals });
+  }
+
+  return (
+    <div>
+      <p>You gain a new <strong>{typeLabel}</strong>. Who are they?</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
+        <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>Name</span>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={`e.g. "Marcus Holt"`}
+            style={{ padding: '0.4rem 0.6rem' }}
+          />
+        </label>
+        <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
+            Description <span style={{ opacity: 0.6 }}>(optional)</span>
+          </span>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder={`How did you meet? What is their role?`}
+            rows={2}
+            style={{ padding: '0.4rem 0.6rem', resize: 'vertical' }}
+          />
+        </label>
+      </div>
+      <button
+        type="button"
+        onClick={handleConfirm}
+        style={{ marginTop: '0.75rem', padding: '0.5rem 1.5rem' }}
+      >
+        Confirm
       </button>
     </div>
   );
@@ -545,6 +651,10 @@ function FallbackResolver({
     const diceStr = effectNode.dice.toUpperCase();
     const perUnit = effectNode.effectPerUnit;
 
+    // Check if the per-unit effect is interactive
+    const perUnitResult = interpretEffect(perUnit, character);
+    const isPerUnitInteractive = perUnitResult.type === 'pause';
+
     function handleDiceRoll() {
       let result: number;
       if (diceStr === 'D3') {
@@ -556,11 +666,33 @@ function FallbackResolver({
       }
       setDiceResult(result);
 
-      // Apply the effect that many times
-      for (let i = 0; i < result; i++) {
-        const actions = resolveImmediate(perUnit, character);
-        actions.forEach(dispatch);
+      // If the per-unit effect is immediate, apply all at once
+      if (!isPerUnitInteractive) {
+        for (let i = 0; i < result; i++) {
+          const actions = resolveImmediate(perUnit, character);
+          actions.forEach(dispatch);
+        }
       }
+    }
+
+    if (diceResult !== null && isPerUnitInteractive) {
+      // Render a compound of N interactive effects
+      const compoundEffect: EffectNode = {
+        type: 'compound',
+        effects: Array.from({ length: diceResult }, () => perUnit),
+      };
+      return (
+        <div>
+          <p>Rolled: {diceResult}</p>
+          <EffectResolver
+            effect={compoundEffect}
+            careerId={careerId}
+            onComplete={(result) => {
+              onComplete({ signals: [...accumulatedSignals, ...result.signals] });
+            }}
+          />
+        </div>
+      );
     }
 
     return (
