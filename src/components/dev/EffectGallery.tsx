@@ -120,8 +120,9 @@ function EffectGalleryInner() {
                   <EffectResolver
                     effect={activeEntry.effects}
                     onComplete={handleComplete}
-                  />
-                </div>
+                      careerId={selectedCareer}
+                    />
+                  </div>
               )}
             </>
           ) : (

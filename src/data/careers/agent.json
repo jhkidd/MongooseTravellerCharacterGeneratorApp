@@ -142,28 +142,52 @@
   },
   "mishaps": {
     "1": {
-      "description": "Severely injured in the line of duty.",
-      "effects": { "type": "rollOnTable", "table": "injury" }
+      "description": "Severely injured (this is the same as a result of 2 on the Injury table). Alternatively, roll twice on the Injury table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured - reduce one physical characteristic by 1D)",
+            "effects": [{ "type": "rollOnTable", "table": "injury", "fixedResult": 2 }]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [{ "type": "rollOnTable", "table": "injury", "modifier": "takeLower" }]
+          }
+        ]
+      }
     },
     "2": {
-      "description": "A criminal or other figure under investigation offers you a deal. Accept and leave this career with an extra Benefit roll, or refuse and have an Enemy.",
+      "description": "A criminal or other figure under investigation offers you a deal. Accept, and you leave this career without further penalty (although you lose the Benefit roll as normal). Refuse, and you must roll twice on the Injury table and take the lower result. You gain an Enemy and one level in any skill you choose.",
       "effects": {
         "type": "choice",
         "prompt": "A figure under investigation offers you a deal.",
         "options": [
-          { "label": "Accept the deal", "effects": [{ "type": "ejectFromCareer" }, { "type": "gainBenefitDM", "value": 1 }] },
-          { "label": "Refuse the deal", "effects": [{ "type": "ejectFromCareer" }, { "type": "gainContact", "contactType": "enemy" }] }
+          {
+            "label": "Accept the deal (leave career without further penalty)",
+            "effects": [{ "type": "ejectFromCareer" }]
+          },
+          {
+            "label": "Refuse the deal (injuries, but gain an Enemy and a skill level)",
+            "effects": [
+              { "type": "ejectFromCareer" },
+              { "type": "rollOnTable", "table": "injury", "modifier": "takeLower" },
+              { "type": "gainContact", "contactType": "enemy" },
+              { "type": "increaseExistingSkill", "filter": "owned" }
+            ]
+          }
         ]
       }
     },
     "3": {
-      "description": "An investigation goes critically wrong. Roll Advocate 8+. If you fail, you must take the Prisoner career next term. If you roll a natural 2, you are framed for the crime.",
+      "description": "An investigation goes critically wrong or leads to the top, ruining your career. Roll Advocate 8+. If you succeed, you may keep the Benefit roll from this term. If you roll 2, you must take the Prisoner career in your next term.",
       "effects": {
         "type": "skillCheck",
         "skill": "Advocate",
         "target": 8,
-        "success": { "type": "none" },
-        "failure": { "type": "forceCareer", "career": "prisoner" },
+        "success": { "type": "gainBenefitDM", "value": 1 },
+        "failure": { "type": "none" },
         "naturalTwo": { "type": "forceCareer", "career": "prisoner" }
       }
     },
@@ -179,12 +203,13 @@
       }
     },
     "5": {
-      "description": "Your work ends up coming home with you. A family member, friend or lover is put in danger or killed.",
+      "description": "Your work ends up coming home with you, and someone gets hurt. Choose one of your Contacts, Allies or family members, and roll twice on the Injury table for them, taking the lower result.",
       "effects": {
         "type": "compound",
         "effects": [
           { "type": "ejectFromCareer" },
-          { "type": "narrative", "prompt": "Describe how your work endangered someone close to you." }
+          { "type": "narrative", "prompt": "Choose one of your Contacts, Allies or family members who gets hurt. Describe who it is and the circumstances." },
+          { "type": "rollOnTable", "table": "injury", "modifier": "takeLower" }
         ]
       }
     },
@@ -207,11 +232,30 @@
     "3": {
       "description": "An investigation takes on a dangerous turn. Roll Investigate 8+ or Streetwise 8+. If you fail, roll on the Mishap table. If you succeed, increase one of these skills by one level.",
       "effects": {
-        "type": "skillCheck",
-        "skill": "Investigate",
-        "target": 8,
-        "success": { "type": "pickSkill", "options": ["Investigate", "Streetwise"], "level": 1 },
-        "failure": { "type": "rollOnTable", "table": "mishap" }
+        "type": "choice",
+        "prompt": "An investigation takes a dangerous turn. Choose which skill to roll.",
+        "options": [
+          {
+            "label": "Roll Investigate 8+",
+            "effects": [{
+              "type": "skillCheck",
+              "skill": "Investigate",
+              "target": 8,
+              "success": { "type": "pickSkill", "options": ["Investigate", "Streetwise"], "level": 1 },
+              "failure": { "type": "rollOnTable", "table": "mishap" }
+            }]
+          },
+          {
+            "label": "Roll Streetwise 8+",
+            "effects": [{
+              "type": "skillCheck",
+              "skill": "Streetwise",
+              "target": 8,
+              "success": { "type": "pickSkill", "options": ["Investigate", "Streetwise"], "level": 1 },
+              "failure": { "type": "rollOnTable", "table": "mishap" }
+            }]
+          }
+        ]
       }
     },
     "4": {
@@ -223,7 +267,7 @@
       "effects": { "type": "diceRoll", "dice": "D3", "effectPerUnit": { "type": "gainContact", "contactType": "contact" } }
     },
     "6": {
-      "description": "You are given advanced training in a specialist field. Roll EDU 8+ to gain any one skill of your choice at level 1.",
+      "description": "You are given advanced training in a specialist field. Roll EDU 8+ to increase any one skill you already have by one level.",
       "effects": {
         "type": "skillCheck",
         "characteristic": "EDU",
@@ -237,13 +281,13 @@
       "effects": { "type": "rollOnTable", "table": "life-events" }
     },
     "8": {
-      "description": "You go undercover to investigate an enemy. Roll Deception 8+. If you succeed, roll immediately on the Rogue or Citizen Events table. If you fail, roll on the Mishap table.",
+      "description": "You go undercover to investigate an enemy. Roll Deception 8+. If you succeed, roll immediately on the Rogue or Citizen Events table and make one roll on any Specialist skill table for that career. If you fail, roll immediately on the Rogue or Citizen Mishap table.",
       "effects": {
         "type": "skillCheck",
         "skill": "Deception",
         "target": 8,
         "success": { "type": "rollOnTable", "table": "rogue-or-citizen-events" },
-        "failure": { "type": "rollOnTable", "table": "mishap" }
+        "failure": { "type": "rollOnTable", "table": "rogue-or-citizen-mishap" }
       }
     },
     "9": {
@@ -251,8 +295,8 @@
       "effects": { "type": "gainAdvancementDM", "value": 2 }
     },
     "10": {
-      "description": "You are given specialist training. Gain one level in any skill you already have.",
-      "effects": { "type": "increaseExistingSkill", "filter": "owned" }
+      "description": "You are given specialist training in vehicles. Gain one of Drive 1, Flyer 1, Pilot 1 or Gunner 1.",
+      "effects": { "type": "pickSkill", "options": ["Drive", "Flyer", "Pilot", "Gunner"], "level": 1 }
     },
     "11": {
       "description": "You are befriended by a senior agent. Either gain Investigate 1 or DM+4 to your next Advancement roll.",
@@ -266,7 +310,7 @@
       }
     },
     "12": {
-      "description": "Your efforts uncover a major conspiracy. You are automatically promoted.",
+      "description": "Your efforts uncover a major conspiracy against your employers. You are automatically promoted.",
       "effects": { "type": "autoPromote" }
     }
   },

@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useCharacter } from '../../context/CharacterContext';
 import { interpretEffect, resolveImmediate } from '../../engine/effect-interpreter';
-import { getDM, rollD6 } from '../../engine/dice';
-import { getSharedTable, getTableEntry } from '../../data/table-loader';
+import { getDM, rollD6, roll2D6 } from '../../engine/dice';
+import { getSharedTable, buildCareerMishapTable } from '../../data/table-loader';
+import type { SharedTable } from '../../data/table-loader';
+import { loadCareer } from '../../data/career-loader';
 import { ChoicePanel } from './ChoicePanel';
 import { SkillPicker } from './SkillPicker';
 import { DiceCheckRoll } from '../ui/Dice3D/DiceCheckRoll';
@@ -18,6 +20,7 @@ export interface EffectResolverResult {
 interface EffectResolverProps {
   effect: EffectNode;
   onComplete: (result: EffectResolverResult) => void;
+  careerId?: string;
 }
 
 /**
@@ -25,7 +28,7 @@ interface EffectResolverProps {
  * effect interpreter. Recursively resolves chains where one effect's outcome
  * leads to another interactive effect.
  */
-export function EffectResolver({ effect, onComplete }: EffectResolverProps) {
+export function EffectResolver({ effect, onComplete, careerId }: EffectResolverProps) {
   const { character, dispatch } = useCharacter();
   const [interpreted] = useState<InterpretedEffect>(() => interpretEffect(effect, character));
 
@@ -45,6 +48,7 @@ export function EffectResolver({ effect, onComplete }: EffectResolverProps) {
       character={character}
       dispatch={dispatch}
       onComplete={onComplete}
+      careerId={careerId}
     />
   );
 }
@@ -89,14 +93,19 @@ function PauseResolver({
   character,
   dispatch,
   onComplete,
+  careerId,
 }: {
   interpreted: Extract<InterpretedEffect, { type: 'pause' }>;
   character: Character;
   dispatch: ReturnType<typeof useCharacter>['dispatch'];
   onComplete: (result: EffectResolverResult) => void;
+  careerId?: string;
 }) {
   // Track if we have a follow-on effect to resolve after this pause
   const [followOn, setFollowOn] = useState<EffectNode | null>(null);
+  const [pendingEffects, setPendingEffects] = useState<EffectNode[]>(
+    () => interpreted.pendingEffects ?? []
+  );
   const [accumulatedSignals, setAccumulatedSignals] = useState<EffectSignal[]>(
     () => {
       // Apply any immediate actions that precede the pause
@@ -107,14 +116,28 @@ function PauseResolver({
     }
   );
 
+  // Chain handler: resolves pending effects before completing
+  function handleChainComplete(result: EffectResolverResult) {
+    const newSignals = [...accumulatedSignals, ...result.signals];
+    if (pendingEffects.length > 0) {
+      const nextEffect: EffectNode = pendingEffects.length === 1
+        ? pendingEffects[0]
+        : { type: 'compound', effects: pendingEffects };
+      setPendingEffects([]);
+      setAccumulatedSignals(newSignals);
+      setFollowOn(nextEffect);
+    } else {
+      onComplete({ signals: newSignals });
+    }
+  }
+
   // If we have a follow-on effect, render a nested EffectResolver
   if (followOn) {
     return (
       <EffectResolver
         effect={followOn}
-        onComplete={(result) => {
-          onComplete({ signals: [...accumulatedSignals, ...result.signals] });
-        }}
+        careerId={careerId}
+        onComplete={handleChainComplete}
       />
     );
   }
@@ -131,7 +154,8 @@ function PauseResolver({
           accumulatedSignals={accumulatedSignals}
           setAccumulatedSignals={setAccumulatedSignals}
           setFollowOn={setFollowOn}
-          onComplete={onComplete}
+          onComplete={handleChainComplete}
+          careerId={careerId}
         />
       );
 
@@ -141,7 +165,7 @@ function PauseResolver({
           effectNode={effectNode}
           dispatch={dispatch}
           accumulatedSignals={accumulatedSignals}
-          onComplete={onComplete}
+          onComplete={handleChainComplete}
         />
       );
 
@@ -154,7 +178,7 @@ function PauseResolver({
           accumulatedSignals={accumulatedSignals}
           setAccumulatedSignals={setAccumulatedSignals}
           setFollowOn={setFollowOn}
-          onComplete={onComplete}
+          onComplete={handleChainComplete}
         />
       );
 
@@ -164,7 +188,7 @@ function PauseResolver({
           effectNode={effectNode}
           dispatch={dispatch}
           accumulatedSignals={accumulatedSignals}
-          onComplete={onComplete}
+          onComplete={handleChainComplete}
         />
       );
 
@@ -173,12 +197,12 @@ function PauseResolver({
         <NarrativeResolver
           effectNode={effectNode}
           accumulatedSignals={accumulatedSignals}
-          onComplete={onComplete}
+          onComplete={handleChainComplete}
         />
       );
 
     default:
-      // rollOnTable, diceRoll, increaseExistingSkill — handle here
+      // rollOnTable, diceRoll, increaseExistingSkill -- handle here
       return (
         <FallbackResolver
           pauseType={pauseType}
@@ -186,7 +210,8 @@ function PauseResolver({
           character={character}
           dispatch={dispatch}
           accumulatedSignals={accumulatedSignals}
-          onComplete={onComplete}
+          onComplete={handleChainComplete}
+          careerId={careerId}
         />
       );
   }
@@ -201,6 +226,7 @@ function ChoiceResolver({
   setAccumulatedSignals,
   setFollowOn,
   onComplete,
+  careerId,
 }: {
   effectNode: EffectNode;
   character: Character;
@@ -209,6 +235,7 @@ function ChoiceResolver({
   setAccumulatedSignals: React.Dispatch<React.SetStateAction<EffectSignal[]>>;
   setFollowOn: React.Dispatch<React.SetStateAction<EffectNode | null>>;
   onComplete: (result: EffectResolverResult) => void;
+  careerId?: string;
 }) {
   if (effectNode.type !== 'choice') return null;
 
@@ -218,11 +245,12 @@ function ChoiceResolver({
 
     // Resolve all effects in the chosen option
     const signals: EffectSignal[] = [];
-    let firstPause: EffectNode | null = null;
+    let firstPauseIndex = -1;
 
-    for (const childEffect of option.effects) {
-      if (firstPause) break;
+    for (let i = 0; i < option.effects.length; i++) {
+      if (firstPauseIndex >= 0) break;
 
+      const childEffect = option.effects[i];
       const childResult = interpretEffect(childEffect, character);
       if (childResult.type === 'immediate') {
         childResult.actions.forEach(dispatch);
@@ -231,13 +259,19 @@ function ChoiceResolver({
         if (childResult.immediateActions?.length) {
           childResult.immediateActions.forEach(dispatch);
         }
-        firstPause = childEffect;
+        firstPauseIndex = i;
       }
     }
 
-    if (firstPause) {
+    if (firstPauseIndex >= 0) {
       setAccumulatedSignals([...accumulatedSignals, ...signals]);
-      setFollowOn(firstPause);
+      // Include all remaining effects from the pause onwards
+      const remaining = option.effects.slice(firstPauseIndex);
+      if (remaining.length === 1) {
+        setFollowOn(remaining[0]);
+      } else {
+        setFollowOn({ type: 'compound', effects: remaining } as EffectNode);
+      }
     } else {
       onComplete({ signals: [...accumulatedSignals, ...signals] });
     }
@@ -451,6 +485,7 @@ function FallbackResolver({
   dispatch,
   accumulatedSignals,
   onComplete,
+  careerId,
 }: {
   pauseType: string;
   effectNode: EffectNode;
@@ -458,9 +493,11 @@ function FallbackResolver({
   dispatch: ReturnType<typeof useCharacter>['dispatch'];
   accumulatedSignals: EffectSignal[];
   onComplete: (result: EffectResolverResult) => void;
+  careerId?: string;
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [diceResult, setDiceResult] = useState<number | null>(null);
+  const [takeLowerRolls, setTakeLowerRolls] = useState<[number, number] | null>(null);
 
   // increaseExistingSkill: pick from owned skills
   if (effectNode.type === 'increaseExistingSkill') {
@@ -556,10 +593,20 @@ function FallbackResolver({
     );
   }
 
-  // rollOnTable: resolve using shared tables when available
+  // rollOnTable: resolve using shared tables or career-specific tables
   if (effectNode.type === 'rollOnTable') {
     const tableName = effectNode.table.replace(/-/g, ' ');
-    const table = getSharedTable(effectNode.table);
+
+    // Resolve the table: shared tables first, then career-specific mishap table
+    let table: SharedTable | null = getSharedTable(effectNode.table);
+    if (!table && effectNode.table === 'mishap' && careerId) {
+      try {
+        const career = loadCareer(careerId);
+        table = buildCareerMishapTable(career);
+      } catch {
+        // Career not found - fall through to "not implemented"
+      }
+    }
 
     if (!table) {
       // Table not implemented yet
@@ -582,19 +629,27 @@ function FallbackResolver({
       );
     }
 
+    const useTakeLower = effectNode.modifier === 'takeLower';
+    const rollDice = table.rollType === '2D6' ? roll2D6 : rollD6;
+
     // Table exists - roll and resolve
     if (diceResult === null) {
       return (
         <div>
-          <p>Roll on the <strong>{tableName}</strong> table:</p>
+          <p>Roll on the <strong>{tableName}</strong> table{useTakeLower ? ' (roll twice, take lower)' : ''}:</p>
           <button
             type="button"
             onClick={() => {
               let result: number;
               if (effectNode.fixedResult) {
                 result = effectNode.fixedResult;
+              } else if (useTakeLower) {
+                const roll1 = rollDice();
+                const roll2 = rollDice();
+                result = Math.min(roll1, roll2);
+                setTakeLowerRolls([roll1, roll2]);
               } else {
-                result = rollD6();
+                result = rollDice();
               }
               setDiceResult(result);
             }}
@@ -607,7 +662,7 @@ function FallbackResolver({
     }
 
     // Have a roll result - show entry and resolve its effects
-    const entry = getTableEntry(effectNode.table, diceResult);
+    const entry = table.entries[String(diceResult)];
     if (!entry) {
       return (
         <div>
@@ -625,10 +680,15 @@ function FallbackResolver({
 
     return (
       <div>
-        <p>Rolled {diceResult} on the {tableName} table:</p>
+        {takeLowerRolls ? (
+          <p>Rolled {takeLowerRolls[0]} and {takeLowerRolls[1]} on the {tableName} table (taking lower: {diceResult}):</p>
+        ) : (
+          <p>Rolled {diceResult} on the {tableName} table:</p>
+        )}
         <p style={{ color: 'var(--color-text-secondary)' }}>{entry.description}</p>
         <EffectResolver
           effect={entry.effects}
+          careerId={careerId}
           onComplete={(result) => {
             onComplete({ signals: [...accumulatedSignals, ...result.signals] });
           }}

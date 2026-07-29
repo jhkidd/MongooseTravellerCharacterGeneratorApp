@@ -1,0 +1,83 @@
+{
+  "table": "life-events",
+  "description": "Roll on this table when an event calls for a Life Event.",
+  "rollType": "2D6",
+  "entries": {
+    "2": {
+      "description": "Sickness or Injury: You are injured or become sick. Roll on the Injury table.",
+      "effects": { "type": "rollOnTable", "table": "injury" }
+    },
+    "3": {
+      "description": "Birth or Death: Someone close to you dies, like a friend or family member. Alternatively, someone close to you gives birth (or is born!). You are involved in some fashion (father or mother, relative, godparent, etc).",
+      "effects": { "type": "narrative", "prompt": "Someone close to you dies, or someone close to you gives birth. Describe what happened and your involvement." }
+    },
+    "4": {
+      "description": "Ending of Relationship: A romantic relationship involving you ends. Badly.",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "A romantic relationship ends badly. Gain a Rival or Enemy.",
+        "options": [
+          { "label": "Gain a Rival", "effect": { "type": "gainContact", "contactType": "rival" } },
+          { "label": "Gain an Enemy", "effect": { "type": "gainContact", "contactType": "enemy" } }
+        ]
+      }
+    },
+    "5": {
+      "description": "Improved Relationship: A romantic relationship involving you deepens, possibly leading to marriage or some other emotional commitment. Gain an Ally.",
+      "effects": { "type": "gainContact", "contactType": "ally" }
+    },
+    "6": {
+      "description": "New Relationship: You become involved in a romantic relationship. Gain an Ally.",
+      "effects": { "type": "gainContact", "contactType": "ally" }
+    },
+    "7": {
+      "description": "New Contact: You gain a new Contact.",
+      "effects": { "type": "gainContact", "contactType": "contact" }
+    },
+    "8": {
+      "description": "Betrayal: You are betrayed in some fashion by a friend. If you have any Contacts or Allies, convert one into a Rival or Enemy. Otherwise, gain a Rival or an Enemy.",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "You are betrayed by a friend. Gain a Rival or Enemy (or convert an existing Contact or Ally).",
+        "options": [
+          { "label": "Gain a Rival", "effect": { "type": "gainContact", "contactType": "rival" } },
+          { "label": "Gain an Enemy", "effect": { "type": "gainContact", "contactType": "enemy" } }
+        ]
+      }
+    },
+    "9": {
+      "description": "Travel: You move to another world. You gain DM+2 to your next Qualification roll.",
+      "effects": { "type": "narrative", "prompt": "You move to another world. You gain DM+2 to your next Qualification roll. Describe where you went and why." }
+    },
+    "10": {
+      "description": "Good Fortune: Something good happens to you; you come into money unexpectedly, have a lifelong dream come true, get a book published or have some other stroke of good fortune. Gain DM+2 to any one Benefit roll.",
+      "effects": { "type": "gainBenefitDM", "value": 2 }
+    },
+    "11": {
+      "description": "Crime: You commit or are the victim (or are accused) of a crime. Lose one Benefit roll or take the Prisoner career in your next term.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are involved in a crime.",
+        "options": [
+          { "label": "Lose one Benefit roll", "effects": [{ "type": "loseBenefitRoll" }] },
+          { "label": "Take the Prisoner career next term", "effects": [{ "type": "forceCareer", "career": "prisoner" }] }
+        ]
+      }
+    },
+    "12": {
+      "description": "Unusual Event: Something weird happens. Roll 1D to determine what.",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Something unusual happens. What is it?",
+        "options": [
+          { "label": "Psionics: You encounter a Psionic institute", "effect": { "type": "narrative", "prompt": "You encounter a Psionic institute. You may immediately test your Psionic Strength and, if you qualify, take the Psion career in your next term." } },
+          { "label": "Aliens: You spend time among an alien race. Gain Science 1 and a Contact", "effect": { "type": "compound", "effects": [{ "type": "gainSkill", "skill": "Science", "level": 1 }, { "type": "gainContact", "contactType": "contact" }] } },
+          { "label": "Alien Artefact: You have a strange and unusual device from an alien culture", "effect": { "type": "gainEquipment", "item": "Alien Artefact" } },
+          { "label": "Amnesia: Something happened to you, but you do not know what it was", "effect": { "type": "narrative", "prompt": "Something happened to you, but you do not know what it was. Describe the gaps in your memory." } },
+          { "label": "Contact with Government: You briefly came into contact with the highest echelons of the Imperium", "effect": { "type": "narrative", "prompt": "You briefly came into contact with the highest echelons of the Imperium. Describe the encounter." } },
+          { "label": "Ancient Technology: You have something older than the Imperium", "effect": { "type": "gainEquipment", "item": "Ancient Technology Artefact" } }
+        ]
+      }
+    }
+  }
+}

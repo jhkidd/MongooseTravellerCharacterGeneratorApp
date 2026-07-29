@@ -22,6 +22,7 @@ export type InterpretedEffect =
       options?: unknown[];
       immediateActions?: CharacterAction[];
       effectNode: EffectNode;
+      pendingEffects?: EffectNode[];
     };
 
 export function resolveImmediate(node: EffectNode, character: Character): CharacterAction[] {
@@ -182,14 +183,20 @@ export function interpretEffect(node: EffectNode, character: Character): Interpr
       const signals: EffectSignal[] = [];
       let currentCharacter = character;
 
-      for (const child of node.effects) {
+      for (let i = 0; i < node.effects.length; i++) {
+        const child = node.effects[i];
         const childResult = interpretEffect(child, currentCharacter);
 
         if (childResult.type === 'pause') {
           const immediateActions = [...actions, ...(childResult.immediateActions ?? [])];
+          const remainingEffects = [
+            ...(childResult.pendingEffects ?? []),
+            ...node.effects.slice(i + 1),
+          ];
           return {
             ...childResult,
             immediateActions,
+            pendingEffects: remainingEffects.length > 0 ? remainingEffects : undefined,
           };
         }
 

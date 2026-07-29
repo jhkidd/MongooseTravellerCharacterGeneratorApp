@@ -71,6 +71,7 @@ export function MishapResolutionStep({ context, onAdvance }: MishapResolutionSte
             <EffectResolver
               effect={mishap.effects}
               onComplete={handleEffectComplete}
+              careerId={context.currentCareer}
             />
           </div>
         </div>
