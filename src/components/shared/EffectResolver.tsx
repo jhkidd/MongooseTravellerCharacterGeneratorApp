@@ -155,7 +155,6 @@ function PauseResolver({
           setAccumulatedSignals={setAccumulatedSignals}
           setFollowOn={setFollowOn}
           onComplete={handleChainComplete}
-          careerId={careerId}
         />
       );
 
@@ -226,7 +225,6 @@ function ChoiceResolver({
   setAccumulatedSignals,
   setFollowOn,
   onComplete,
-  careerId,
 }: {
   effectNode: EffectNode;
   character: Character;
@@ -235,7 +233,6 @@ function ChoiceResolver({
   setAccumulatedSignals: React.Dispatch<React.SetStateAction<EffectSignal[]>>;
   setFollowOn: React.Dispatch<React.SetStateAction<EffectNode | null>>;
   onComplete: (result: EffectResolverResult) => void;
-  careerId?: string;
 }) {
   if (effectNode.type !== 'choice') return null;
 

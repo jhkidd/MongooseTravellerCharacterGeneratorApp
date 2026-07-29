@@ -86,7 +86,7 @@ export function EventResolutionStep({ phase, context, onAdvance }: EventResoluti
         <EffectResolver
           effect={event.effects}
           onComplete={handleEffectComplete}
-          careerId={context.currentCareer}
+          careerId={context.currentCareer ?? undefined}
         />
       </div>
     </div>
