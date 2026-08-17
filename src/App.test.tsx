@@ -19,4 +19,10 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /^traveller$/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /choose your species/i })).toBeInTheDocument();
   });
+
+  it('renders the planet generator page when navigating to #planet', () => {
+    window.location.hash = '#planet';
+    render(<App />);
+    expect(screen.getByRole('heading', { name: /planet generator/i })).toBeInTheDocument();
+  });
 });

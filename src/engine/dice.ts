@@ -8,6 +8,11 @@ export function roll2D6(): number {
   return rollD6() + rollD6();
 }
 
+/** Roll a D3 (1–3), per the Traveller convention of a D6 halved and rounded up. */
+export function rollD3(): number {
+  return Math.ceil(rollD6() / 2);
+}
+
 /**
  * Mongoose Traveller 2e Dice Modifier table.
  * Score 0 → -3, 1-2 → -2, 3-5 → -1, 6-8 → 0, 9-11 → +1, 12-14 → +2, 15+ → +3

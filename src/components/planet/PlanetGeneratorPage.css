@@ -1,0 +1,238 @@
+.planet-generator-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+  padding: var(--space-xl);
+  color: var(--color-text-primary);
+}
+
+.planet-generator-page__hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  padding: var(--space-lg);
+  background:
+    linear-gradient(135deg, rgba(196, 122, 42, 0.08), transparent 45%),
+    var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.planet-generator-page__hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: min(100%, 360px);
+}
+
+.planet-generator-page__eyebrow {
+  margin: 0;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-text-secondary);
+}
+
+.planet-generator-page__subtitle {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.planet-generator-page__identity-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 240px;
+}
+
+.planet-generator-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.planet-generator-page__field input {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+}
+
+.planet-generator-page__form-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-xs);
+}
+
+.planet-generator-page__button {
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.planet-generator-page__button:hover {
+  background: var(--color-accent-light);
+  border-color: var(--color-accent-light);
+  transform: translateY(-1px);
+}
+
+.planet-generator-page__button--secondary {
+  background: transparent;
+  color: var(--color-accent-light);
+  border-color: var(--color-border-light);
+}
+
+.planet-generator-page__button--secondary:hover {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
+}
+
+.planet-generator-page__empty-state {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.planet-generator-page__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.planet-generator-page__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+  padding: var(--space-lg);
+  background: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.planet-generator-page__section--overview {
+  grid-column: span 2;
+}
+
+.planet-generator-page__uwp-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.planet-generator-page__uwp-string {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--color-accent-light);
+  background: var(--color-bg-primary);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.planet-generator-page__copy-status {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.planet-generator-page__copy-status--success {
+  color: var(--color-success-text);
+}
+
+.planet-generator-page__copy-status--error {
+  color: var(--color-failure-text);
+}
+
+.planet-generator-page__overview-facts {
+  display: flex;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  color: var(--color-text-secondary);
+}
+
+.planet-generator-page__stat-row {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.planet-generator-page__fact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.planet-generator-page__starport-summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+
+.planet-generator-page__starport-class {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-accent-light);
+}
+
+.planet-generator-page__chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.planet-generator-page__chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(196, 122, 42, 0.14);
+  color: var(--color-accent-light);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.planet-generator-page__travel-zone {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 900px) {
+  .planet-generator-page__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .planet-generator-page__section--overview {
+    grid-column: span 1;
+  }
+}

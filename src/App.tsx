@@ -5,7 +5,7 @@ import { WizardShell } from './components/wizard/WizardShell';
 import { EffectGallery } from './components/dev/EffectGallery';
 import { HomeScreen } from './components/home/HomeScreen';
 import { BackToHomeLink } from './components/home/BackToHomeLink';
-import { PlanetGeneratorPlaceholder } from './components/planet/PlanetGeneratorPlaceholder';
+import { PlanetGeneratorPage } from './components/planet/PlanetGeneratorPage';
 import './theme/global.css';
 import './App.css';
 
@@ -38,7 +38,7 @@ function App() {
   }
 
   if (route === 'planet') {
-    return <PlanetGeneratorPlaceholder />;
+    return <PlanetGeneratorPage />;
   }
 
   if (route === 'character') {

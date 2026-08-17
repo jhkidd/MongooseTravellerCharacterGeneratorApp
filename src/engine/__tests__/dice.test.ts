@@ -1,4 +1,4 @@
-import { rollD6, roll2D6, getDM, getSuccessChance, getEffectiveTarget } from '../dice';
+import { rollD6, roll2D6, rollD3, getDM, getSuccessChance, getEffectiveTarget } from '../dice';
 
 describe('rollD6', () => {
   it('returns a value between 1 and 6', () => {
@@ -11,6 +11,21 @@ describe('rollD6', () => {
 
   it('returns an integer', () => {
     const result = rollD6();
+    expect(Number.isInteger(result)).toBe(true);
+  });
+});
+
+describe('rollD3', () => {
+  it('returns a value between 1 and 3', () => {
+    for (let i = 0; i < 100; i++) {
+      const result = rollD3();
+      expect(result).toBeGreaterThanOrEqual(1);
+      expect(result).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it('returns an integer', () => {
+    const result = rollD3();
     expect(Number.isInteger(result)).toBe(true);
   });
 });
