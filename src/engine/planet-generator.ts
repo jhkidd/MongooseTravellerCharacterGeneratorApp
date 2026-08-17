@@ -8,6 +8,7 @@ import {
   TL_POPULATION_DM,
   TL_GOVERNMENT_DM,
   TRADE_CODE_DEFINITIONS,
+  GOVERNMENT_TYPES,
 } from '../data/planet-tables';
 import type { Bases, Faction, Planet, StarportClass, TradeCode, TravelZone } from '../models/planet';
 
@@ -346,6 +347,23 @@ export function computeTravelZone(atmosphere: number, government: number, lawLev
     return 'Amber';
   }
   return null;
+}
+
+/** Explains which condition(s) triggered an Amber travel zone, for display alongside the advisory. */
+export function getTravelZoneReasons(atmosphere: number, government: number, lawLevel: number): string[] {
+  const reasons: string[] = [];
+  if (atmosphere >= 10) {
+    reasons.push('exotic atmosphere');
+  }
+  if (AMBER_GOVERNMENTS.has(government)) {
+    reasons.push(`${GOVERNMENT_TYPES[government].name} government`);
+  }
+  if (lawLevel === 0) {
+    reasons.push('no law level');
+  } else if (lawLevel >= 9) {
+    reasons.push('extreme law level');
+  }
+  return reasons;
 }
 
 // --- UWP Formatting ---

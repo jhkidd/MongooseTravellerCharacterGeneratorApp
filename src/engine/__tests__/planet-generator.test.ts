@@ -18,6 +18,7 @@ import {
   computeBases,
   computeTradeCodes,
   computeTravelZone,
+  getTravelZoneReasons,
   toHexDigit,
   formatUwp,
   generatePlanet,
@@ -264,6 +265,23 @@ describe('computeTravelZone', () => {
 
   it('is null (green) for an ordinary stable world', () => {
     expect(computeTravelZone(6, 6, 5)).toBeNull();
+  });
+});
+
+describe('getTravelZoneReasons', () => {
+  it('reports each condition that triggers an Amber zone', () => {
+    expect(getTravelZoneReasons(10, 6, 5)).toEqual(['exotic atmosphere']);
+    expect(getTravelZoneReasons(6, 0, 5)).toEqual(['None government']);
+    expect(getTravelZoneReasons(6, 6, 0)).toEqual(['no law level']);
+    expect(getTravelZoneReasons(6, 6, 9)).toEqual(['extreme law level']);
+  });
+
+  it('reports multiple reasons when several conditions apply', () => {
+    expect(getTravelZoneReasons(10, 0, 0)).toEqual(['exotic atmosphere', 'None government', 'no law level']);
+  });
+
+  it('returns an empty array for an ordinary stable world', () => {
+    expect(getTravelZoneReasons(6, 6, 5)).toEqual([]);
   });
 });
 

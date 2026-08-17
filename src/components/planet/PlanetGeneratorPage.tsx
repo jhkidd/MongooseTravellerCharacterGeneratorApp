@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BackToHomeLink } from '../home/BackToHomeLink';
 import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
 import { HexBadge } from '../ui/HexBadge/HexBadge';
-import { generatePlanet, formatUwp } from '../../engine/planet-generator';
+import { generatePlanet, formatUwp, getTravelZoneReasons } from '../../engine/planet-generator';
 import {
   SIZE_DESCRIPTIONS,
   ATMOSPHERE_DESCRIPTIONS,
@@ -170,44 +170,60 @@ function PlanetResults({ planet, copyState, onCopy }: { planet: Planet; copyStat
           <button type="button" className="planet-generator-page__button planet-generator-page__button--secondary" onClick={onCopy}>
             Copy UWP
           </button>
+          <div className="planet-generator-page__overview-chips">
+            <span className="planet-generator-page__chip">{planet.hasGasGiant ? 'Gas Giant' : 'No Gas Giant'}</span>
+            <span className="planet-generator-page__chip planet-generator-page__chip--travelzone">
+              {planet.travelZone ? `${planet.travelZone} Zone` : 'Green Zone'}
+            </span>
+          </div>
         </div>
         {copyState === 'success' && <span className="planet-generator-page__copy-status planet-generator-page__copy-status--success">Copied to clipboard.</span>}
         {copyState === 'error' && <span className="planet-generator-page__copy-status planet-generator-page__copy-status--error">Copy failed. Please try again.</span>}
-        <div className="planet-generator-page__overview-facts">
-          <span>Gas Giant: {planet.hasGasGiant ? 'Present' : 'None'}</span>
-          <span>Travel Zone: {planet.travelZone ?? 'Green (none)'}</span>
-        </div>
       </section>
 
       <section className="planet-generator-page__section planet-generator-page__section--physical">
         <ChamferedHeader level={3}>Physical</ChamferedHeader>
-        <div className="planet-generator-page__stat-row">
-          <HexBadge value={planet.size.toString(16).toUpperCase()} label="Size" size="lg" />
-          <HexBadge value={planet.atmosphere.toString(16).toUpperCase()} label="Atm" size="lg" />
-          <HexBadge value={planet.hydrographics.toString(16).toUpperCase()} label="Hydro" size="lg" />
+        <div className="planet-generator-page__stat-grid">
+          <div className="planet-generator-page__stat-block">
+            <HexBadge value={planet.size.toString(16).toUpperCase()} label="Size" size="lg" />
+            <p>{SIZE_DESCRIPTIONS[planet.size]}</p>
+          </div>
+          <div className="planet-generator-page__stat-block">
+            <HexBadge value={planet.atmosphere.toString(16).toUpperCase()} label="Atm" size="lg" />
+            <p>{ATMOSPHERE_DESCRIPTIONS[planet.atmosphere]}</p>
+          </div>
+          <div className="planet-generator-page__stat-block">
+            <HexBadge value={planet.hydrographics.toString(16).toUpperCase()} label="Hydro" size="lg" />
+            <p>{HYDROGRAPHICS_DESCRIPTIONS[planet.hydrographics]}</p>
+          </div>
         </div>
-        <ul className="planet-generator-page__fact-list">
-          <li>{SIZE_DESCRIPTIONS[planet.size]}</li>
-          <li>{ATMOSPHERE_DESCRIPTIONS[planet.atmosphere]}</li>
-          <li>{HYDROGRAPHICS_DESCRIPTIONS[planet.hydrographics]}</li>
-          <li>{temperatureBand.label}: {temperatureBand.description}</li>
-        </ul>
+        <div className="planet-generator-page__temperature">
+          <span className="planet-generator-page__temperature-label">Temperature: {temperatureBand.label}</span>
+          <p>{temperatureBand.description}</p>
+        </div>
       </section>
 
       <section className="planet-generator-page__section planet-generator-page__section--society">
         <ChamferedHeader level={3}>Society</ChamferedHeader>
-        <div className="planet-generator-page__stat-row">
-          <HexBadge value={planet.population.toString(16).toUpperCase()} label="Pop" size="lg" />
-          <HexBadge value={planet.government.toString(16).toUpperCase()} label="Gov" size="lg" />
-          <HexBadge value={planet.lawLevel.toString(16).toUpperCase()} label="Law" size="lg" />
-          <HexBadge value={planet.techLevel.toString(16).toUpperCase()} label="Tech" size="lg" />
+        <div className="planet-generator-page__stat-grid planet-generator-page__stat-grid--society">
+          <div className="planet-generator-page__stat-block">
+            <HexBadge value={planet.population.toString(16).toUpperCase()} label="Pop" size="lg" />
+            <p>{POPULATION_DESCRIPTIONS[planet.population]}</p>
+          </div>
+          <div className="planet-generator-page__stat-block">
+            <HexBadge value={planet.government.toString(16).toUpperCase()} label="Gov" size="lg" />
+            <p><strong>{government.name}</strong>: {government.description}</p>
+          </div>
+          <div className="planet-generator-page__stat-block">
+            <HexBadge value={planet.lawLevel.toString(16).toUpperCase()} label="Law" size="lg" />
+            <p>Weapons banned: {lawLevelInfo.weaponsBanned}</p>
+            <p>Armour banned: {lawLevelInfo.armourBanned}</p>
+          </div>
+          <div className="planet-generator-page__stat-block">
+            <HexBadge value={planet.techLevel.toString(16).toUpperCase()} label="Tech" size="lg" />
+            <p>Tech Level {planet.techLevel}</p>
+          </div>
         </div>
-        <ul className="planet-generator-page__fact-list">
-          <li>{POPULATION_DESCRIPTIONS[planet.population]}</li>
-          <li><strong>{government.name}</strong>: {government.description}</li>
-          <li>Weapons banned: {lawLevelInfo.weaponsBanned}</li>
-          <li>Armour banned: {lawLevelInfo.armourBanned}</li>
-        </ul>
       </section>
 
       <section className="planet-generator-page__section planet-generator-page__section--starport">
@@ -245,7 +261,7 @@ function PlanetResults({ planet, copyState, onCopy }: { planet: Planet; copyStat
         )}
         <p className="planet-generator-page__travel-zone">
           {planet.travelZone
-            ? `${planet.travelZone} Zone advisory in effect.`
+            ? `${planet.travelZone} Zone advisory: ${getTravelZoneReasons(planet.atmosphere, planet.government, planet.lawLevel).join(', ')}.`
             : 'Green Zone - no travel advisory.'}
         </p>
       </section>

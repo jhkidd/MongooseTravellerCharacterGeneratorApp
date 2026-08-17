@@ -3,15 +3,16 @@
   flex-direction: column;
   gap: var(--space-lg);
   width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
   padding: var(--space-xl);
   color: var(--color-text-primary);
 }
 
 .planet-generator-page__hero {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: var(--space-lg);
+  gap: var(--space-xl);
   flex-wrap: wrap;
   padding: var(--space-lg);
   background:
@@ -25,7 +26,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
-  min-width: min(100%, 360px);
+  flex: 1 1 320px;
+  min-width: 0;
 }
 
 .planet-generator-page__eyebrow {
@@ -47,6 +49,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  flex: 0 1 280px;
   min-width: 240px;
 }
 
@@ -120,6 +123,7 @@
 .planet-generator-page__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: var(--space-lg);
 }
 
@@ -136,6 +140,10 @@
 }
 
 .planet-generator-page__section--overview {
+  grid-column: span 2;
+}
+
+.planet-generator-page__section--factions {
   grid-column: span 2;
 }
 
@@ -169,18 +177,57 @@
   color: var(--color-failure-text);
 }
 
-.planet-generator-page__overview-facts {
+.planet-generator-page__overview-chips {
   display: flex;
-  gap: var(--space-lg);
+  gap: var(--space-sm);
   flex-wrap: wrap;
-  color: var(--color-text-secondary);
+  margin-left: auto;
 }
 
-.planet-generator-page__stat-row {
-  display: flex;
+.planet-generator-page__stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-md);
-  flex-wrap: wrap;
-  justify-content: center;
+}
+
+.planet-generator-page__stat-grid--society {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.planet-generator-page__stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  text-align: center;
+}
+
+.planet-generator-page__stat-block p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  font-size: var(--text-sm);
+}
+
+.planet-generator-page__temperature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-top: var(--space-sm);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.planet-generator-page__temperature-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.planet-generator-page__temperature p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
 }
 
 .planet-generator-page__fact-list {
@@ -222,6 +269,11 @@
   letter-spacing: 0.06em;
 }
 
+.planet-generator-page__chip--travelzone {
+  background: rgba(196, 122, 42, 0.28);
+  font-weight: 700;
+}
+
 .planet-generator-page__travel-zone {
   margin: 0;
   color: var(--color-text-secondary);
@@ -232,7 +284,12 @@
     grid-template-columns: 1fr;
   }
 
-  .planet-generator-page__section--overview {
+  .planet-generator-page__section--overview,
+  .planet-generator-page__section--factions {
     grid-column: span 1;
+  }
+
+  .planet-generator-page__stat-grid--society {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
