@@ -185,21 +185,21 @@
 }
 
 .planet-generator-page__stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: var(--space-md);
-}
-
-.planet-generator-page__stat-grid--society {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .planet-generator-page__stat-block {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: var(--space-xs);
-  text-align: center;
+  gap: var(--space-md);
+  text-align: left;
+}
+
+.planet-generator-page__stat-block > .hex-badge {
+  flex-shrink: 0;
 }
 
 .planet-generator-page__stat-block p {
@@ -207,6 +207,12 @@
   color: var(--color-text-secondary);
   line-height: 1.4;
   font-size: var(--text-sm);
+}
+
+.planet-generator-page__stat-block-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
 .planet-generator-page__temperature {
@@ -287,9 +293,5 @@
   .planet-generator-page__section--overview,
   .planet-generator-page__section--factions {
     grid-column: span 1;
-  }
-
-  .planet-generator-page__stat-grid--society {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

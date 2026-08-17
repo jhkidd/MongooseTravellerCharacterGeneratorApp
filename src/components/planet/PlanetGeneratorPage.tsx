@@ -205,7 +205,7 @@ function PlanetResults({ planet, copyState, onCopy }: { planet: Planet; copyStat
 
       <section className="planet-generator-page__section planet-generator-page__section--society">
         <ChamferedHeader level={3}>Society</ChamferedHeader>
-        <div className="planet-generator-page__stat-grid planet-generator-page__stat-grid--society">
+        <div className="planet-generator-page__stat-grid">
           <div className="planet-generator-page__stat-block">
             <HexBadge value={planet.population.toString(16).toUpperCase()} label="Pop" size="lg" />
             <p>{POPULATION_DESCRIPTIONS[planet.population]}</p>
@@ -216,8 +216,10 @@ function PlanetResults({ planet, copyState, onCopy }: { planet: Planet; copyStat
           </div>
           <div className="planet-generator-page__stat-block">
             <HexBadge value={planet.lawLevel.toString(16).toUpperCase()} label="Law" size="lg" />
-            <p>Weapons banned: {lawLevelInfo.weaponsBanned}</p>
-            <p>Armour banned: {lawLevelInfo.armourBanned}</p>
+            <div className="planet-generator-page__stat-block-text">
+              <p>Weapons banned: {lawLevelInfo.weaponsBanned}</p>
+              <p>Armour banned: {lawLevelInfo.armourBanned}</p>
+            </div>
           </div>
           <div className="planet-generator-page__stat-block">
             <HexBadge value={planet.techLevel.toString(16).toUpperCase()} label="Tech" size="lg" />
