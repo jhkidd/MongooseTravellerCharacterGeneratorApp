@@ -20,3 +20,9 @@
   padding: var(--space-lg);
   overflow-y: auto;
 }
+
+.app__main-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

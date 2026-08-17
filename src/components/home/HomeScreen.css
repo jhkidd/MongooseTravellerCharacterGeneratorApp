@@ -1,0 +1,10 @@
+.home-screen {
+  width: 100%;
+  padding: var(--space-xl);
+}
+
+.home-screen__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}

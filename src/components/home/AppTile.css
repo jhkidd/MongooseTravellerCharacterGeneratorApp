@@ -1,0 +1,66 @@
+.app-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 150px;
+  height: 150px;
+  padding: var(--space-md);
+  background: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  text-align: center;
+  text-decoration: none;
+  position: relative;
+  transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+}
+
+.app-tile:hover {
+  border-color: var(--color-accent);
+  background: var(--color-bg-elevated);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.app-tile__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.app-tile__title {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.app-tile__description {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.app-tile--disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.app-tile--disabled:hover {
+  border-color: var(--color-border);
+  background: var(--color-bg-surface);
+  transform: none;
+}
+
+.app-tile__badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--color-bg-primary);
+  border: var(--border-width) solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  color: var(--color-text-muted);
+}
