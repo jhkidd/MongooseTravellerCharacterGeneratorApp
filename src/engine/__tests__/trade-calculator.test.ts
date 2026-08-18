@@ -26,6 +26,7 @@ import {
   computeSalePrice,
   rollPurchasePrice,
   rollSalePrice,
+  combineTravelZones,
 } from '../trade-calculator';
 import { getTradeGoodByD66 } from '../../data/trade-tables';
 
@@ -69,6 +70,25 @@ describe('parseUwp', () => {
 
   it('returns null when no UWP profile can be found', () => {
     expect(parseUwp('not a valid profile at all')).toBeNull();
+  });
+});
+
+describe('combineTravelZones', () => {
+  it('returns Red if either world is Red, regardless of order', () => {
+    expect(combineTravelZones('Red', 'Amber')).toBe('Red');
+    expect(combineTravelZones('Amber', 'Red')).toBe('Red');
+    expect(combineTravelZones('Red', null)).toBe('Red');
+    expect(combineTravelZones(null, 'Red')).toBe('Red');
+  });
+
+  it('returns Amber if either world is Amber and neither is Red', () => {
+    expect(combineTravelZones('Amber', null)).toBe('Amber');
+    expect(combineTravelZones(null, 'Amber')).toBe('Amber');
+    expect(combineTravelZones('Amber', 'Amber')).toBe('Amber');
+  });
+
+  it('returns null when neither world is Amber or Red', () => {
+    expect(combineTravelZones(null, null)).toBeNull();
   });
 });
 

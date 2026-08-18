@@ -34,6 +34,14 @@ import type {
 } from '../models/trade';
 import type { StarportClass, TravelZone } from '../models/planet';
 
+/** Returns the more severe of two travel zones (Red > Amber > none), since either the source or
+ *  destination world being restricted can affect passenger/freight/mail traffic for a trip. */
+export function combineTravelZones(a: TravelZone, b: TravelZone): TravelZone {
+  if (a === 'Red' || b === 'Red') return 'Red';
+  if (a === 'Amber' || b === 'Amber') return 'Amber';
+  return null;
+}
+
 const HEX_DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 function fromHexDigit(digit: string): number {
@@ -92,6 +100,7 @@ export interface PassengerTrafficParams {
   destPopulation: number;
   sourceStarport: StarportClass;
   destStarport: StarportClass;
+  /** The more severe of the source/destination worlds' travel zones; see `combineTravelZones`. */
   travelZone: TravelZone;
   parsecs: number;
 }
@@ -129,7 +138,7 @@ export function getPassengerModifierBreakdown(params: PassengerTrafficParams): D
   const destStarportDm = getStarportTradeDM(destStarport);
   if (destStarportDm) items.push({ label: 'Destination Starport', value: destStarportDm });
   const zoneDm = getZonePassengerDM(travelZone);
-  if (zoneDm) items.push({ label: 'Destination Travel Zone', value: zoneDm });
+  if (zoneDm) items.push({ label: `Travel Zone (${travelZone})`, value: zoneDm });
   const parsecPenalty = -Math.max(0, parsecs - 1);
   if (parsecPenalty) items.push({ label: 'Parsecs Travelled', value: parsecPenalty });
   return items;
@@ -172,6 +181,7 @@ export interface FreightTrafficParams {
   sourceStarport: StarportClass;
   destStarport: StarportClass;
   techLevel: number;
+  /** The more severe of the source/destination worlds' travel zones; see `combineTravelZones`. */
   travelZone: TravelZone;
   parsecs: number;
 }
@@ -211,7 +221,7 @@ export function getFreightModifierBreakdown(params: FreightTrafficParams): DmCom
   const techDm = getTechLevelFreightDM(techLevel);
   if (techDm) items.push({ label: 'Destination Tech Level', value: techDm });
   const zoneDm = getZoneFreightDM(travelZone);
-  if (zoneDm) items.push({ label: 'Destination Travel Zone', value: zoneDm });
+  if (zoneDm) items.push({ label: `Travel Zone (${travelZone})`, value: zoneDm });
   const parsecPenalty = -Math.max(0, parsecs - 1);
   if (parsecPenalty) items.push({ label: 'Parsecs Travelled', value: parsecPenalty });
   return items;

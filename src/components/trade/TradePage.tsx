@@ -26,6 +26,7 @@ import {
   getSaleModifierBreakdown,
   rollPurchasePrice,
   rollSalePrice,
+  combineTravelZones,
 } from '../../engine/trade-calculator';
 import type { DmComponent } from '../../engine/trade-calculator';
 import type { AvailableGood, FreightLotSize, ParsedWorld, PassengerClass, SpeculativeMode } from '../../models/trade';
@@ -184,7 +185,7 @@ function PassengersTab({
       destPopulation: destWorld!.population,
       sourceStarport: sourceWorld!.starport,
       destStarport: destWorld!.starport,
-      travelZone: destWorld!.travelZone,
+      travelZone: combineTravelZones(sourceWorld!.travelZone, destWorld!.travelZone),
       parsecs,
     };
   }
@@ -278,7 +279,7 @@ function FreightMailTab({
       sourceStarport: sourceWorld!.starport,
       destStarport: destWorld!.starport,
       techLevel: destWorld!.techLevel,
-      travelZone: destWorld!.travelZone,
+      travelZone: combineTravelZones(sourceWorld!.travelZone, destWorld!.travelZone),
       parsecs,
     };
   }
