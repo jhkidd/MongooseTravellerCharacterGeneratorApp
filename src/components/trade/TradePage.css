@@ -172,6 +172,27 @@
   color: var(--color-text-secondary);
 }
 
+.trade-page__stat-line--compact {
+  font-size: var(--text-xs);
+}
+
+.trade-page__dm-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trade-page__dm-list {
+  margin: 0;
+  padding: 0 0 0 var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.trade-page__dm-list li {
+  list-style: disc;
+}
+
 .trade-page__roll-row {
   display: flex;
   align-items: center;

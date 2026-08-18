@@ -18,6 +18,12 @@ import {
   FREIGHT_LOT_DICE,
   TRADE_GOODS_TABLE,
 } from '../data/trade-tables';
+
+/** A single named DM contribution, used to show players what a total modifier is made up of. */
+export interface DmComponent {
+  label: string;
+  value: number;
+}
 import type {
   AvailableGood,
   FreightLotSize,
@@ -106,6 +112,29 @@ export function computePassengerModifier(params: PassengerTrafficParams): number
   return dm;
 }
 
+/** Breaks down the passenger-traffic modifier into its named, non-zero contributions. */
+export function getPassengerModifierBreakdown(params: PassengerTrafficParams): DmComponent[] {
+  const { passengerClass, skillEffect, stewardSkill, sourcePopulation, destPopulation, sourceStarport, destStarport, travelZone, parsecs } = params;
+  const items: DmComponent[] = [];
+  if (skillEffect) items.push({ label: 'Broker/Streetwise Effect', value: skillEffect });
+  if (stewardSkill) items.push({ label: 'Steward Skill', value: stewardSkill });
+  if (passengerClass === 'High') items.push({ label: 'High Passage', value: -4 });
+  if (passengerClass === 'Low') items.push({ label: 'Low Passage', value: 1 });
+  const sourcePopDm = getPopulationPassengerDM(sourcePopulation);
+  if (sourcePopDm) items.push({ label: 'Source Population', value: sourcePopDm });
+  const destPopDm = getPopulationPassengerDM(destPopulation);
+  if (destPopDm) items.push({ label: 'Destination Population', value: destPopDm });
+  const sourceStarportDm = getStarportTradeDM(sourceStarport);
+  if (sourceStarportDm) items.push({ label: 'Source Starport', value: sourceStarportDm });
+  const destStarportDm = getStarportTradeDM(destStarport);
+  if (destStarportDm) items.push({ label: 'Destination Starport', value: destStarportDm });
+  const zoneDm = getZonePassengerDM(travelZone);
+  if (zoneDm) items.push({ label: 'Destination Travel Zone', value: zoneDm });
+  const parsecPenalty = -Math.max(0, parsecs - 1);
+  if (parsecPenalty) items.push({ label: 'Parsecs Travelled', value: parsecPenalty });
+  return items;
+}
+
 /** Rolls (or accepts a supplied) 2D traffic roll and resolves it to a dice-count, then simulates that many D6. */
 export function computePassengerTraffic(twoDRoll: number, modifier: number, diceRolls: number[]): number {
   const modified = twoDRoll + modifier;
@@ -164,6 +193,30 @@ export function computeFreightModifier(params: FreightTrafficParams): number {
   return dm;
 }
 
+/** Breaks down the freight-traffic modifier into its named, non-zero contributions. */
+export function getFreightModifierBreakdown(params: FreightTrafficParams): DmComponent[] {
+  const { lotSize, skillEffect, sourcePopulation, destPopulation, sourceStarport, destStarport, techLevel, travelZone, parsecs } = params;
+  const items: DmComponent[] = [];
+  if (skillEffect) items.push({ label: 'Broker Check Effect', value: skillEffect });
+  if (lotSize === 'Major') items.push({ label: 'Major Lot', value: -4 });
+  if (lotSize === 'Incidental') items.push({ label: 'Incidental Lot', value: 2 });
+  const sourcePopDm = getPopulationFreightDM(sourcePopulation);
+  if (sourcePopDm) items.push({ label: 'Source Population', value: sourcePopDm });
+  const destPopDm = getPopulationFreightDM(destPopulation);
+  if (destPopDm) items.push({ label: 'Destination Population', value: destPopDm });
+  const sourceStarportDm = getStarportTradeDM(sourceStarport);
+  if (sourceStarportDm) items.push({ label: 'Source Starport', value: sourceStarportDm });
+  const destStarportDm = getStarportTradeDM(destStarport);
+  if (destStarportDm) items.push({ label: 'Destination Starport', value: destStarportDm });
+  const techDm = getTechLevelFreightDM(techLevel);
+  if (techDm) items.push({ label: 'Destination Tech Level', value: techDm });
+  const zoneDm = getZoneFreightDM(travelZone);
+  if (zoneDm) items.push({ label: 'Destination Travel Zone', value: zoneDm });
+  const parsecPenalty = -Math.max(0, parsecs - 1);
+  if (parsecPenalty) items.push({ label: 'Parsecs Travelled', value: parsecPenalty });
+  return items;
+}
+
 export function computeFreightTraffic(twoDRoll: number, modifier: number, diceRolls: number[]): number {
   const modified = twoDRoll + modifier;
   const diceCount = getDiceCountForRoll(FREIGHT_TRAFFIC_TABLE, modified);
@@ -190,6 +243,12 @@ export function rollLotTonnage(lotSize: FreightLotSize): number {
   const { dice } = FREIGHT_LOT_DICE[lotSize];
   const rolls = Array.from({ length: dice }, () => rollD6());
   return computeLotTonnage(lotSize, rolls);
+}
+
+/** Dice notation for a lot size's tonnage roll, e.g. "1D6 x10". */
+export function getLotTonnageDiceLabel(lotSize: FreightLotSize): string {
+  const { dice, multiplier } = FREIGHT_LOT_DICE[lotSize];
+  return `${dice}D6 x${multiplier}`;
 }
 
 export function getFreightRate(parsecs: number): number {
@@ -221,6 +280,23 @@ export function computeMailModifier(params: MailAvailabilityParams): number {
   dm += socDm;
   dm += navalOrScoutRank;
   return dm;
+}
+
+/** Breaks down the mail-availability modifier into its named, non-zero contributions. */
+export function getMailModifierBreakdown(params: MailAvailabilityParams): DmComponent[] {
+  const { freightTrafficDM, shipArmed, techLevel, socDm, navalOrScoutRank } = params;
+  const items: DmComponent[] = [];
+  let trafficBand = 0;
+  if (freightTrafficDM <= -10) trafficBand = -2;
+  else if (freightTrafficDM <= -5) trafficBand = -1;
+  else if (freightTrafficDM >= 10) trafficBand = 2;
+  else if (freightTrafficDM >= 5) trafficBand = 1;
+  if (trafficBand) items.push({ label: 'Freight Traffic DM', value: trafficBand });
+  if (shipArmed) items.push({ label: 'Ship Armed', value: 2 });
+  if (techLevel <= 5) items.push({ label: 'Destination Tech Level', value: -4 });
+  if (socDm) items.push({ label: 'Social Standing', value: socDm });
+  if (navalOrScoutRank) items.push({ label: 'Naval/Scout Rank', value: navalOrScoutRank });
+  return items;
 }
 
 /** A 2D roll of 12+ (after modifiers) means mail is available for this run. */
@@ -357,17 +433,17 @@ export function rollAvailableGoods(population: number, tradeCodes: string[], mod
   return computeAvailableGoods(population, tradeCodes, mode, extraRolls, tonnageRolls);
 }
 
-/** Counts how many DM bonuses a trade good's DM-text string grants for a given set of trade codes/flags. */
-function parseDmText(dmText: string, tradeCodes: string[], zone: TravelZone): number {
-  if (!dmText) return 0;
-  const codeNameToCode: Record<string, string> = {
-    agricultural: 'Ag', 'non-agricultural': '!Ag', asteroid: 'As', desert: 'De', fluid: 'Fl',
-    garden: 'Ga', 'high population': 'Hi', 'high tech': 'Ht', 'ice-capped': 'Ic', industrial: 'In',
-    'non-industrial': '!In', 'low population': 'Lo', 'low tech': 'Lt', poor: 'Po', rich: 'Ri',
-    'water world': 'Wa', 'fluid oceans': 'Fl',
-  };
+const TRADE_CODE_NAME_TO_CODE: Record<string, string> = {
+  agricultural: 'Ag', 'non-agricultural': '!Ag', asteroid: 'As', desert: 'De', fluid: 'Fl',
+  garden: 'Ga', 'high population': 'Hi', 'high tech': 'Ht', 'ice-capped': 'Ic', industrial: 'In',
+  'non-industrial': '!In', 'low population': 'Lo', 'low tech': 'Lt', poor: 'Po', rich: 'Ri',
+  'water world': 'Wa', 'fluid oceans': 'Fl',
+};
 
-  let best = 0;
+/** Finds the single best-matching (highest DM) clause of a trade good's DM-text for the given trade codes/zone. */
+function findBestDmClause(dmText: string, tradeCodes: string[], zone: TravelZone): { label: string; value: number } | null {
+  if (!dmText) return null;
+  let best: { label: string; value: number } | null = null;
   const clauses = dmText.split(',').map((c) => c.trim());
   for (const clause of clauses) {
     const clauseMatch = /^(.+?)\s*([+-]\d+)$/.exec(clause);
@@ -375,18 +451,28 @@ function parseDmText(dmText: string, tradeCodes: string[], zone: TravelZone): nu
     const [, label, dmStr] = clauseMatch;
     const dm = parseInt(dmStr, 10);
     const labelLower = label.toLowerCase();
-    if (labelLower === 'amber zone' && zone === 'Amber') best = Math.max(best, dm);
-    else if (labelLower === 'red zone' && zone === 'Red') best = Math.max(best, dm);
+    let applicable = false;
+    if (labelLower === 'amber zone' && zone === 'Amber') applicable = true;
+    else if (labelLower === 'red zone' && zone === 'Red') applicable = true;
     else {
-      const code = codeNameToCode[labelLower];
-      if (!code) continue;
-      const negate = code.startsWith('!');
-      const bareCode = negate ? code.slice(1) : code;
-      const has = tradeCodes.includes(bareCode);
-      if (negate ? !has : has) best = Math.max(best, dm);
+      const code = TRADE_CODE_NAME_TO_CODE[labelLower];
+      if (code) {
+        const negate = code.startsWith('!');
+        const bareCode = negate ? code.slice(1) : code;
+        const has = tradeCodes.includes(bareCode);
+        applicable = negate ? !has : has;
+      }
+    }
+    if (applicable && (best === null || dm > best.value)) {
+      best = { label, value: dm };
     }
   }
   return best;
+}
+
+/** Counts how many DM bonuses a trade good's DM-text string grants for a given set of trade codes/flags. */
+function parseDmText(dmText: string, tradeCodes: string[], zone: TravelZone): number {
+  return Math.max(0, findBestDmClause(dmText, tradeCodes, zone)?.value ?? 0);
 }
 
 export interface TradePriceParams {
@@ -409,6 +495,30 @@ export function computeSaleModifier(params: TradePriceParams): number {
   const saleDm = parseDmText(params.good.saleDmText, params.tradeCodes, params.travelZone);
   const purchaseDm = parseDmText(params.good.purchaseDmText, params.tradeCodes, params.travelZone);
   return params.brokerSkill + saleDm - purchaseDm - params.counterpartyBrokerSkill;
+}
+
+/** Breaks down the purchase-roll modifier into its named, non-zero contributions. */
+export function getPurchaseModifierBreakdown(params: TradePriceParams): DmComponent[] {
+  const items: DmComponent[] = [];
+  if (params.brokerSkill) items.push({ label: 'Broker Skill', value: params.brokerSkill });
+  const purchaseMatch = findBestDmClause(params.good.purchaseDmText, params.tradeCodes, params.travelZone);
+  if (purchaseMatch && purchaseMatch.value > 0) items.push({ label: `${purchaseMatch.label} (Purchase)`, value: purchaseMatch.value });
+  const saleMatch = findBestDmClause(params.good.saleDmText, params.tradeCodes, params.travelZone);
+  if (saleMatch && saleMatch.value > 0) items.push({ label: `${saleMatch.label} (Sale, opposes)`, value: -saleMatch.value });
+  if (params.counterpartyBrokerSkill) items.push({ label: 'Supplier Broker Skill', value: -params.counterpartyBrokerSkill });
+  return items;
+}
+
+/** Breaks down the sale-roll modifier into its named, non-zero contributions. */
+export function getSaleModifierBreakdown(params: TradePriceParams): DmComponent[] {
+  const items: DmComponent[] = [];
+  if (params.brokerSkill) items.push({ label: 'Broker Skill', value: params.brokerSkill });
+  const saleMatch = findBestDmClause(params.good.saleDmText, params.tradeCodes, params.travelZone);
+  if (saleMatch && saleMatch.value > 0) items.push({ label: `${saleMatch.label} (Sale)`, value: saleMatch.value });
+  const purchaseMatch = findBestDmClause(params.good.purchaseDmText, params.tradeCodes, params.travelZone);
+  if (purchaseMatch && purchaseMatch.value > 0) items.push({ label: `${purchaseMatch.label} (Purchase, opposes)`, value: -purchaseMatch.value });
+  if (params.counterpartyBrokerSkill) items.push({ label: 'Buyer Broker Skill', value: -params.counterpartyBrokerSkill });
+  return items;
 }
 
 export function computePurchasePrice(threeDRoll: number, modifier: number, basePrice: number): number {

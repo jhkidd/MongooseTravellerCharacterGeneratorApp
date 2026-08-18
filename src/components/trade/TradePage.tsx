@@ -4,21 +4,30 @@ import { ChamferedHeader } from '../ui/ChamferedHeader/ChamferedHeader';
 import {
   parseUwp,
   computePassengerModifier,
+  getPassengerModifierBreakdown,
   rollPassengerTraffic,
   getPassageFare,
   computeFreightModifier,
+  getFreightModifierBreakdown,
   rollFreightTraffic,
   rollLotTonnage,
+  getLotTonnageDiceLabel,
   getFreightRate,
   computeMailModifier,
+  getMailModifierBreakdown,
   rollMailAvailable,
   rollMailContainers,
   MAIL_CONTAINER_TONS,
   MAIL_CONTAINER_PAYMENT,
   rollAvailableGoods,
+  computePurchaseModifier,
+  getPurchaseModifierBreakdown,
+  computeSaleModifier,
+  getSaleModifierBreakdown,
   rollPurchasePrice,
   rollSalePrice,
 } from '../../engine/trade-calculator';
+import type { DmComponent } from '../../engine/trade-calculator';
 import type { AvailableGood, FreightLotSize, ParsedWorld, PassengerClass, SpeculativeMode } from '../../models/trade';
 import './TradePage.css';
 
@@ -166,8 +175,8 @@ function PassengersTab({
 
   if (!sourceWorld || !destWorld) return <NeedsWorlds sourceWorld={sourceWorld} destWorld={destWorld} />;
 
-  function modifierFor(passengerClass: PassengerClass) {
-    return computePassengerModifier({
+  function paramsFor(passengerClass: PassengerClass) {
+    return {
       passengerClass,
       skillEffect,
       stewardSkill,
@@ -177,7 +186,11 @@ function PassengersTab({
       destStarport: destWorld!.starport,
       travelZone: destWorld!.travelZone,
       parsecs,
-    });
+    };
+  }
+
+  function modifierFor(passengerClass: PassengerClass) {
+    return computePassengerModifier(paramsFor(passengerClass));
   }
 
   function handleRoll(passengerClass: PassengerClass) {
@@ -205,7 +218,11 @@ function PassengersTab({
           return (
             <div className="trade-page__card" key={passengerClass}>
               <h4>{passengerClass} Passage</h4>
-              <p className="trade-page__stat-line">DM {formatDm(modifierFor(passengerClass))}</p>
+              <DmBreakdown
+                diceLabel="2D6"
+                total={modifierFor(passengerClass)}
+                items={getPassengerModifierBreakdown(paramsFor(passengerClass))}
+              />
               <p className="trade-page__stat-line">Fare: Cr{fare.toLocaleString()}</p>
               <div className="trade-page__roll-row">
                 <button type="button" className="trade-page__button trade-page__button--secondary" onClick={() => handleRoll(passengerClass)}>
@@ -252,8 +269,8 @@ function FreightMailTab({
 
   if (!sourceWorld || !destWorld) return <NeedsWorlds sourceWorld={sourceWorld} destWorld={destWorld} />;
 
-  function modifierFor(lotSize: FreightLotSize) {
-    return computeFreightModifier({
+  function paramsFor(lotSize: FreightLotSize) {
+    return {
       lotSize,
       skillEffect,
       sourcePopulation: sourceWorld!.population,
@@ -263,7 +280,11 @@ function FreightMailTab({
       techLevel: destWorld!.techLevel,
       travelZone: destWorld!.travelZone,
       parsecs,
-    });
+    };
+  }
+
+  function modifierFor(lotSize: FreightLotSize) {
+    return computeFreightModifier(paramsFor(lotSize));
   }
 
   function handleRollLots(lotSize: FreightLotSize) {
@@ -286,13 +307,14 @@ function FreightMailTab({
   const freightRate = getFreightRate(parsecs);
   const majorModifier = modifierFor('Major');
 
-  const mailModifier = computeMailModifier({
+  const mailModifierParams = {
     freightTrafficDM: majorModifier,
     shipArmed,
     techLevel: destWorld.techLevel,
     socDm,
     navalOrScoutRank,
-  });
+  };
+  const mailModifier = computeMailModifier(mailModifierParams);
 
   function handleRollMailAvailable() {
     setMailAvailable(rollMailAvailable(mailModifier));
@@ -318,7 +340,7 @@ function FreightMailTab({
             return (
               <div className="trade-page__card" key={lotSize}>
                 <h4>{lotSize} Lots</h4>
-                <p className="trade-page__stat-line">DM {formatDm(modifierFor(lotSize))}</p>
+                <DmBreakdown diceLabel="2D6" total={modifierFor(lotSize)} items={getFreightModifierBreakdown(paramsFor(lotSize))} />
                 <div className="trade-page__roll-row">
                   <button type="button" className="trade-page__button trade-page__button--secondary" onClick={() => handleRollLots(lotSize)}>
                     Roll Lots
@@ -332,6 +354,7 @@ function FreightMailTab({
                   />
                   <span>lots available</span>
                 </div>
+                <p className="trade-page__stat-line">Tonnage roll: {getLotTonnageDiceLabel(lotSize)}</p>
                 <div className="trade-page__roll-row">
                   <button type="button" className="trade-page__button trade-page__button--secondary" onClick={() => handleRollTonnage(lotSize)}>
                     Roll Tonnage
@@ -372,7 +395,7 @@ function FreightMailTab({
             <input type="number" value={navalOrScoutRank} onChange={(e) => setNavalOrScoutRank(Number(e.target.value))} />
           </label>
         </div>
-        <p className="trade-page__stat-line">Mail Availability DM {formatDm(mailModifier)} (needs 12+ on 2D)</p>
+        <DmBreakdown diceLabel="2D6 (need 12+)" total={mailModifier} items={getMailModifierBreakdown(mailModifierParams)} />
         <div className="trade-page__roll-row">
           <button type="button" className="trade-page__button trade-page__button--secondary" onClick={handleRollMailAvailable}>
             Roll Mail Available
@@ -388,6 +411,7 @@ function FreightMailTab({
         </div>
         {mailAvailable && (
           <div className="trade-page__roll-row">
+            <span className="trade-page__stat-line">Roll 1D6</span>
             <button type="button" className="trade-page__button trade-page__button--secondary" onClick={handleRollMailContainers}>
               Roll Containers
             </button>
@@ -437,25 +461,33 @@ function SpeculativeTradeTab({
     setSaleResults({});
   }
 
-  function handlePurchase(good: AvailableGood) {
-    const result = rollPurchasePrice({
+  function purchaseParams(good: AvailableGood) {
+    return {
       good: good.definition,
       brokerSkill,
       counterpartyBrokerSkill,
       tradeCodes: sourceWorld!.tradeCodes.map((tc) => tc.code),
       travelZone: sourceWorld!.travelZone,
-    });
-    setPurchaseResults((prev) => ({ ...prev, [good.definition.d66]: result }));
+    };
   }
 
-  function handleSale(good: AvailableGood) {
-    const result = rollSalePrice({
+  function saleParams(good: AvailableGood) {
+    return {
       good: good.definition,
       brokerSkill,
       counterpartyBrokerSkill,
       tradeCodes: destWorld!.tradeCodes.map((tc) => tc.code),
       travelZone: destWorld!.travelZone,
-    });
+    };
+  }
+
+  function handlePurchase(good: AvailableGood) {
+    const result = rollPurchasePrice(purchaseParams(good));
+    setPurchaseResults((prev) => ({ ...prev, [good.definition.d66]: result }));
+  }
+
+  function handleSale(good: AvailableGood) {
+    const result = rollSalePrice(saleParams(good));
     setSaleResults((prev) => ({ ...prev, [good.definition.d66]: result }));
   }
 
@@ -508,12 +540,26 @@ function SpeculativeTradeTab({
                   <td>{good.tons}</td>
                   <td>Cr{good.definition.basePrice.toLocaleString()}</td>
                   <td>
+                    <p className="trade-page__stat-line trade-page__stat-line--compact">
+                      Roll 3D6 {formatDm(computePurchaseModifier(purchaseParams(good)))}
+                      {(() => {
+                        const breakdown = formatDmBreakdown(getPurchaseModifierBreakdown(purchaseParams(good)));
+                        return breakdown ? ` (${breakdown})` : '';
+                      })()}
+                    </p>
                     <button type="button" className="trade-page__button trade-page__button--secondary" onClick={() => handlePurchase(good)}>
                       Roll Purchase
                     </button>
                     {purchase && <p className="trade-page__result">3D {purchase.roll}: Cr{purchase.price.toLocaleString()}/ton</p>}
                   </td>
                   <td>
+                    <p className="trade-page__stat-line trade-page__stat-line--compact">
+                      Roll 3D6 {formatDm(computeSaleModifier(saleParams(good)))}
+                      {(() => {
+                        const breakdown = formatDmBreakdown(getSaleModifierBreakdown(saleParams(good)));
+                        return breakdown ? ` (${breakdown})` : '';
+                      })()}
+                    </p>
                     <button type="button" className="trade-page__button trade-page__button--secondary" onClick={() => handleSale(good)}>
                       Roll Sale
                     </button>
@@ -531,4 +577,29 @@ function SpeculativeTradeTab({
 
 function formatDm(dm: number): string {
   return dm >= 0 ? `+${dm}` : `${dm}`;
+}
+
+/** Renders a roll's dice notation and total DM, plus a bulleted list of the non-zero DMs behind it. */
+function DmBreakdown({ diceLabel, total, items }: { diceLabel: string; total: number; items: DmComponent[] }) {
+  return (
+    <div className="trade-page__dm-block">
+      <p className="trade-page__stat-line">
+        Roll {diceLabel} {formatDm(total)}
+      </p>
+      {items.length > 0 && (
+        <ul className="trade-page__dm-list">
+          {items.map((item) => (
+            <li key={item.label}>
+              {item.label}: {formatDm(item.value)}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** Compact comma-separated rendering of a DM breakdown, for tight spaces like table cells. */
+function formatDmBreakdown(items: DmComponent[]): string {
+  return items.map((item) => `${item.label} ${formatDm(item.value)}`).join(', ');
 }
