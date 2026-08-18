@@ -11,6 +11,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /traveller toolkit/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /character creation/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /planet generator/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /trade/i })).toBeInTheDocument();
   });
 
   it('renders the app shell with sidebar and wizard when navigating to #character', () => {
@@ -24,5 +25,11 @@ describe('App', () => {
     window.location.hash = '#planet';
     render(<App />);
     expect(screen.getByRole('heading', { name: /planet generator/i })).toBeInTheDocument();
+  });
+
+  it('renders the trade page when navigating to #trade', () => {
+    window.location.hash = '#trade';
+    render(<App />);
+    expect(screen.getByRole('heading', { name: /^trade$/i })).toBeInTheDocument();
   });
 });

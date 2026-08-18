@@ -6,10 +6,11 @@ import { EffectGallery } from './components/dev/EffectGallery';
 import { HomeScreen } from './components/home/HomeScreen';
 import { BackToHomeLink } from './components/home/BackToHomeLink';
 import { PlanetGeneratorPage } from './components/planet/PlanetGeneratorPage';
+import { TradePage } from './components/trade/TradePage';
 import './theme/global.css';
 import './App.css';
 
-type Route = 'home' | 'character' | 'planet' | 'dev';
+type Route = 'home' | 'character' | 'planet' | 'trade' | 'dev';
 
 function getRoute(hash: string): Route {
   switch (hash) {
@@ -17,6 +18,8 @@ function getRoute(hash: string): Route {
       return 'character';
     case '#planet':
       return 'planet';
+    case '#trade':
+      return 'trade';
     case '#dev':
       return 'dev';
     default:
@@ -39,6 +42,10 @@ function App() {
 
   if (route === 'planet') {
     return <PlanetGeneratorPage />;
+  }
+
+  if (route === 'trade') {
+    return <TradePage />;
   }
 
   if (route === 'character') {
