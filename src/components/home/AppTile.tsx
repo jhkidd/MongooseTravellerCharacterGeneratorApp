@@ -11,6 +11,7 @@ interface AppTileProps {
 
 export function AppTile({ href, icon, title, description, disabled = false }: AppTileProps) {
   const classes = ['app-tile', disabled ? 'app-tile--disabled' : ''].filter(Boolean).join(' ');
+  const isExternal = /^https?:\/\//i.test(href);
 
   return (
     <a
@@ -18,6 +19,8 @@ export function AppTile({ href, icon, title, description, disabled = false }: Ap
       href={disabled ? undefined : href}
       aria-disabled={disabled}
       role="button"
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
     >
       <span className="app-tile__icon">{icon}</span>
       <span className="app-tile__title">{title}</span>

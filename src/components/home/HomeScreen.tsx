@@ -10,6 +10,12 @@ export function HomeScreen() {
         <AppTile href="#character" icon="🧑‍🚀" title="Character Creation" description="Build a traveller" />
         <AppTile href="#planet" icon="🪐" title="Planet Generator" description="Random world builder" />
         <AppTile href="#trade" icon="📦" title="Trade" description="Passengers, freight & speculative cargo" />
+        <AppTile
+          href="https://travellermap.com/?p=-93.121%2116.103%217"
+          icon="🗺️"
+          title="Starmap"
+          description="Interactive map centred on Drinax"
+        />
       </div>
     </div>
   );
