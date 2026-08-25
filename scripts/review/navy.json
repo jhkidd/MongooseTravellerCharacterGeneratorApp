@@ -1,0 +1,82 @@
+{
+  "mishaps": {
+    "2": {
+      "description": "Your ship is destroyed in a battle, misjump or accident. You are one of the few survivors. Gain a fellow survivor as a Contact.",
+      "tokens": [
+        "Contact"
+      ]
+    },
+    "3": {
+      "description": "You are disgraced by the actions of your ship, your captain, or yourself. Gain a Rival in the service.",
+      "tokens": [
+        "Rival"
+      ]
+    },
+    "4": {
+      "description": "You are court-martialled for a real or imagined offence. Whether or not you are convicted, you are forced out of the service.",
+      "tokens": []
+    },
+    "5": {
+      "description": "A political scandal or shift in Imperial policy ends your career. Gain an Enemy among the admiralty.",
+      "tokens": [
+        "Enemy"
+      ]
+    }
+  },
+  "events": {
+    "3": {
+      "description": "Your ship engages an enemy vessel. Roll Gunner 8+ or Tactics (Naval) 8+; on success, gain one of Gunner 1 or Tactics (Naval) 1 and DM+1 to your next Advancement roll. On failure, roll on the Mishap Table (not ejected).",
+      "tokens": [
+        "Roll Gunner 8+",
+        "Tactics (Naval) 8+",
+        "DM+1"
+      ]
+    },
+    "4": {
+      "description": "You are assigned to an isolated, long-range patrol. Gain one of Astrogation 1, Survival 1, Electronics 1 or Vacc Suit 1.",
+      "tokens": []
+    },
+    "5": {
+      "description": "You are given a commendation. Gain DM+1 to any one Benefit roll.",
+      "tokens": [
+        "DM+1"
+      ]
+    },
+    "6": {
+      "description": "You serve aboard a ship with an excellent captain. Gain them as a Contact or Ally.",
+      "tokens": [
+        "Contact",
+        "Ally"
+      ]
+    },
+    "8": {
+      "description": "You are sent to officer training or specialist school. Roll EDU 8+ to gain any one skill from the Officer or Advanced Education tables at level 1.",
+      "tokens": [
+        "Roll EDU 8+",
+        "EDU"
+      ]
+    },
+    "9": {
+      "description": "You distinguish yourself in a ship-to-ship engagement. Gain DM+2 to your next Advancement roll.",
+      "tokens": [
+        "DM+2"
+      ]
+    },
+    "10": {
+      "description": "You are transferred to an elite unit. Gain one of Gun Combat 1, Melee (Blade) 1, Vacc Suit 1 or Leadership 1, or transfer to the Marines without a Qualification roll.",
+      "tokens": []
+    },
+    "11": {
+      "description": "You are given advanced training in a specialist field. Gain one level in any skill you already have, or DM+4 to your next Advancement roll.",
+      "tokens": [
+        "DM+4"
+      ]
+    },
+    "12": {
+      "description": "Your heroism in a major fleet action is noted by the Imperial court. You are automatically promoted and gain a medal.",
+      "tokens": [
+        "automatically promoted"
+      ]
+    }
+  }
+}

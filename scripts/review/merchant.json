@@ -1,0 +1,84 @@
+{
+  "mishaps": {
+    "2": {
+      "description": "Your ship is attacked by pirates, corsairs or competitors. Gain an Enemy; if you survive, you lose all Benefits from this term.",
+      "tokens": [
+        "Enemy"
+      ]
+    },
+    "3": {
+      "description": "A cargo deal collapses catastrophically, leaving you in debt. Your Benefit rolls from this term are forfeit and you must muster out.",
+      "tokens": []
+    },
+    "4": {
+      "description": "You are caught up in a political or legal dispute that costs you your position. Gain a Rival and muster out.",
+      "tokens": [
+        "Rival"
+      ]
+    },
+    "5": {
+      "description": "Your ship is impounded, lost, or destroyed in a misjump. Gain one less Benefit roll this career.",
+      "tokens": []
+    }
+  },
+  "events": {
+    "3": {
+      "description": "Your ship is attacked. Roll Gun Combat 8+ or Gunner 8+ to escape; on failure, roll on the Mishap Table (not ejected). Either way, gain an Enemy.",
+      "tokens": [
+        "Enemy",
+        "Roll Gun Combat 8+",
+        "Gunner 8+"
+      ]
+    },
+    "4": {
+      "description": "You spend several years trading on the fringes of Imperial space. Gain one of Streetwise 1, Broker 1, Diplomat 1 or Carouse 1.",
+      "tokens": []
+    },
+    "5": {
+      "description": "You make a lucrative deal. Gain DM+1 to any one Benefit roll.",
+      "tokens": [
+        "DM+1"
+      ]
+    },
+    "6": {
+      "description": "You travel extensively and broaden your horizons. Gain one of Language 1, Pilot (Spacecraft) 1, Astrogation 1 or Steward 1.",
+      "tokens": []
+    },
+    "8": {
+      "description": "You strike a long-term cargo agreement with a major client. Gain an Ally and DM+1 to any one Benefit roll, or DM+2 to your next Advancement check.",
+      "tokens": [
+        "Ally",
+        "DM+1",
+        "DM+2"
+      ]
+    },
+    "9": {
+      "description": "You are pursued by creditors, authorities or pirates. Roll Pilot 8+ or Deception 8+; on success, gain a Contact among the Imperial Starport Authority. On failure, gain an Enemy and roll on the Mishap Table (not ejected).",
+      "tokens": [
+        "Contact",
+        "Enemy",
+        "Roll Pilot 8+",
+        "Deception 8+"
+      ]
+    },
+    "10": {
+      "description": "You become well-known for your dealings on a particular route. Gain DM+2 to your next Advancement check.",
+      "tokens": [
+        "DM+2"
+      ]
+    },
+    "11": {
+      "description": "You are entrusted with a particularly valuable or sensitive cargo. Either gain one level of Diplomat, Broker or Advocate, or DM+4 to your next Advancement roll.",
+      "tokens": [
+        "DM+4"
+      ]
+    },
+    "12": {
+      "description": "You pull off the deal of a lifetime. You are automatically promoted and gain DM+2 to any one Benefit roll.",
+      "tokens": [
+        "DM+2",
+        "automatically promoted"
+      ]
+    }
+  }
+}

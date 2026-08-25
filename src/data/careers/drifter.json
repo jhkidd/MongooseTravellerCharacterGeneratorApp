@@ -1,0 +1,714 @@
+{
+  "id": "drifter",
+  "name": "Drifter",
+  "description": "Wanderers, hitchhikers and travellers, drifers are those who roam the stars without obvious purpose r direction.",
+  "qualification": null,
+  "assignments": [
+    {
+      "id": "barbarian",
+      "name": "Barbarian",
+      "description": "You live on a primitive world without the benefits of technology.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 7
+      },
+      "advancementCheck": {
+        "characteristic": "STR",
+        "target": 7
+      }
+    },
+    {
+      "id": "wanderer",
+      "name": "Wanderer",
+      "description": "You are a space bum, living hand-to-mouth in slums ans spaceports across the galaxy.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 7
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 7
+      }
+    },
+    {
+      "id": "scavenger",
+      "name": "Scavenger",
+      "description": "You work as a belter (asteroid miner) or on a salvage crew.",
+      "survivalCheck": {
+        "characteristic": "DEX",
+        "target": 7
+      },
+      "advancementCheck": {
+        "characteristic": "END",
+        "target": 7
+      }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": {
+          "type": "characteristic",
+          "characteristic": "STR",
+          "value": 1
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "END",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Language"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Profession"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Jack-of-all-Trades"
+        }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Athletics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Unarmed"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Recon"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Survival"
+        }
+      }
+    },
+    {
+      "id": "barbarian-skills",
+      "name": "Barbarian",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "barbarian"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Animals"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Carouse"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Blade"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "5": {
+          "type": "choice",
+          "options": [
+            {
+              "type": "skill",
+              "skill": "Seafarer",
+              "specialty": "Personal"
+            },
+            {
+              "type": "skill",
+              "skill": "Seafarer",
+              "specialty": "Sail"
+            }
+          ]
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Survival"
+        }
+      }
+    },
+    {
+      "id": "wanderer-skills",
+      "name": "Wanderer",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "wanderer"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Drive"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Deception"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Recon"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Survival"
+        }
+      }
+    },
+    {
+      "id": "scavenger-skills",
+      "name": "Scavenger",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "scavenger"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Pilot",
+          "specialty": "Small Craft"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Mechanic"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Astrogation"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Profession"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "assignment",
+    "tracks": {
+      "barbarian": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Survival",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Warrior",
+          "bonus": {
+            "type": "gainSpecialty",
+            "skill": "Melee",
+            "specialty": "Blade",
+            "level": 1
+          }
+        },
+        "3": {
+          "title": ""
+        },
+        "4": {
+          "title": "Chieftain",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Leadership",
+            "level": 1
+          }
+        },
+        "5": {
+          "title": ""
+        },
+        "6": {
+          "title": "Warlord"
+        }
+      },
+      "wanderer": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Streetwise",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": ""
+        },
+        "3": {
+          "title": "",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Deception",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": ""
+        },
+        "5": {
+          "title": ""
+        },
+        "6": {
+          "title": ""
+        }
+      },
+      "scavenger": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Vacc Suit",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": ""
+        },
+        "3": {
+          "title": "",
+          "bonus": {
+            "type": "pickOne",
+            "prompt": "Choose your bonus:",
+            "options": [
+              {
+                "label": "Profession (belter) 1",
+                "effect": {
+                  "type": "gainSpecialty",
+                  "skill": "Profession",
+                  "specialty": "belter",
+                  "level": 1
+                }
+              },
+              {
+                "label": "Mechanic 1",
+                "effect": {
+                  "type": "gainSkill",
+                  "skill": "Mechanic",
+                  "level": 1
+                }
+              }
+            ]
+          }
+        },
+        "4": {
+          "title": ""
+        },
+        "5": {
+          "title": ""
+        },
+        "6": {
+          "title": ""
+        }
+      }
+    }
+  },
+  "basicTrainingUsesAssignmentSkills": true,
+  "mishaps": {
+    "1": {
+      "description": "Severely injured (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "description": "Injured. Roll on the Injury table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury"
+          }
+        ]
+      }
+    },
+    "3": {
+      "description": "You run afoul of a criminal gang, corrupt bureaucrat or other foe. Gain an enemy.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "gainContact",
+            "contactType": "enemy"
+          }
+        ]
+      }
+    },
+    "4": {
+      "description": "You suffer from a life-threatening illness. Reduce your END by 1.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "modCharacteristic",
+            "characteristic": "END",
+            "value": -1
+          }
+        ]
+      }
+    },
+    "5": {
+      "description": "Betrayed by a friend. One of your Contacts or Allies betrays you, ending your career. That Contact or Ally becomes an Enemy or Rival. If you have no Contacts or Allies, then you are betrayed by someone you never saw coming and still gain a Rival or Enemy. In addition, roll 2D. If you roll a 2, you must take the prisoner career in your next term.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "narrative",
+            "prompt": "One of your Contacts or Allies betrays you (or, if you have none, someone unexpected does). That character becomes an Enemy or Rival."
+          },
+          {
+            "type": "gainContact",
+            "contactType": "enemy"
+          },
+          {
+            "type": "narrative",
+            "prompt": "Roll 2D6: on a natural 2, you must take the Prisoner career in your next term (note this manually)."
+          }
+        ]
+      }
+    },
+    "6": {
+      "description": "You do not know what happened to you. There is a gap in your memory.",
+      "effects": {
+        "type": "none"
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
+    },
+    "3": {
+      "description": "A patron offers you a chance at a job. If you accept, you gain DM+4 to your next qualification roll but you owe that patron a favour.",
+      "effects": {
+        "type": "choice",
+        "prompt": "A patron offers you a chance at a job.",
+        "options": [
+          {
+            "label": "Accept (DM+4 to next qualification roll, but you owe a favour)",
+            "effects": [
+              {
+                "type": "narrative",
+                "prompt": "You gain DM+4 to your next Qualification roll (note manually; qualification DM bonuses are not yet tracked by the engine) but you owe the patron a favour."
+              }
+            ]
+          },
+          {
+            "label": "Decline",
+            "effects": [
+              {
+                "type": "none"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "4": {
+      "description": "You pick up a few useful skills here and there. Gain one level of Jack-of-all-Trades, Survival, Streetwise or Melee (any).",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Choose one skill to gain at level 1:",
+        "options": [
+          {
+            "label": "Jack-of-all-Trades 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Jack-of-all-Trades",
+              "level": 1
+            }
+          },
+          {
+            "label": "Survival 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Survival",
+              "level": 1
+            }
+          },
+          {
+            "label": "Streetwise 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Streetwise",
+              "level": 1
+            }
+          },
+          {
+            "label": "Melee 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Melee",
+              "level": 1
+            }
+          }
+        ]
+      }
+    },
+    "5": {
+      "description": "You manage to scavenge something of use. Gain DM+1 to any one Benefit roll.",
+      "effects": {
+        "type": "gainBenefitDM",
+        "value": 1
+      }
+    },
+    "6": {
+      "description": "You encounter something unusual. Go to the Life Events table and have an Unusual Event.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events",
+        "fixedResult": 12
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
+    },
+    "8": {
+      "description": "You are attacked by enemies. Gain an Enemy if you do not have one already, and roll either Melee 8+, Gun Combat 8+ or Stealth 8+ to avoid a roll on the Injury Table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "gainContact",
+            "contactType": "enemy"
+          },
+          {
+            "type": "pickOne",
+            "prompt": "Choose which skill to roll to avoid injury:",
+            "options": [
+              {
+                "label": "Melee 8+",
+                "effect": {
+                  "type": "skillCheck",
+                  "skill": "Melee",
+                  "target": 8,
+                  "success": {
+                    "type": "none"
+                  },
+                  "failure": {
+                    "type": "rollOnTable",
+                    "table": "injury"
+                  }
+                }
+              },
+              {
+                "label": "Gun Combat 8+",
+                "effect": {
+                  "type": "skillCheck",
+                  "skill": "Gun Combat",
+                  "target": 8,
+                  "success": {
+                    "type": "none"
+                  },
+                  "failure": {
+                    "type": "rollOnTable",
+                    "table": "injury"
+                  }
+                }
+              },
+              {
+                "label": "Stealth 8+",
+                "effect": {
+                  "type": "skillCheck",
+                  "skill": "Stealth",
+                  "target": 8,
+                  "success": {
+                    "type": "none"
+                  },
+                  "failure": {
+                    "type": "rollOnTable",
+                    "table": "injury"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "9": {
+      "description": "You are offered a chance to take part in a risky but rewarding adventure. If you accept, roll 1D: On a 1-2 you are injured or arrested; either roll on the injury table or take the prisoner career in you next term. On 3-4, you survive, but gain nothing. On a 5-6, you succeed and gain DM+4 to one Benefit roll.",
+      "effects": {
+        "type": "narrative",
+        "prompt": "You are offered a chance to take part in a risky but rewarding adventure. If you accept, roll 1D: 1-2 you are injured or arrested (roll on the Injury table, or take the Prisoner career next term); 3-4 you survive but gain nothing; 5-6 you gain DM+4 to one Benefit roll. Resolve this manually."
+      }
+    },
+    "10": {
+      "description": "Life on the edge hones your abilities. Increase any skill you already have by one level.",
+      "effects": {
+        "type": "increaseExistingSkill"
+      }
+    },
+    "11": {
+      "description": "You are forcibly drafted. Roll for the Draft next term.",
+      "effects": {
+        "type": "narrative",
+        "prompt": "You are forcibly drafted. Roll for the Draft next term (resolve manually)."
+      }
+    },
+    "12": {
+      "description": "You thrive on adversity. You are automatically promoted.",
+      "effects": {
+        "type": "autoPromote"
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 0,
+      "2": 0,
+      "3": 1000,
+      "4": 2000,
+      "5": 3000,
+      "6": 4000,
+      "7": 8000
+    },
+    "benefits": {
+      "1": {
+        "description": "Contact",
+        "effects": {
+          "type": "gainContact",
+          "contactType": "contact"
+        }
+      },
+      "2": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "3": {
+        "description": "Ally",
+        "effects": {
+          "type": "gainContact",
+          "contactType": "ally"
+        }
+      },
+      "4": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "5": {
+        "description": "EDU +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "EDU",
+          "value": 1
+        }
+      },
+      "6": {
+        "description": "Ship Share",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Ship Share"
+        }
+      },
+      "7": {
+        "description": "Two Ship Shares",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Two Ship Shares"
+        }
+      }
+    }
+  },
+  "isSpecial": true
+}

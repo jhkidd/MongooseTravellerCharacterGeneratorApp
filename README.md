@@ -19,7 +19,7 @@ A browser-based character creator for the Mongoose Traveller 2nd Edition tableto
 
 - React 19 + TypeScript
 - Vite 5
-- Vitest + Testing Library (311 tests)
+- Vitest + Testing Library (417 tests)
 - CSS custom properties (no framework)
 - GitHub Pages via GitHub Actions
 

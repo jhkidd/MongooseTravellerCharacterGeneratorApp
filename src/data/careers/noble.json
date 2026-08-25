@@ -1,0 +1,589 @@
+{
+  "id": "noble",
+  "name": "Noble",
+  "description": "Individuals of the upper class who perform little consistent function, but often have large amounts of ready money.",
+  "qualification": {
+    "characteristic": "SOC",
+    "target": 10,
+    "modifiers": [
+      {
+        "type": "previousCareers",
+        "dmPer": -1
+      }
+    ]
+  },
+  "assignments": [
+    {
+      "id": "administrator",
+      "name": "Administrator",
+      "description": "You serve in the planetary government or even rule over a fiefdom or other domain.",
+      "survivalCheck": {
+        "characteristic": "INT",
+        "target": 4
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 6
+      }
+    },
+    {
+      "id": "diplomat",
+      "name": "Diplomat",
+      "description": "You are a diplomat or other state official.",
+      "survivalCheck": {
+        "characteristic": "INT",
+        "target": 5
+      },
+      "advancementCheck": {
+        "characteristic": "SOC",
+        "target": 7
+      }
+    },
+    {
+      "id": "dilettante",
+      "name": "Dilettante",
+      "description": "You are known for being known and have absolutely no useful function in society.",
+      "survivalCheck": {
+        "characteristic": "SOC",
+        "target": 3
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 8
+      }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": {
+          "type": "characteristic",
+          "characteristic": "STR",
+          "value": 1
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "END",
+          "value": 1
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Gambler"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Melee"
+        }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Admin"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Diplomat"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Investigate"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Persuade"
+        }
+      }
+    },
+    {
+      "id": "advanced-education",
+      "name": "Advanced Education",
+      "restriction": {
+        "type": "minEdu",
+        "value": 8
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Admin"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Language"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Leadership"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Diplomat"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Art"
+        }
+      }
+    },
+    {
+      "id": "administrator-skills",
+      "name": "Administrator",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "administrator"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Admin"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Broker"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Diplomat"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Leadership"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Persuade"
+        }
+      }
+    },
+    {
+      "id": "diplomat-skills",
+      "name": "Diplomat",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "diplomat"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Carouse"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Steward"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Diplomat"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Deception"
+        }
+      }
+    },
+    {
+      "id": "dilettante-skills",
+      "name": "Dilettante",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "dilettante"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Carouse"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Deception"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Flyer"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Gambler"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Jack-of-all-Trades"
+        }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "assignment",
+    "tracks": {
+      "administrator": {
+        "0": {
+          "title": "Assistant"
+        },
+        "1": {
+          "title": "Clerk",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Admin",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Supervisor"
+        },
+        "3": {
+          "title": "Manager",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Advocate",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": "Chief"
+        },
+        "5": {
+          "title": "Director",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Leadership",
+            "level": 1
+          }
+        },
+        "6": {
+          "title": "Minister"
+        }
+      },
+      "diplomat": {
+        "0": {
+          "title": "Intern"
+        },
+        "1": {
+          "title": "3rd Secretary",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Admin",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "2nd Secretary"
+        },
+        "3": {
+          "title": "1st Secretary",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Advocate",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": "Counsellor"
+        },
+        "5": {
+          "title": "Minister",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Diplomat",
+            "level": 1
+          }
+        },
+        "6": {
+          "title": "Ambassador"
+        }
+      },
+      "dilettante": {
+        "0": {
+          "title": "Wastrel"
+        },
+        "1": {
+          "title": ""
+        },
+        "2": {
+          "title": "Ingrate",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Carouse",
+            "level": 1
+          }
+        },
+        "3": {
+          "title": ""
+        },
+        "4": {
+          "title": "Black Sheep",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Persuade",
+            "level": 1
+          }
+        },
+        "5": {
+          "title": ""
+        },
+        "6": {
+          "title": "Scoundrel",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Jack-of-all-Trades",
+            "level": 1
+          }
+        }
+      }
+    }
+  },
+  "mishaps": {
+    "1": {
+      "description": "Severely injured (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "description": "A family scandal forces you out of your position. Lose one SOC.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "3": {
+      "description": "A disaster or war strikes. Roll Stealth 8+ or Deception 8+ to escape unhurt. If you fail, roll on the Injury Table.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "Political manoeuvrings usurp your position. Increase Diplomat or Advocate by one level and gain a Rival.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "An assassin attempts to end your life. Roll END 8+. If you fail, roll on the Injury Table.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "Injured. Roll on the Injury Table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury"
+          }
+        ]
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
+    },
+    "3": {
+      "description": "You are challenged to a duel for your honour and standing. If you refuse, reduce your SOC by 1. If you accept, roll Melee (Blade) 8+. If you succeed, gain one SOC. If you fail, roll on the Injury Table and reduce your SOC by one. Either way, gain one level in Melee (Blade), Leadership, Tactics (any) or Deception.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "Your time as a ruler or playboy gives you a wide range of experiences. Gain one of Animals (riding) 1, Art 1, Carouse 1, or Streetwise 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "You inherit a gift from a rich relative. Gain DM+1 to any one Benefit roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "You become deeply involved in politics on your world of residence, becoming a player in the political intrigues of government. Gain one level in Advocate, Admin, Diplomacy or Persuade, but also gain a Rival.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
+    },
+    "8": {
+      "description": "A conspiracy of nobles attempts to recruit you. If you refuse, gain the conspiracy as an Enemy. If you accept, roll Deception 8+ or Persuade 8+. If you fail, roll on the Mishap Table as the conspiracy collapses. If you succeed, gain one level of Deception, Persuade, Tactics or Carouse.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "9": {
+      "description": "Your reign is acclaimed by all as being fair and wise \u2014 or in the case of a dilettante, you sponge off your family's wealth a while longer. Gain either a jealous relative or an unhappy subject as an Enemy. Gain DM+2 to your next Advancement check.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "10": {
+      "description": "You manipulate and charm your way through high society. Gain one level of Carouse, Diplomat, Persuade or Steward, as well as a Rival and an Ally.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "11": {
+      "description": "You make an alliance with a powerful and charismatic noble, who becomes an Ally. Either gain one level of Leadership or DM+4 to your next Advancement roll thanks to their aid.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "12": {
+      "description": "Your efforts do not go unnoticed by the Imperium. You are automatically promoted.",
+      "effects": {
+        "type": "none"
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 10000,
+      "2": 10000,
+      "3": 50000,
+      "4": 50000,
+      "5": 100000,
+      "6": 100000,
+      "7": 200000
+    },
+    "benefits": {
+      "1": {
+        "description": "Ship Share",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Ship Share"
+        }
+      },
+      "2": {
+        "description": "Two Ship Shares",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Two Ship Shares"
+        }
+      },
+      "3": {
+        "description": "Blade",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Blade"
+        }
+      },
+      "4": {
+        "description": "SOC +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "SOC",
+          "value": 1
+        }
+      },
+      "5": {
+        "description": "TAS Membership",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "TAS Membership"
+        }
+      },
+      "6": {
+        "description": "Yacht",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Yacht"
+        }
+      },
+      "7": {
+        "description": "SOC +1 and Yacht",
+        "effects": {
+          "type": "compound",
+          "effects": [
+            {
+              "type": "modCharacteristic",
+              "characteristic": "SOC",
+              "value": 1
+            },
+            {
+              "type": "gainEquipment",
+              "item": "Yacht"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

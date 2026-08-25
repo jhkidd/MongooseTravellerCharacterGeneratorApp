@@ -1,0 +1,90 @@
+{
+  "mishaps": {
+    "2": {
+      "description": "Psychologically damaged by your time in the scouts. Reduce your INT or SOC by 1.",
+      "tokens": [
+        "INT",
+        "SOC"
+      ]
+    },
+    "3": {
+      "description": "Your ship is damaged, and you have to hitch-hike your way back across the stars to the nearest scout base. Gain 1D Contacts and D3 Enemies.",
+      "tokens": [
+        "D3"
+      ]
+    },
+    "4": {
+      "description": "You inadvertently cause a conflict between the Imperium and a minor world or race. Gain a Rival and Diplomat 1.",
+      "tokens": [
+        "Rival"
+      ]
+    },
+    "5": {
+      "description": "You have no idea what happened to you \u2014 they found your ship drifting on the fringes of friendly space.",
+      "tokens": []
+    }
+  },
+  "events": {
+    "3": {
+      "description": "Your ship is ambushed by enemy vessels. Either run, and roll Pilot 8+ to escape, or treat with them and roll Persuade 10+ to bargain. If you fail, your ship is destroyed and you may not re-enlist in the Scouts at the end of this term. If you succeed, you survive and gain Electronics (Sensors) 1. Either way, gain an Enemy.",
+      "tokens": [
+        "Enemy",
+        "Pilot 8+",
+        "Persuade 10+"
+      ]
+    },
+    "4": {
+      "description": "You survey an alien world. Gain one of Animals (riding or Training) 1, Survival 1, Recon 1 or Science 1.",
+      "tokens": []
+    },
+    "5": {
+      "description": "You perform an exemplary service for the scouts. Gain DM+1 to any one Benefit roll.",
+      "tokens": [
+        "DM+1"
+      ]
+    },
+    "6": {
+      "description": "You spend several years jumping from world to world in your scout ship. Gain one of Astrogation 1, Electronics 1, Navigation 1, Pilot (Small Craft) 1 or Mechanic 1.",
+      "tokens": []
+    },
+    "8": {
+      "description": "When dealing with an alien race, you have an opportunity to gather extra intelligence. Roll Electronics 8+ or Deception 8+. If you succeed, gain an Ally in the Imperium and DM+2 to your next Advancement roll. If you fail, roll on the Mishap Table, but you are not ejected from this career.",
+      "tokens": [
+        "Ally",
+        "Roll Electronics 8+",
+        "Deception 8+",
+        "DM+2"
+      ]
+    },
+    "9": {
+      "description": "Your scout ship is one of the first on the scene to rescue the survivors of a disaster. Roll Medic 8+ or Engineer 8+. If you succeed, gain a Contact and DM+2 to your next Advancement check. If you fail, gain an Enemy.",
+      "tokens": [
+        "Contact",
+        "Enemy",
+        "Roll Medic 8+",
+        "Engineer 8+",
+        "DM+2"
+      ]
+    },
+    "10": {
+      "description": "You spend a great deal of time on the fringes of Charted Space. Roll Survival 8+ or Pilot 8+. If you succeed, gain a Contact in an alien race and one level in any skill of your choice. If you fail, roll on the Mishap Table but you are not ejected from this career.",
+      "tokens": [
+        "Contact",
+        "Roll Survival 8+",
+        "Pilot 8+"
+      ]
+    },
+    "11": {
+      "description": "You serve as the courier for an important message from the Imperium. Either gain one level of Diplomat or DM+4 to your next Advancement roll.",
+      "tokens": [
+        "DM+4"
+      ]
+    },
+    "12": {
+      "description": "You discover a world, item or information of worth to the Imperium. You are automatically promoted.",
+      "tokens": [
+        "automatically promoted"
+      ]
+    }
+  }
+}

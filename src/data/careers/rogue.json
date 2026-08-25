@@ -1,0 +1,524 @@
+{
+  "id": "rogue",
+  "name": "Rogue",
+  "description": "Criminal elements familiar with the rougher or more illegal methods of attaining goals.",
+  "qualification": {
+    "characteristic": "DEX",
+    "target": 6,
+    "modifiers": [
+      {
+        "type": "previousCareers",
+        "dmPer": -1
+      }
+    ]
+  },
+  "assignments": [
+    {
+      "id": "thief",
+      "name": "Thief",
+      "description": "You steal from the rich and give to\u2026 well, yourself, actually.",
+      "survivalCheck": {
+        "characteristic": "INT",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "DEX",
+        "target": 6
+      }
+    },
+    {
+      "id": "enforcer",
+      "name": "Enforcer",
+      "description": "You are a leg-breaker, thug or assassin for a criminal group.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "STR",
+        "target": 6
+      }
+    },
+    {
+      "id": "pirate",
+      "name": "Pirate",
+      "description": "You are a space-going corsair.",
+      "survivalCheck": {
+        "characteristic": "DEX",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 6
+      }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": {
+          "type": "characteristic",
+          "characteristic": "STR",
+          "value": 1
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "END",
+          "value": 1
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Unarmed"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Deception"
+        }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Deception"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Melee"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Recon"
+        }
+      }
+    },
+    {
+      "id": "advanced-education",
+      "name": "Advanced Education",
+      "restriction": {
+        "type": "minEdu",
+        "value": 8
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Broker"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Language"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Persuade"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Deception"
+        }
+      }
+    },
+    {
+      "id": "thief-skills",
+      "name": "Thief",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "thief"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Deception"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Electronics",
+          "specialty": "Computers"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Athletics",
+          "specialty": "Dexterity"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Melee"
+        }
+      }
+    },
+    {
+      "id": "enforcer-skills",
+      "name": "Enforcer",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "enforcer"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Melee"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Recon"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Persuade"
+        }
+      }
+    },
+    {
+      "id": "pirate-skills",
+      "name": "Pirate",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "pirate"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Gunner"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Pilot",
+          "specialty": "Spacecraft"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Mechanic"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Blade"
+        }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "default",
+    "tracks": {
+      "default": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Streetwise",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": ""
+        },
+        "3": {
+          "title": "",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Deception",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": ""
+        },
+        "5": {
+          "title": ""
+        },
+        "6": {
+          "title": "",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": 1
+          }
+        }
+      }
+    }
+  },
+  "mishaps": {
+    "1": {
+      "description": "Severely injured (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "description": "You are arrested and sent to prison. You must muster out, and any Benefit rolls from this term are forfeit.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "3": {
+      "description": "A job goes spectacularly wrong. Gain an Enemy and lose all Benefit rolls from this term.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "You betray \u2014 or are betrayed by \u2014 a partner in crime. Gain them as an Enemy.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "A rival criminal organisation targets you and you are forced to flee or go straight. Muster out.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "Injured. Roll on the Injury Table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury"
+          }
+        ]
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
+    },
+    "3": {
+      "description": "A job goes wrong and you are pursued by the law. Roll Stealth 8+ or Deception 8+ to escape. On failure, roll on the Mishap Table (not ejected). Either way, gain an Enemy in law enforcement.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "You befriend a fence, crime boss, or fellow criminal. Gain a Contact or Ally in the underworld.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "You pull off a lucrative heist. Gain DM+2 to any one Benefit roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "You spend time working the shadows of a particular world. Gain one of Streetwise 1, Stealth 1, Deception 1 or Persuade 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
+    },
+    "8": {
+      "description": "You are given a delicate job by a major criminal syndicate. Roll Stealth 8+ or Deception 8+; on success, gain a Contact in the syndicate and DM+2 to your next Advancement. On failure, gain an Enemy and roll on the Mishap Table (not ejected).",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "9": {
+      "description": "You clash with law enforcement. Roll Streetwise 8+ or Gun Combat 8+ to escape; on failure, gain an Enemy in the Agents and a Rival on the streets.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "10": {
+      "description": "You earn a reputation in the underworld. Gain DM+2 to your next Advancement roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "11": {
+      "description": "You acquire specialist knowledge or equipment. Either gain one level of Gun Combat, Stealth, Electronics or Melee, or DM+4 to your next Advancement roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "12": {
+      "description": "You pull off a caper that becomes legendary. You are automatically promoted and gain DM+2 to any one Benefit roll.",
+      "effects": {
+        "type": "none"
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 1000,
+      "2": 2000,
+      "3": 5000,
+      "4": 10000,
+      "5": 20000,
+      "6": 20000,
+      "7": 40000
+    },
+    "benefits": {
+      "1": {
+        "description": "Contact",
+        "effects": {
+          "type": "gainContact",
+          "contactType": "contact"
+        }
+      },
+      "2": {
+        "description": "INT +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "INT",
+          "value": 1
+        }
+      },
+      "3": {
+        "description": "Blade or Ally",
+        "effects": {
+          "type": "pickOne",
+          "prompt": "Choose your benefit:",
+          "options": [
+            {
+              "label": "Blade",
+              "effect": {
+                "type": "gainEquipment",
+                "item": "Blade"
+              }
+            },
+            {
+              "label": "Ally",
+              "effect": {
+                "type": "gainContact",
+                "contactType": "ally"
+              }
+            }
+          ]
+        }
+      },
+      "4": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "5": {
+        "description": "Gun",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Gun"
+        }
+      },
+      "6": {
+        "description": "Combat Implant",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Combat Implant"
+        }
+      },
+      "7": {
+        "description": "Ship Share",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Ship Share"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,524 @@
+{
+  "id": "merchant",
+  "name": "Merchant",
+  "description": "Interstellar traders, ship crew and brokers. The lifeblood of the Imperial economy.",
+  "qualification": {
+    "characteristic": "INT",
+    "target": 4,
+    "modifiers": [
+      {
+        "type": "previousCareers",
+        "dmPer": -1
+      }
+    ]
+  },
+  "assignments": [
+    {
+      "id": "merchant-marine",
+      "name": "Merchant Marine",
+      "description": "You serve as crew on a merchant vessel.",
+      "survivalCheck": {
+        "characteristic": "EDU",
+        "target": 5
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 7
+      }
+    },
+    {
+      "id": "free-trader",
+      "name": "Free Trader",
+      "description": "You own (or part-own) your own ship and chase cargoes across the stars.",
+      "survivalCheck": {
+        "characteristic": "DEX",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 6
+      }
+    },
+    {
+      "id": "broker",
+      "name": "Broker",
+      "description": "You buy and sell cargoes, arranging deals between traders and clients.",
+      "survivalCheck": {
+        "characteristic": "EDU",
+        "target": 5
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 7
+      }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": {
+          "type": "characteristic",
+          "characteristic": "STR",
+          "value": 1
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "END",
+          "value": 1
+        },
+        "4": {
+          "type": "characteristic",
+          "characteristic": "INT",
+          "value": 1
+        },
+        "5": {
+          "type": "characteristic",
+          "characteristic": "EDU",
+          "value": 1
+        },
+        "6": {
+          "type": "characteristic",
+          "characteristic": "SOC",
+          "value": 1
+        }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": {
+          "type": "choice",
+          "options": [
+            {
+              "type": "skill",
+              "skill": "Pilot"
+            },
+            {
+              "type": "skill",
+              "skill": "Flyer"
+            }
+          ]
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Broker"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Drive"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Persuade"
+        }
+      }
+    },
+    {
+      "id": "advanced-education",
+      "name": "Advanced Education",
+      "restriction": {
+        "type": "minEdu",
+        "value": 8
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Astrogation"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Engineer"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Medic"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Science"
+        }
+      }
+    },
+    {
+      "id": "merchant-marine-skills",
+      "name": "Merchant Marine",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "merchant-marine"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Pilot",
+          "specialty": "Spacecraft"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Astrogation"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Engineer"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Mechanic"
+        }
+      }
+    },
+    {
+      "id": "free-trader-skills",
+      "name": "Free Trader",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "free-trader"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Pilot",
+          "specialty": "Spacecraft"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Mechanic"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Astrogation"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Engineer"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Broker"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gunner"
+        }
+      }
+    },
+    {
+      "id": "broker-skills",
+      "name": "Broker",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "broker"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Admin"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Broker"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Diplomat"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Persuade"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Carouse"
+        }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "default",
+    "tracks": {
+      "default": {
+        "0": {
+          "title": "Crewman",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Steward",
+            "level": 1
+          }
+        },
+        "1": {
+          "title": "Senior Crewman"
+        },
+        "2": {
+          "title": "4th Officer",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Electronics",
+            "level": 1
+          }
+        },
+        "3": {
+          "title": "3rd Officer"
+        },
+        "4": {
+          "title": "2nd Officer",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Pilot",
+            "level": 1
+          }
+        },
+        "5": {
+          "title": "1st Officer"
+        },
+        "6": {
+          "title": "Captain",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": 1
+          }
+        }
+      }
+    }
+  },
+  "mishaps": {
+    "1": {
+      "description": "Severely injured (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "description": "Your ship is attacked by pirates, corsairs or competitors. Gain an Enemy; if you survive, you lose all Benefits from this term.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "3": {
+      "description": "A cargo deal collapses catastrophically, leaving you in debt. Your Benefit rolls from this term are forfeit and you must muster out.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "You are caught up in a political or legal dispute that costs you your position. Gain a Rival and muster out.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "Your ship is impounded, lost, or destroyed in a misjump. Gain one less Benefit roll this career.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "Injured. Roll on the Injury Table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury"
+          }
+        ]
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
+    },
+    "3": {
+      "description": "Your ship is attacked. Roll Gun Combat 8+ or Gunner 8+ to escape; on failure, roll on the Mishap Table (not ejected). Either way, gain an Enemy.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "You spend several years trading on the fringes of Imperial space. Gain one of Streetwise 1, Broker 1, Diplomat 1 or Carouse 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "You make a lucrative deal. Gain DM+1 to any one Benefit roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "You travel extensively and broaden your horizons. Gain one of Language 1, Pilot (Spacecraft) 1, Astrogation 1 or Steward 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
+    },
+    "8": {
+      "description": "You strike a long-term cargo agreement with a major client. Gain an Ally and DM+1 to any one Benefit roll, or DM+2 to your next Advancement check.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "9": {
+      "description": "You are pursued by creditors, authorities or pirates. Roll Pilot 8+ or Deception 8+; on success, gain a Contact among the Imperial Starport Authority. On failure, gain an Enemy and roll on the Mishap Table (not ejected).",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "10": {
+      "description": "You become well-known for your dealings on a particular route. Gain DM+2 to your next Advancement check.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "11": {
+      "description": "You are entrusted with a particularly valuable or sensitive cargo. Either gain one level of Diplomat, Broker or Advocate, or DM+4 to your next Advancement roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "12": {
+      "description": "You pull off the deal of a lifetime. You are automatically promoted and gain DM+2 to any one Benefit roll.",
+      "effects": {
+        "type": "none"
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 1000,
+      "2": 5000,
+      "3": 10000,
+      "4": 10000,
+      "5": 20000,
+      "6": 40000,
+      "7": 60000
+    },
+    "benefits": {
+      "1": {
+        "description": "Contact",
+        "effects": {
+          "type": "gainContact",
+          "contactType": "contact"
+        }
+      },
+      "2": {
+        "description": "INT +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "INT",
+          "value": 1
+        }
+      },
+      "3": {
+        "description": "EDU +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "EDU",
+          "value": 1
+        }
+      },
+      "4": {
+        "description": "Ship Share",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Ship Share"
+        }
+      },
+      "5": {
+        "description": "Ship Share",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Ship Share"
+        }
+      },
+      "6": {
+        "description": "Free Trader",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Free Trader"
+        }
+      },
+      "7": {
+        "description": "SOC +2",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "SOC",
+          "value": 2
+        }
+      }
+    }
+  }
+}

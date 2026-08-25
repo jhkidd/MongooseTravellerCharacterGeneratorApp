@@ -1,0 +1,92 @@
+{
+  "mishaps": {
+    "2": {
+      "description": "A family scandal forces you out of your position. Lose one SOC.",
+      "tokens": [
+        "SOC"
+      ]
+    },
+    "3": {
+      "description": "A disaster or war strikes. Roll Stealth 8+ or Deception 8+ to escape unhurt. If you fail, roll on the Injury Table.",
+      "tokens": [
+        "Roll Stealth 8+",
+        "Deception 8+"
+      ]
+    },
+    "4": {
+      "description": "Political manoeuvrings usurp your position. Increase Diplomat or Advocate by one level and gain a Rival.",
+      "tokens": [
+        "Rival"
+      ]
+    },
+    "5": {
+      "description": "An assassin attempts to end your life. Roll END 8+. If you fail, roll on the Injury Table.",
+      "tokens": [
+        "Roll END 8+",
+        "END"
+      ]
+    }
+  },
+  "events": {
+    "3": {
+      "description": "You are challenged to a duel for your honour and standing. If you refuse, reduce your SOC by 1. If you accept, roll Melee (Blade) 8+. If you succeed, gain one SOC. If you fail, roll on the Injury Table and reduce your SOC by one. Either way, gain one level in Melee (Blade), Leadership, Tactics (any) or Deception.",
+      "tokens": [
+        "Melee (Blade) 8+",
+        "SOC",
+        "SOC",
+        "SOC"
+      ]
+    },
+    "4": {
+      "description": "Your time as a ruler or playboy gives you a wide range of experiences. Gain one of Animals (riding) 1, Art 1, Carouse 1, or Streetwise 1.",
+      "tokens": []
+    },
+    "5": {
+      "description": "You inherit a gift from a rich relative. Gain DM+1 to any one Benefit roll.",
+      "tokens": [
+        "DM+1"
+      ]
+    },
+    "6": {
+      "description": "You become deeply involved in politics on your world of residence, becoming a player in the political intrigues of government. Gain one level in Advocate, Admin, Diplomacy or Persuade, but also gain a Rival.",
+      "tokens": [
+        "Rival"
+      ]
+    },
+    "8": {
+      "description": "A conspiracy of nobles attempts to recruit you. If you refuse, gain the conspiracy as an Enemy. If you accept, roll Deception 8+ or Persuade 8+. If you fail, roll on the Mishap Table as the conspiracy collapses. If you succeed, gain one level of Deception, Persuade, Tactics or Carouse.",
+      "tokens": [
+        "Enemy",
+        "Deception 8+",
+        "Persuade 8+"
+      ]
+    },
+    "9": {
+      "description": "Your reign is acclaimed by all as being fair and wise \u2014 or in the case of a dilettante, you sponge off your family's wealth a while longer. Gain either a jealous relative or an unhappy subject as an Enemy. Gain DM+2 to your next Advancement check.",
+      "tokens": [
+        "Enemy",
+        "DM+2"
+      ]
+    },
+    "10": {
+      "description": "You manipulate and charm your way through high society. Gain one level of Carouse, Diplomat, Persuade or Steward, as well as a Rival and an Ally.",
+      "tokens": [
+        "Rival",
+        "Ally"
+      ]
+    },
+    "11": {
+      "description": "You make an alliance with a powerful and charismatic noble, who becomes an Ally. Either gain one level of Leadership or DM+4 to your next Advancement roll thanks to their aid.",
+      "tokens": [
+        "Ally",
+        "DM+4"
+      ]
+    },
+    "12": {
+      "description": "Your efforts do not go unnoticed by the Imperium. You are automatically promoted.",
+      "tokens": [
+        "automatically promoted"
+      ]
+    }
+  }
+}

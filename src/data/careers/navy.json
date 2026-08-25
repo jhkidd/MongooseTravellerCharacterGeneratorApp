@@ -1,0 +1,637 @@
+{
+  "id": "navy",
+  "name": "Navy",
+  "description": "The Imperial Navy \u2014 the interstellar military forces that maintain order between worlds and defend the Imperium from external threats.",
+  "qualification": {
+    "characteristic": "INT",
+    "target": 6,
+    "modifiers": [
+      {
+        "type": "previousCareers",
+        "dmPer": -1
+      }
+    ]
+  },
+  "commission": {
+    "characteristic": "SOC",
+    "target": 8
+  },
+  "assignments": [
+    {
+      "id": "line-crew",
+      "name": "Line/Crew",
+      "description": "You serve on the deck of an Imperial warship.",
+      "survivalCheck": {
+        "characteristic": "INT",
+        "target": 5
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 7
+      }
+    },
+    {
+      "id": "engineer-gunner",
+      "name": "Engineer/Gunner",
+      "description": "You operate the ship's drives or weapons.",
+      "survivalCheck": {
+        "characteristic": "INT",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 6
+      }
+    },
+    {
+      "id": "flight",
+      "name": "Flight",
+      "description": "You pilot small craft, fighters, and shuttles launched from a capital ship.",
+      "survivalCheck": {
+        "characteristic": "DEX",
+        "target": 7
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 5
+      }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": {
+          "type": "characteristic",
+          "characteristic": "STR",
+          "value": 1
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "END",
+          "value": 1
+        },
+        "4": {
+          "type": "characteristic",
+          "characteristic": "INT",
+          "value": 1
+        },
+        "5": {
+          "type": "characteristic",
+          "characteristic": "EDU",
+          "value": 1
+        },
+        "6": {
+          "type": "characteristic",
+          "characteristic": "SOC",
+          "value": 1
+        }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Pilot"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Athletics"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Gunner"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Mechanic"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        }
+      }
+    },
+    {
+      "id": "advanced-education",
+      "name": "Advanced Education",
+      "restriction": {
+        "type": "minEdu",
+        "value": 8
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Astrogation"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Engineer"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Medic"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Navigation"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Tactics",
+          "specialty": "Naval"
+        }
+      }
+    },
+    {
+      "id": "officer",
+      "name": "Officer",
+      "restriction": {
+        "type": "officer"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Leadership"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Pilot",
+          "specialty": "Capital Ships"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Blade"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Admin"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Tactics",
+          "specialty": "Naval"
+        }
+      }
+    },
+    {
+      "id": "line-crew-skills",
+      "name": "Line/Crew",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "line-crew"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Mechanic"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Blade"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Leadership"
+        }
+      }
+    },
+    {
+      "id": "engineer-gunner-skills",
+      "name": "Engineer/Gunner",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "engineer-gunner"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Mechanic"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Engineer"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Gunner"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gunner"
+        }
+      }
+    },
+    {
+      "id": "flight-skills",
+      "name": "Flight",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "flight"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Pilot",
+          "specialty": "Small Craft"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Flyer"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Gunner"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Electronics",
+          "specialty": "Sensors"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Astrogation"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Pilot",
+          "specialty": "Spacecraft"
+        }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "split",
+    "tracks": {
+      "enlisted": {
+        "0": {
+          "title": "Crewman",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Mechanic",
+            "level": 1
+          }
+        },
+        "1": {
+          "title": "Able Spacehand",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Vacc Suit",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Petty Officer 3rd Class"
+        },
+        "3": {
+          "title": "Petty Officer 2nd Class",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Gunner",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": "Petty Officer 1st Class"
+        },
+        "5": {
+          "title": "Chief Petty Officer"
+        },
+        "6": {
+          "title": "Master Chief"
+        }
+      },
+      "officer": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "Ensign",
+          "bonus": {
+            "type": "gainSpecialty",
+            "skill": "Melee",
+            "specialty": "Blade",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Sub-Lieutenant"
+        },
+        "3": {
+          "title": "Lieutenant",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Leadership",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": "Commander",
+          "bonus": {
+            "type": "gainSpecialty",
+            "skill": "Tactics",
+            "specialty": "Naval",
+            "level": 1
+          }
+        },
+        "5": {
+          "title": "Captain",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": 1
+          }
+        },
+        "6": {
+          "title": "Admiral",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": 2
+          }
+        }
+      }
+    }
+  },
+  "mishaps": {
+    "1": {
+      "description": "Severely injured in action (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "description": "Your ship is destroyed in a battle, misjump or accident. You are one of the few survivors. Gain a fellow survivor as a Contact.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "3": {
+      "description": "You are disgraced by the actions of your ship, your captain, or yourself. Gain a Rival in the service.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "You are court-martialled for a real or imagined offence. Whether or not you are convicted, you are forced out of the service.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "A political scandal or shift in Imperial policy ends your career. Gain an Enemy among the admiralty.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "Injured. Roll on the Injury Table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury"
+          }
+        ]
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
+    },
+    "3": {
+      "description": "Your ship engages an enemy vessel. Roll Gunner 8+ or Tactics (Naval) 8+; on success, gain one of Gunner 1 or Tactics (Naval) 1 and DM+1 to your next Advancement roll. On failure, roll on the Mishap Table (not ejected).",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "You are assigned to an isolated, long-range patrol. Gain one of Astrogation 1, Survival 1, Electronics 1 or Vacc Suit 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "You are given a commendation. Gain DM+1 to any one Benefit roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "You serve aboard a ship with an excellent captain. Gain them as a Contact or Ally.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
+    },
+    "8": {
+      "description": "You are sent to officer training or specialist school. Roll EDU 8+ to gain any one skill from the Officer or Advanced Education tables at level 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "9": {
+      "description": "You distinguish yourself in a ship-to-ship engagement. Gain DM+2 to your next Advancement roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "10": {
+      "description": "You are transferred to an elite unit. Gain one of Gun Combat 1, Melee (Blade) 1, Vacc Suit 1 or Leadership 1, or transfer to the Marines without a Qualification roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "11": {
+      "description": "You are given advanced training in a specialist field. Gain one level in any skill you already have, or DM+4 to your next Advancement roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "12": {
+      "description": "Your heroism in a major fleet action is noted by the Imperial court. You are automatically promoted and gain a medal.",
+      "effects": {
+        "type": "none"
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 1000,
+      "2": 5000,
+      "3": 5000,
+      "4": 10000,
+      "5": 20000,
+      "6": 50000,
+      "7": 50000
+    },
+    "benefits": {
+      "1": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "2": {
+        "description": "INT +1 or EDU +1",
+        "effects": {
+          "type": "pickOne",
+          "prompt": "Choose your benefit:",
+          "options": [
+            {
+              "label": "INT +1",
+              "effect": {
+                "type": "modCharacteristic",
+                "characteristic": "INT",
+                "value": 1
+              }
+            },
+            {
+              "label": "EDU +1",
+              "effect": {
+                "type": "modCharacteristic",
+                "characteristic": "EDU",
+                "value": 1
+              }
+            }
+          ]
+        }
+      },
+      "3": {
+        "description": "EDU +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "EDU",
+          "value": 1
+        }
+      },
+      "4": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "5": {
+        "description": "TAS Membership",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "TAS Membership"
+        }
+      },
+      "6": {
+        "description": "SOC +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "SOC",
+          "value": 1
+        }
+      },
+      "7": {
+        "description": "Ship's Boat or SOC +2",
+        "effects": {
+          "type": "pickOne",
+          "prompt": "Choose your benefit:",
+          "options": [
+            {
+              "label": "Ship's Boat",
+              "effect": {
+                "type": "gainEquipment",
+                "item": "Ship's Boat"
+              }
+            },
+            {
+              "label": "SOC +2",
+              "effect": {
+                "type": "modCharacteristic",
+                "characteristic": "SOC",
+                "value": 2
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

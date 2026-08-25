@@ -1,0 +1,513 @@
+{
+  "id": "scout",
+  "name": "Scout",
+  "description": "Members of the exploratory service. Scouts explore new areas, map and survey known or newly discovered areas, and maintain communication ships that carry information and messages between the worlds of the galaxy.",
+  "qualification": {
+    "characteristic": "INT",
+    "target": 5,
+    "modifiers": [
+      {
+        "type": "previousCareers",
+        "dmPer": -1
+      }
+    ]
+  },
+  "assignments": [
+    {
+      "id": "courier",
+      "name": "Courier",
+      "description": "You are responsible for shuttling messages and high-value packages around the galaxy.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 5
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 9
+      }
+    },
+    {
+      "id": "surveyor",
+      "name": "Surveyor",
+      "description": "You visit border worlds and assess their worth.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 8
+      }
+    },
+    {
+      "id": "explorer",
+      "name": "Explorer",
+      "description": "You go wherever the map is blank, exploring unknown worlds and uncharted space.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 7
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 7
+      }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": {
+          "type": "characteristic",
+          "characteristic": "STR",
+          "value": 1
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "END",
+          "value": 1
+        },
+        "4": {
+          "type": "characteristic",
+          "characteristic": "INT",
+          "value": 1
+        },
+        "5": {
+          "type": "characteristic",
+          "characteristic": "EDU",
+          "value": 1
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Jack-of-all-Trades"
+        }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": {
+          "type": "choice",
+          "options": [
+            {
+              "type": "skill",
+              "skill": "Pilot",
+              "specialty": "Small Craft"
+            },
+            {
+              "type": "skill",
+              "skill": "Pilot",
+              "specialty": "Spacecraft"
+            }
+          ]
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Survival"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Mechanic"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Astrogation"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        }
+      }
+    },
+    {
+      "id": "advanced-education",
+      "name": "Advanced Education",
+      "restriction": {
+        "type": "minEdu",
+        "value": 8
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Medic"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Navigation"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Seafarer"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Explosives"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Science"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Jack-of-all-Trades"
+        }
+      }
+    },
+    {
+      "id": "courier-skills",
+      "name": "Courier",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "courier"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Flyer"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Pilot",
+          "specialty": "Spacecraft"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Engineer"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Athletics"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Astrogation"
+        }
+      }
+    },
+    {
+      "id": "surveyor-skills",
+      "name": "Surveyor",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "surveyor"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Persuade"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Pilot"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Navigation"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Diplomat"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Streetwise"
+        }
+      }
+    },
+    {
+      "id": "explorer-skills",
+      "name": "Explorer",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "explorer"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Pilot"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Engineer"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Science"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Recon"
+        }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "default",
+    "tracks": {
+      "default": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "Scout",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Vacc Suit",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": ""
+        },
+        "3": {
+          "title": "Senior Scout",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Pilot",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": ""
+        },
+        "5": {
+          "title": ""
+        },
+        "6": {
+          "title": ""
+        }
+      }
+    }
+  },
+  "mishaps": {
+    "1": {
+      "description": "Severely injured (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "description": "Psychologically damaged by your time in the scouts. Reduce your INT or SOC by 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "3": {
+      "description": "Your ship is damaged, and you have to hitch-hike your way back across the stars to the nearest scout base. Gain 1D Contacts and D3 Enemies.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "You inadvertently cause a conflict between the Imperium and a minor world or race. Gain a Rival and Diplomat 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "You have no idea what happened to you \u2014 they found your ship drifting on the fringes of friendly space.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "Injured. Roll on the Injury Table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury"
+          }
+        ]
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
+    },
+    "3": {
+      "description": "Your ship is ambushed by enemy vessels. Either run, and roll Pilot 8+ to escape, or treat with them and roll Persuade 10+ to bargain. If you fail, your ship is destroyed and you may not re-enlist in the Scouts at the end of this term. If you succeed, you survive and gain Electronics (Sensors) 1. Either way, gain an Enemy.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "4": {
+      "description": "You survey an alien world. Gain one of Animals (riding or Training) 1, Survival 1, Recon 1 or Science 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "5": {
+      "description": "You perform an exemplary service for the scouts. Gain DM+1 to any one Benefit roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "6": {
+      "description": "You spend several years jumping from world to world in your scout ship. Gain one of Astrogation 1, Electronics 1, Navigation 1, Pilot (Small Craft) 1 or Mechanic 1.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
+    },
+    "8": {
+      "description": "When dealing with an alien race, you have an opportunity to gather extra intelligence. Roll Electronics 8+ or Deception 8+. If you succeed, gain an Ally in the Imperium and DM+2 to your next Advancement roll. If you fail, roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "9": {
+      "description": "Your scout ship is one of the first on the scene to rescue the survivors of a disaster. Roll Medic 8+ or Engineer 8+. If you succeed, gain a Contact and DM+2 to your next Advancement check. If you fail, gain an Enemy.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "10": {
+      "description": "You spend a great deal of time on the fringes of Charted Space. Roll Survival 8+ or Pilot 8+. If you succeed, gain a Contact in an alien race and one level in any skill of your choice. If you fail, roll on the Mishap Table but you are not ejected from this career.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "11": {
+      "description": "You serve as the courier for an important message from the Imperium. Either gain one level of Diplomat or DM+4 to your next Advancement roll.",
+      "effects": {
+        "type": "none"
+      }
+    },
+    "12": {
+      "description": "You discover a world, item or information of worth to the Imperium. You are automatically promoted.",
+      "effects": {
+        "type": "none"
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 20000,
+      "2": 20000,
+      "3": 30000,
+      "4": 30000,
+      "5": 50000,
+      "6": 50000,
+      "7": 50000
+    },
+    "benefits": {
+      "1": {
+        "description": "Ship Share",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Ship Share"
+        }
+      },
+      "2": {
+        "description": "INT +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "INT",
+          "value": 1
+        }
+      },
+      "3": {
+        "description": "EDU +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "EDU",
+          "value": 1
+        }
+      },
+      "4": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "5": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "6": {
+        "description": "Scout Ship",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Scout Ship"
+        }
+      },
+      "7": {
+        "description": "Scout Ship",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Scout Ship"
+        }
+      }
+    }
+  }
+}

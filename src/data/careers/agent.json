@@ -1,33 +1,56 @@
 {
   "id": "agent",
   "name": "Agent",
-  "description": "Law enforcement, intelligence, or corporate agents working to uphold the law, protect the state, or safeguard corporate interests.",
+  "description": "Law enforcement agencies, corporate operatives, spies, and others who work in the shadows.",
   "qualification": {
     "characteristic": "INT",
     "target": 6,
-    "modifiers": [{ "type": "previousCareers", "dmPer": -1 }]
+    "modifiers": [
+      {
+        "type": "previousCareers",
+        "dmPer": -1
+      }
+    ]
   },
   "assignments": [
     {
       "id": "law-enforcement",
       "name": "Law Enforcement",
       "description": "You are a police officer or detective.",
-      "survivalCheck": { "characteristic": "END", "target": 6 },
-      "advancementCheck": { "characteristic": "INT", "target": 7 }
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 6
+      }
     },
     {
       "id": "intelligence",
       "name": "Intelligence",
       "description": "You work as a spy or saboteur.",
-      "survivalCheck": { "characteristic": "INT", "target": 7 },
-      "advancementCheck": { "characteristic": "INT", "target": 5 }
+      "survivalCheck": {
+        "characteristic": "INT",
+        "target": 7
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 5
+      }
     },
     {
       "id": "corporate",
       "name": "Corporate",
-      "description": "You work for a corporation, spying on rival firms.",
-      "survivalCheck": { "characteristic": "INT", "target": 5 },
-      "advancementCheck": { "characteristic": "DEX", "target": 7 }
+      "description": "You work for a corporation, spying on rival organisations.",
+      "survivalCheck": {
+        "characteristic": "INT",
+        "target": 5
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 7
+      }
     }
   ],
   "skillTables": [
@@ -35,76 +58,201 @@
       "id": "personal-development",
       "name": "Personal Development",
       "entries": {
-        "1": { "type": "skill", "skill": "Gun Combat" },
-        "2": { "type": "characteristic", "characteristic": "DEX", "value": 1 },
-        "3": { "type": "characteristic", "characteristic": "END", "value": 1 },
-        "4": { "type": "skill", "skill": "Melee" },
-        "5": { "type": "characteristic", "characteristic": "INT", "value": 1 },
-        "6": { "type": "skill", "skill": "Athletics" }
+        "1": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "END",
+          "value": 1
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Melee"
+        },
+        "5": {
+          "type": "characteristic",
+          "characteristic": "INT",
+          "value": 1
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Athletics"
+        }
       }
     },
     {
       "id": "service-skills",
       "name": "Service Skills",
       "entries": {
-        "1": { "type": "skill", "skill": "Streetwise" },
-        "2": { "type": "skill", "skill": "Drive" },
-        "3": { "type": "skill", "skill": "Investigate" },
-        "4": { "type": "skill", "skill": "Flyer" },
-        "5": { "type": "skill", "skill": "Recon" },
-        "6": { "type": "skill", "skill": "Gun Combat" }
+        "1": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Drive"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Investigate"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Flyer"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Recon"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        }
       }
     },
     {
       "id": "advanced-education",
       "name": "Advanced Education",
-      "restriction": { "type": "minEdu", "value": 8 },
+      "restriction": {
+        "type": "minEdu",
+        "value": 8
+      },
       "entries": {
-        "1": { "type": "skill", "skill": "Advocate" },
-        "2": { "type": "skill", "skill": "Language" },
-        "3": { "type": "skill", "skill": "Explosives" },
-        "4": { "type": "skill", "skill": "Medic" },
-        "5": { "type": "skill", "skill": "Vacc Suit" },
-        "6": { "type": "skill", "skill": "Electronics" }
+        "1": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Language"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Explosives"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Medic"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Electronics"
+        }
       }
     },
     {
       "id": "law-enforcement-skills",
       "name": "Law Enforcement",
-      "restriction": { "type": "assignment", "assignmentId": "law-enforcement" },
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "law-enforcement"
+      },
       "entries": {
-        "1": { "type": "skill", "skill": "Investigate" },
-        "2": { "type": "skill", "skill": "Recon" },
-        "3": { "type": "skill", "skill": "Streetwise" },
-        "4": { "type": "skill", "skill": "Stealth" },
-        "5": { "type": "skill", "skill": "Melee" },
-        "6": { "type": "skill", "skill": "Advocate" }
+        "1": {
+          "type": "skill",
+          "skill": "Investigate"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Recon"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Melee"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Advocate"
+        }
       }
     },
     {
       "id": "intelligence-skills",
       "name": "Intelligence",
-      "restriction": { "type": "assignment", "assignmentId": "intelligence" },
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "intelligence"
+      },
       "entries": {
-        "1": { "type": "skill", "skill": "Investigate" },
-        "2": { "type": "skill", "skill": "Recon" },
-        "3": { "type": "skill", "skill": "Electronics", "specialty": "Comms" },
-        "4": { "type": "skill", "skill": "Stealth" },
-        "5": { "type": "skill", "skill": "Persuade" },
-        "6": { "type": "skill", "skill": "Deception" }
+        "1": {
+          "type": "skill",
+          "skill": "Investigate"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Recon"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Electronics",
+          "specialty": "Comms"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Persuade"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Deception"
+        }
       }
     },
     {
       "id": "corporate-skills",
       "name": "Corporate",
-      "restriction": { "type": "assignment", "assignmentId": "corporate" },
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "corporate"
+      },
       "entries": {
-        "1": { "type": "skill", "skill": "Investigate" },
-        "2": { "type": "skill", "skill": "Electronics", "specialty": "Computers" },
-        "3": { "type": "skill", "skill": "Stealth" },
-        "4": { "type": "skill", "skill": "Carouse" },
-        "5": { "type": "skill", "skill": "Deception" },
-        "6": { "type": "skill", "skill": "Streetwise" }
+        "1": {
+          "type": "skill",
+          "skill": "Investigate"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Electronics",
+          "specialty": "Computers"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Carouse"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Deception"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Streetwise"
+        }
       }
     }
   ],
@@ -112,69 +260,233 @@
     "type": "assignment",
     "tracks": {
       "law-enforcement": {
-        "0": { "title": "Rookie" },
-        "1": { "title": "Corporal", "bonus": { "type": "gainSkill", "skill": "Streetwise", "level": 1 } },
-        "2": { "title": "Sergeant" },
-        "3": { "title": "Detective" },
-        "4": { "title": "Lieutenant", "bonus": { "type": "gainSkill", "skill": "Investigate", "level": 1 } },
-        "5": { "title": "Chief", "bonus": { "type": "gainSkill", "skill": "Admin", "level": 1 } },
-        "6": { "title": "Commissioner" }
+        "0": {
+          "title": "Rookie"
+        },
+        "1": {
+          "title": "Corporal",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Streetwise",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Sergeant"
+        },
+        "3": {
+          "title": "Detective"
+        },
+        "4": {
+          "title": "Lieutenant",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Investigate",
+            "level": 1
+          }
+        },
+        "5": {
+          "title": "Chief",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Admin",
+            "level": 1
+          }
+        },
+        "6": {
+          "title": "Commissioner",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": 1
+          }
+        }
       },
       "intelligence": {
-        "0": { "title": "Agent" },
-        "1": { "title": "Field Agent", "bonus": { "type": "gainSkill", "skill": "Deception", "level": 1 } },
-        "2": { "title": "Senior Agent" },
-        "3": { "title": "Special Agent", "bonus": { "type": "gainSkill", "skill": "Investigate", "level": 1 } },
-        "4": { "title": "Assistant Director" },
-        "5": { "title": "Director" },
-        "6": { "title": "Director in Chief" }
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "Agent",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Deception",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Field Agent",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Investigate",
+            "level": 1
+          }
+        },
+        "3": {
+          "title": ""
+        },
+        "4": {
+          "title": "Special Agent",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Gun Combat",
+            "level": 1
+          }
+        },
+        "5": {
+          "title": "Assistant Director"
+        },
+        "6": {
+          "title": "Director"
+        }
       },
       "corporate": {
-        "0": { "title": "Agent" },
-        "1": { "title": "Field Agent", "bonus": { "type": "gainSkill", "skill": "Deception", "level": 1 } },
-        "2": { "title": "Senior Agent" },
-        "3": { "title": "Special Agent", "bonus": { "type": "gainSkill", "skill": "Investigate", "level": 1 } },
-        "4": { "title": "Assistant Director" },
-        "5": { "title": "Director" },
-        "6": { "title": "Director in Chief" }
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "Agent",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Deception",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Field Agent",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Investigate",
+            "level": 1
+          }
+        },
+        "3": {
+          "title": ""
+        },
+        "4": {
+          "title": "Special Agent",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Gun Combat",
+            "level": 1
+          }
+        },
+        "5": {
+          "title": "Assistant Director"
+        },
+        "6": {
+          "title": "Director"
+        }
       }
     }
   },
   "mishaps": {
     "1": {
-      "description": "Severely injured (this is the same as a result of 2 on the Injury table). Alternatively, roll twice on the Injury table and take the lower result.",
+      "description": "Severely injured (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
       "effects": {
         "type": "choice",
         "prompt": "You are severely injured. Choose how to resolve your injuries.",
         "options": [
           {
-            "label": "Take the severity of a result of 2 (Severely injured - reduce one physical characteristic by 1D)",
-            "effects": [{ "type": "rollOnTable", "table": "injury", "fixedResult": 2 }]
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
           },
           {
             "label": "Roll twice on the Injury table and take the lower result",
-            "effects": [{ "type": "rollOnTable", "table": "injury", "modifier": "takeLower" }]
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
           }
         ]
       }
     },
     "2": {
-      "description": "A criminal or other figure under investigation offers you a deal. Accept, and you leave this career without further penalty (although you lose the Benefit roll as normal). Refuse, and you must roll twice on the Injury table and take the lower result. You gain an Enemy and one level in any skill you choose.",
+      "description": "A criminal or other figure under investigation offers you a deal. Accept, and you leave this career without further penalty (though you lose the Benefit roll as normal). Refuse, and you must roll twice on the Injury Table and take the lower result. You gain an Enemy and one level in any skill you choose.",
       "effects": {
         "type": "choice",
         "prompt": "A figure under investigation offers you a deal.",
         "options": [
           {
             "label": "Accept the deal (leave career without further penalty)",
-            "effects": [{ "type": "ejectFromCareer" }]
+            "effects": [
+              {
+                "type": "ejectFromCareer"
+              },
+              {
+                "type": "loseBenefitRoll"
+              }
+            ]
           },
           {
             "label": "Refuse the deal (injuries, but gain an Enemy and a skill level)",
             "effects": [
-              { "type": "ejectFromCareer" },
-              { "type": "rollOnTable", "table": "injury", "modifier": "takeLower" },
-              { "type": "gainContact", "contactType": "enemy" },
-              { "type": "increaseExistingSkill", "filter": "owned" }
+              {
+                "type": "ejectFromCareer"
+              },
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              },
+              {
+                "type": "gainContact",
+                "contactType": "enemy"
+              },
+              {
+                "type": "pickSkill",
+                "options": [
+                  "Admin",
+                  "Advocate",
+                  "Animals",
+                  "Art",
+                  "Astrogation",
+                  "Athletics",
+                  "Broker",
+                  "Carouse",
+                  "Deception",
+                  "Diplomat",
+                  "Drive",
+                  "Electronics",
+                  "Engineer",
+                  "Explosives",
+                  "Flyer",
+                  "Gambler",
+                  "Gun Combat",
+                  "Gunner",
+                  "Heavy Weapons",
+                  "Investigate",
+                  "Jack-of-all-Trades",
+                  "Language",
+                  "Leadership",
+                  "Mechanic",
+                  "Medic",
+                  "Melee",
+                  "Navigation",
+                  "Persuade",
+                  "Pilot",
+                  "Profession",
+                  "Recon",
+                  "Science",
+                  "Seafarer",
+                  "Stealth",
+                  "Steward",
+                  "Streetwise",
+                  "Survival",
+                  "Tactics",
+                  "Vacc Suit"
+                ],
+                "level": 1
+              }
             ]
           }
         ]
@@ -186,99 +498,205 @@
         "type": "skillCheck",
         "skill": "Advocate",
         "target": 8,
-        "success": { "type": "gainBenefitDM", "value": 1 },
-        "failure": { "type": "none" },
-        "naturalTwo": { "type": "forceCareer", "career": "prisoner" }
+        "success": {
+          "type": "gainBenefitDM",
+          "value": 1
+        },
+        "failure": {
+          "type": "none"
+        },
+        "naturalTwo": {
+          "type": "forceCareer",
+          "career": "prisoner"
+        }
       }
     },
     "4": {
-      "description": "You learn something you shouldn't know. Gain an Enemy and Deception 1.",
+      "description": "You learn something you should not know, and people want to kill you for it. Gain an Enemy and Deception 1.",
       "effects": {
         "type": "compound",
         "effects": [
-          { "type": "ejectFromCareer" },
-          { "type": "gainContact", "contactType": "enemy" },
-          { "type": "gainSkill", "skill": "Deception", "level": 1 }
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "gainContact",
+            "contactType": "enemy"
+          },
+          {
+            "type": "gainSkill",
+            "skill": "Deception",
+            "level": 1
+          }
         ]
       }
     },
     "5": {
-      "description": "Your work ends up coming home with you, and someone gets hurt. Choose one of your Contacts, Allies or family members, and roll twice on the Injury table for them, taking the lower result.",
+      "description": "Your work ends up coming home with you, and someone gets hurt. Choose one of your Contacts, Allies or family members, and roll twice on the Injury Table for them, taking the lower result.",
       "effects": {
         "type": "compound",
         "effects": [
-          { "type": "ejectFromCareer" },
-          { "type": "narrative", "prompt": "Choose one of your Contacts, Allies or family members who gets hurt. Describe who it is and the circumstances." },
-          { "type": "rollOnTable", "table": "injury", "modifier": "takeLower" }
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "narrative",
+            "prompt": "Choose one of your Contacts, Allies or family members who gets hurt. Describe who it is and the circumstances."
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury",
+            "modifier": "takeLower"
+          }
         ]
       }
     },
     "6": {
-      "description": "Injured. Roll on the Injury table.",
+      "description": "Injured. Roll on the Injury Table.",
       "effects": {
         "type": "compound",
         "effects": [
-          { "type": "ejectFromCareer" },
-          { "type": "rollOnTable", "table": "injury" }
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury"
+          }
         ]
       }
     }
   },
   "events": {
     "2": {
-      "description": "Disaster! Roll on the Mishap table but you are not ejected from this career.",
-      "effects": { "type": "rollOnTable", "table": "mishap" }
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
     },
     "3": {
-      "description": "An investigation takes on a dangerous turn. Roll Investigate 8+ or Streetwise 8+. If you fail, roll on the Mishap table. If you succeed, increase one of these skills by one level.",
+      "description": "An investigation takes on a dangerous turn. Roll Investigate 8+ or Streetwise 8+. If you fail, roll on the Mishap Table. If you succeed, increase one of these skills by one level: Deception, Jack-of-All-Trades, Persuade or Tactics.",
       "effects": {
         "type": "choice",
         "prompt": "An investigation takes a dangerous turn. Choose which skill to roll.",
         "options": [
           {
             "label": "Roll Investigate 8+",
-            "effects": [{
-              "type": "skillCheck",
-              "skill": "Investigate",
-              "target": 8,
-              "success": {
-                "type": "pickOne",
-                "prompt": "Choose a skill to increase by one level:",
-                "options": [
-                  { "label": "Investigate", "effect": { "type": "increaseSkill", "skill": "Investigate" } },
-                  { "label": "Streetwise", "effect": { "type": "increaseSkill", "skill": "Streetwise" } }
-                ]
-              },
-              "failure": { "type": "rollOnTable", "table": "mishap" }
-            }]
+            "effects": [
+              {
+                "type": "skillCheck",
+                "skill": "Investigate",
+                "target": 8,
+                "success": {
+                  "type": "pickOne",
+                  "prompt": "Choose a skill to increase by one level:",
+                  "options": [
+                    {
+                      "label": "Deception",
+                      "effect": {
+                        "type": "increaseSkill",
+                        "skill": "Deception"
+                      }
+                    },
+                    {
+                      "label": "Jack-of-all-Trades",
+                      "effect": {
+                        "type": "increaseSkill",
+                        "skill": "Jack-of-all-Trades"
+                      }
+                    },
+                    {
+                      "label": "Persuade",
+                      "effect": {
+                        "type": "increaseSkill",
+                        "skill": "Persuade"
+                      }
+                    },
+                    {
+                      "label": "Tactics",
+                      "effect": {
+                        "type": "increaseSkill",
+                        "skill": "Tactics"
+                      }
+                    }
+                  ]
+                },
+                "failure": {
+                  "type": "rollOnTable",
+                  "table": "mishap"
+                }
+              }
+            ]
           },
           {
             "label": "Roll Streetwise 8+",
-            "effects": [{
-              "type": "skillCheck",
-              "skill": "Streetwise",
-              "target": 8,
-              "success": {
-                "type": "pickOne",
-                "prompt": "Choose a skill to increase by one level:",
-                "options": [
-                  { "label": "Investigate", "effect": { "type": "increaseSkill", "skill": "Investigate" } },
-                  { "label": "Streetwise", "effect": { "type": "increaseSkill", "skill": "Streetwise" } }
-                ]
-              },
-              "failure": { "type": "rollOnTable", "table": "mishap" }
-            }]
+            "effects": [
+              {
+                "type": "skillCheck",
+                "skill": "Streetwise",
+                "target": 8,
+                "success": {
+                  "type": "pickOne",
+                  "prompt": "Choose a skill to increase by one level:",
+                  "options": [
+                    {
+                      "label": "Deception",
+                      "effect": {
+                        "type": "increaseSkill",
+                        "skill": "Deception"
+                      }
+                    },
+                    {
+                      "label": "Jack-of-all-Trades",
+                      "effect": {
+                        "type": "increaseSkill",
+                        "skill": "Jack-of-all-Trades"
+                      }
+                    },
+                    {
+                      "label": "Persuade",
+                      "effect": {
+                        "type": "increaseSkill",
+                        "skill": "Persuade"
+                      }
+                    },
+                    {
+                      "label": "Tactics",
+                      "effect": {
+                        "type": "increaseSkill",
+                        "skill": "Tactics"
+                      }
+                    }
+                  ]
+                },
+                "failure": {
+                  "type": "rollOnTable",
+                  "table": "mishap"
+                }
+              }
+            ]
           }
         ]
       }
     },
     "4": {
-      "description": "You complete a mission for your superiors and are suitably rewarded. Gain DM+1 to any one Benefit roll.",
-      "effects": { "type": "gainBenefitDM", "value": 1 }
+      "description": "You complete a mission for your superiors, and are suitably rewarded. Gain DM+1 to any one Benefit roll from this career.",
+      "effects": {
+        "type": "gainBenefitDM",
+        "value": 1
+      }
     },
     "5": {
       "description": "You establish a network of contacts. Gain D3 Contacts.",
-      "effects": { "type": "diceRoll", "dice": "D3", "effectPerUnit": { "type": "gainContact", "contactType": "contact" } }
+      "effects": {
+        "type": "diceRoll",
+        "dice": "D3",
+        "effectPerUnit": {
+          "type": "gainContact",
+          "contactType": "contact"
+        }
+      }
     },
     "6": {
       "description": "You are given advanced training in a specialist field. Roll EDU 8+ to increase any one skill you already have by one level.",
@@ -286,46 +704,89 @@
         "type": "skillCheck",
         "characteristic": "EDU",
         "target": 8,
-        "success": { "type": "increaseExistingSkill", "filter": "owned" },
-        "failure": { "type": "none" }
+        "success": {
+          "type": "increaseExistingSkill"
+        },
+        "failure": {
+          "type": "none"
+        }
       }
     },
     "7": {
-      "description": "Life Event. Roll on the Life Events table.",
-      "effects": { "type": "rollOnTable", "table": "life-events" }
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
     },
     "8": {
-      "description": "You go undercover to investigate an enemy. Roll Deception 8+. If you succeed, roll immediately on the Rogue or Citizen Events table and make one roll on any Specialist skill table for that career. If you fail, roll immediately on the Rogue or Citizen Mishap table.",
+      "description": "You go undercover to investigate an enemy. Roll Deception 8+. If you succeed, roll immediately on the Rogue or Citizen Events Table and make one roll on any Specialist skill table for that career. If you fail, roll immediately on the Rogue or Citizen Mishap Table.",
       "effects": {
         "type": "skillCheck",
         "skill": "Deception",
         "target": 8,
-        "success": { "type": "rollOnTable", "table": "rogue-or-citizen-events" },
-        "failure": { "type": "rollOnTable", "table": "rogue-or-citizen-mishap" }
+        "success": {
+          "type": "rollOnTable",
+          "table": "rogue-or-citizen-events"
+        },
+        "failure": {
+          "type": "rollOnTable",
+          "table": "rogue-or-citizen-mishap"
+        }
       }
     },
     "9": {
-      "description": "You go above and beyond the call of duty. Gain DM+2 to your next Advancement roll.",
-      "effects": { "type": "gainAdvancementDM", "value": 2 }
+      "description": "You go above and beyond the call of duty. Gain DM+2 to your next Advancement check.",
+      "effects": {
+        "type": "gainAdvancementDM",
+        "value": 2
+      }
     },
     "10": {
       "description": "You are given specialist training in vehicles. Gain one of Drive 1, Flyer 1, Pilot 1 or Gunner 1.",
-      "effects": { "type": "pickSkill", "options": ["Drive", "Flyer", "Pilot", "Gunner"], "level": 1 }
+      "effects": {
+        "type": "pickSkill",
+        "options": [
+          "Drive",
+          "Flyer",
+          "Pilot",
+          "Gunner"
+        ],
+        "level": 1
+      }
     },
     "11": {
-      "description": "You are befriended by a senior agent. Either gain Investigate 1 or DM+4 to your next Advancement roll.",
+      "description": "You are befriended by a senior agent. Either increase Investigate by one level or DM+4 to your next Advancement roll thanks to their aid.",
       "effects": {
         "type": "choice",
         "prompt": "A senior agent befriends you.",
         "options": [
-          { "label": "Gain Investigate 1", "effects": [{ "type": "gainSkill", "skill": "Investigate", "level": 1 }] },
-          { "label": "Gain DM+4 to next Advancement", "effects": [{ "type": "gainAdvancementDM", "value": 4 }] }
+          {
+            "label": "Gain Investigate 1",
+            "effects": [
+              {
+                "type": "increaseSkill",
+                "skill": "Investigate"
+              }
+            ]
+          },
+          {
+            "label": "Gain DM+4 to next Advancement",
+            "effects": [
+              {
+                "type": "gainAdvancementDM",
+                "value": 4
+              }
+            ]
+          }
         ]
       }
     },
     "12": {
       "description": "Your efforts uncover a major conspiracy against your employers. You are automatically promoted.",
-      "effects": { "type": "autoPromote" }
+      "effects": {
+        "type": "autoPromote"
+      }
     }
   },
   "musteringOut": {
@@ -339,13 +800,73 @@
       "7": 50000
     },
     "benefits": {
-      "1": { "description": "Scientific Equipment", "effects": { "type": "gainEquipment", "item": "Scientific Equipment" } },
-      "2": { "description": "+1 INT", "effects": { "type": "modCharacteristic", "characteristic": "INT", "value": 1 } },
-      "3": { "description": "Ship Share", "effects": { "type": "gainEquipment", "item": "Ship Share" } },
-      "4": { "description": "Weapon", "effects": { "type": "gainEquipment", "item": "Weapon" } },
-      "5": { "description": "Combat Implant", "effects": { "type": "gainEquipment", "item": "Combat Implant" } },
-      "6": { "description": "+1 SOC", "effects": { "type": "modCharacteristic", "characteristic": "SOC", "value": 1 } },
-      "7": { "description": "TAS Membership", "effects": { "type": "gainEquipment", "item": "TAS Membership" } }
+      "1": {
+        "description": "Scientific Equipment",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Scientific Equipment"
+        }
+      },
+      "2": {
+        "description": "INT +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "INT",
+          "value": 1
+        }
+      },
+      "3": {
+        "description": "Ship Share",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Ship Share"
+        }
+      },
+      "4": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "5": {
+        "description": "Cybernetic Implant",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Cybernetic Implant"
+        }
+      },
+      "6": {
+        "description": "SOC +1 or Cybernetic Implant",
+        "effects": {
+          "type": "pickOne",
+          "prompt": "Choose your benefit:",
+          "options": [
+            {
+              "label": "SOC +1",
+              "effect": {
+                "type": "modCharacteristic",
+                "characteristic": "SOC",
+                "value": 1
+              }
+            },
+            {
+              "label": "Cybernetic Implant",
+              "effect": {
+                "type": "gainEquipment",
+                "item": "Cybernetic Implant"
+              }
+            }
+          ]
+        }
+      },
+      "7": {
+        "description": "TAS Membership",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "TAS Membership"
+        }
+      }
     }
   }
 }

@@ -53,10 +53,17 @@ export function SkillTrainingStep({ context, onAdvance, isBasicTraining = false 
   const [choiceEntry, setChoiceEntry] = useState<SkillTableEntry | null>(null);
 
   const career = useMemo(() => tryLoadCareer(context.currentCareer), [context.currentCareer]);
-  const serviceTable = career?.skillTables.find((table) => table.id === 'service-skills');
+  const basicTrainingTable = useMemo(() => {
+    if (!career) return undefined;
+    if (career.basicTrainingUsesAssignmentSkills && context.currentAssignment) {
+      const assignmentTableId = `${context.currentAssignment}-skills`;
+      return career.skillTables.find((table) => table.id === assignmentTableId);
+    }
+    return career.skillTables.find((table) => table.id === 'service-skills');
+  }, [career, context.currentAssignment]);
   const basicSkillOptions = useMemo(() => (
-    serviceTable ? extractSkillGrantOptions(serviceTable.entries) : DRIFTER_SKILLS
-  ), [serviceTable]);
+    basicTrainingTable ? extractSkillGrantOptions(basicTrainingTable.entries) : DRIFTER_SKILLS
+  ), [basicTrainingTable]);
 
   const availableTables = useMemo(
     () => getAvailableTables(career, context, character.characteristics.EDU),

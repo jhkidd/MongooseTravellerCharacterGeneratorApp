@@ -1,0 +1,846 @@
+{
+  "id": "entertainer",
+  "name": "Entertainer",
+  "description": "Individuals who are involved with the media, whether as reporters, artists or celebrities.",
+  "qualification": {
+    "characteristic": "DEX_OR_INT",
+    "target": 5,
+    "modifiers": [
+      {
+        "type": "previousCareers",
+        "dmPer": -1
+      }
+    ]
+  },
+  "assignments": [
+    {
+      "id": "artist",
+      "name": "Artist",
+      "description": "You are a witer, holographer or other creative.",
+      "survivalCheck": {
+        "characteristic": "SOC",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 6
+      }
+    },
+    {
+      "id": "journalist",
+      "name": "Journalist",
+      "description": "You report on local or galactic events for a news feed, the TAS or other organisation.",
+      "survivalCheck": {
+        "characteristic": "EDU",
+        "target": 7
+      },
+      "advancementCheck": {
+        "characteristic": "INT",
+        "target": 5
+      }
+    },
+    {
+      "id": "performer",
+      "name": "Performer",
+      "description": "You are an actor, dancer, acrobat, professional athlete or other public performer.",
+      "survivalCheck": {
+        "characteristic": "INT",
+        "target": 5
+      },
+      "advancementCheck": {
+        "characteristic": "DEX",
+        "target": 7
+      }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "INT",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "SOC",
+          "value": 1
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Language"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Carouse"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Jack-of-all-Trades"
+        }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Art"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Carouse"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Deception"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Drive"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Persuade"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Steward"
+        }
+      }
+    },
+    {
+      "id": "advanced-education",
+      "name": "Advanced Education",
+      "restriction": {
+        "type": "minEdu",
+        "value": 10
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Broker"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Deception"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Science"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Streetwise"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Diplomat"
+        }
+      }
+    },
+    {
+      "id": "artist-skills",
+      "name": "Artist",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "artist"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Art"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Carouse"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Electronics",
+          "specialty": "Computers"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Gambler"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Persuade"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Profession"
+        }
+      }
+    },
+    {
+      "id": "journalist-skills",
+      "name": "Journalist",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "journalist"
+      },
+      "entries": {
+        "1": {
+          "type": "choice",
+          "options": [
+            {
+              "type": "skill",
+              "skill": "Art",
+              "specialty": "Holography"
+            },
+            {
+              "type": "skill",
+              "skill": "Art",
+              "specialty": "Write"
+            }
+          ]
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Drive"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Investigate"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Recon"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Streetwise"
+        }
+      }
+    },
+    {
+      "id": "performer-skills",
+      "name": "Performer",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "performer"
+      },
+      "entries": {
+        "1": {
+          "type": "choice",
+          "options": [
+            {
+              "type": "skill",
+              "skill": "Art",
+              "specialty": "Performer"
+            },
+            {
+              "type": "skill",
+              "skill": "Art",
+              "specialty": "Instrument"
+            }
+          ]
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Athletics"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Carouse"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Deception"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Stealth"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Streetwise"
+        }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "assignment",
+    "tracks": {
+      "artist": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Art",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": ""
+        },
+        "3": {
+          "title": "",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Investigate",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": ""
+        },
+        "5": {
+          "title": "Famous Artist",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": 1
+          }
+        },
+        "6": {
+          "title": ""
+        }
+      },
+      "journalist": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "Freelancer",
+          "bonus": {
+            "type": "gainSpecialty",
+            "skill": "Electronics",
+            "specialty": "Comms",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Staff Writer",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Investigate",
+            "level": 1
+          }
+        },
+        "3": {
+          "title": ""
+        },
+        "4": {
+          "title": "Correspondent",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Persuade",
+            "level": 1
+          }
+        },
+        "5": {
+          "title": ""
+        },
+        "6": {
+          "title": "Senior Correspondent",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": 1
+          }
+        }
+      },
+      "performer": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "DEX",
+            "value": 1
+          }
+        },
+        "2": {
+          "title": ""
+        },
+        "3": {
+          "title": "",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "STR",
+            "value": 1
+          }
+        },
+        "4": {
+          "title": ""
+        },
+        "5": {
+          "title": "Famous Performer",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": 1
+          }
+        },
+        "6": {
+          "title": ""
+        }
+      }
+    }
+  },
+  "mishaps": {
+    "1": {
+      "description": "Severely injured (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "description": "You expose or are involved in a scandal of some sort.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "narrative",
+            "prompt": "You expose or are involved in a scandal of some sort. Describe its nature."
+          }
+        ]
+      }
+    },
+    "3": {
+      "description": "Public opinion turns on you. Reduce your SOC by 1.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "modCharacteristic",
+            "characteristic": "SOC",
+            "value": -1
+          }
+        ]
+      }
+    },
+    "4": {
+      "description": "You are betrayed by a peer. One of your Contacts or Allies betrays you, ending your career. That Contact or Ally becomes a Rival or Enemy. If you have no Contacts or Allies, then you are betrayed by someone you never saw coming and still gain a Rival or Enemy.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "narrative",
+            "prompt": "One of your Contacts or Allies betrays you (or, if you have none, someone unexpected does). That character becomes a Rival or Enemy."
+          },
+          {
+            "type": "gainContact",
+            "contactType": "rival"
+          }
+        ]
+      }
+    },
+    "5": {
+      "description": "An investigation, tour, project or expedition goes wrong, stranding you far from home. Gain one of Survival 1, Pilot 1, Persuade 1 or Streetwise 1.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "pickSkill",
+            "options": [
+              "Survival",
+              "Pilot",
+              "Persuade",
+              "Streetwise"
+            ],
+            "level": 1
+          }
+        ]
+      }
+    },
+    "6": {
+      "description": "You are forced out because of censorship or controversy. What truth did you get too close to? You gain DM+2 to the qualification roll for your next career.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "narrative",
+            "prompt": "You gain DM+2 to the Qualification roll for your next career (note this manually; qualification DM bonuses are not yet tracked by the engine)."
+          }
+        ]
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
+    },
+    "3": {
+      "description": "You are invited to take part in a controversial event or exhibition. Roll Art or Investigate 8+. If you succeed, gain one SOC. If you fail, lose one SOC.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are invited to take part in a controversial event or exhibition.",
+        "options": [
+          {
+            "label": "Roll Art 8+",
+            "effects": [
+              {
+                "type": "skillCheck",
+                "skill": "Art",
+                "target": 8,
+                "success": {
+                  "type": "modCharacteristic",
+                  "characteristic": "SOC",
+                  "value": 1
+                },
+                "failure": {
+                  "type": "modCharacteristic",
+                  "characteristic": "SOC",
+                  "value": -1
+                }
+              }
+            ]
+          },
+          {
+            "label": "Roll Investigate 8+",
+            "effects": [
+              {
+                "type": "skillCheck",
+                "skill": "Investigate",
+                "target": 8,
+                "success": {
+                  "type": "modCharacteristic",
+                  "characteristic": "SOC",
+                  "value": 1
+                },
+                "failure": {
+                  "type": "modCharacteristic",
+                  "characteristic": "SOC",
+                  "value": -1
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "4": {
+      "description": "You are a part of your homeworld's celebrity circles. Gain one of Carouse 1, Persuade 1, Steward 1 or a Contact.",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Choose your reward:",
+        "options": [
+          {
+            "label": "Carouse 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Carouse",
+              "level": 1
+            }
+          },
+          {
+            "label": "Persuade 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Persuade",
+              "level": 1
+            }
+          },
+          {
+            "label": "Steward 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Steward",
+              "level": 1
+            }
+          },
+          {
+            "label": "A Contact",
+            "effect": {
+              "type": "gainContact",
+              "contactType": "contact"
+            }
+          }
+        ]
+      }
+    },
+    "5": {
+      "description": "One of your works is especially well received and popular, making you a minor celebrity. Gain DM+1 to any one Benefit roll.",
+      "effects": {
+        "type": "gainBenefitDM",
+        "value": 1
+      }
+    },
+    "6": {
+      "description": "You gain a patron in the arts. Gain DM+2 to your next advancement roll and an Ally.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "gainAdvancementDM",
+            "value": 2
+          },
+          {
+            "type": "gainContact",
+            "contactType": "ally"
+          }
+        ]
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
+    },
+    "8": {
+      "description": "You have the opportunity to criticise or even bring down a questionable political leader on your homeworld. If you refuse and support the leader, you gain nothing. If you accept, gain an Enemy and roll Art or Persuade 8+. If you succeed, gain one level in any skill you already have. If you fail, increase a skill anyway and roll on the Mishaps table.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You have the opportunity to criticise or bring down a questionable political leader.",
+        "options": [
+          {
+            "label": "Refuse and support the leader (gain nothing)",
+            "effects": [
+              {
+                "type": "none"
+              }
+            ]
+          },
+          {
+            "label": "Accept",
+            "effects": [
+              {
+                "type": "gainContact",
+                "contactType": "enemy"
+              },
+              {
+                "type": "choice",
+                "prompt": "Roll to see how it goes:",
+                "options": [
+                  {
+                    "label": "Roll Art 8+",
+                    "effects": [
+                      {
+                        "type": "skillCheck",
+                        "skill": "Art",
+                        "target": 8,
+                        "success": {
+                          "type": "increaseExistingSkill"
+                        },
+                        "failure": {
+                          "type": "compound",
+                          "effects": [
+                            {
+                              "type": "increaseExistingSkill"
+                            },
+                            {
+                              "type": "rollOnTable",
+                              "table": "mishap"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Roll Persuade 8+",
+                    "effects": [
+                      {
+                        "type": "skillCheck",
+                        "skill": "Persuade",
+                        "target": 8,
+                        "success": {
+                          "type": "increaseExistingSkill"
+                        },
+                        "failure": {
+                          "type": "compound",
+                          "effects": [
+                            {
+                              "type": "increaseExistingSkill"
+                            },
+                            {
+                              "type": "rollOnTable",
+                              "table": "mishap"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "9": {
+      "description": "You go on a tour of the secotr, visiting several worlds. Gain D3 Contacts.",
+      "effects": {
+        "type": "diceRoll",
+        "dice": "D3",
+        "effectPerUnit": {
+          "type": "gainContact",
+          "contactType": "contact"
+        }
+      }
+    },
+    "10": {
+      "description": "One of your pieces of art is stolen and the investigation brings you into the criminal underworld. Gain one of Streetwise 1, Investigate 1, Recon 1 or Stealth 1.",
+      "effects": {
+        "type": "pickSkill",
+        "options": [
+          "Streetwise",
+          "Investigate",
+          "Recon",
+          "Stealth"
+        ],
+        "level": 1
+      }
+    },
+    "11": {
+      "description": "As an artist, you lead a strange and charmed life. Go to the Life Events Table and have an Unusual Event.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events",
+        "fixedResult": 12
+      }
+    },
+    "12": {
+      "description": "You win a prestigious prize. You are automatically promoted.",
+      "effects": {
+        "type": "autoPromote"
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 0,
+      "2": 0,
+      "3": 10000,
+      "4": 10000,
+      "5": 40000,
+      "6": 40000,
+      "7": 80000
+    },
+    "benefits": {
+      "1": {
+        "description": "Contact",
+        "effects": {
+          "type": "gainContact",
+          "contactType": "contact"
+        }
+      },
+      "2": {
+        "description": "SOC +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "SOC",
+          "value": 1
+        }
+      },
+      "3": {
+        "description": "Contact",
+        "effects": {
+          "type": "gainContact",
+          "contactType": "contact"
+        }
+      },
+      "4": {
+        "description": "SOC +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "SOC",
+          "value": 1
+        }
+      },
+      "5": {
+        "description": "INT +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "INT",
+          "value": 1
+        }
+      },
+      "6": {
+        "description": "Two Ship Shares",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Two Ship Shares"
+        }
+      },
+      "7": {
+        "description": "SOC +1 and EDU +1",
+        "effects": {
+          "type": "compound",
+          "effects": [
+            {
+              "type": "modCharacteristic",
+              "characteristic": "SOC",
+              "value": 1
+            },
+            {
+              "type": "modCharacteristic",
+              "characteristic": "EDU",
+              "value": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}

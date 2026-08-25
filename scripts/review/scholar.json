@@ -1,0 +1,87 @@
+{
+  "mishaps": {
+    "2": {
+      "description": "One of your experiments goes disastrously wrong. Reduce one physical characteristic by 1 and lose your Benefit rolls from this term.",
+      "tokens": []
+    },
+    "3": {
+      "description": "Your research is discredited \u2014 you may have committed fraud, or simply been unlucky. Lose 1 SOC and gain a Rival.",
+      "tokens": [
+        "Rival",
+        "SOC"
+      ]
+    },
+    "4": {
+      "description": "A patient, subject, or colleague dies as a result of your work. Gain an Enemy among their family or colleagues.",
+      "tokens": [
+        "Enemy"
+      ]
+    },
+    "5": {
+      "description": "Your funding is pulled or your institution disbands your department. You must muster out.",
+      "tokens": []
+    }
+  },
+  "events": {
+    "3": {
+      "description": "A research expedition goes wrong. Roll Survival 8+ or Medic 8+; on success, gain one level in that skill. On failure, lose 1 END.",
+      "tokens": [
+        "Roll Survival 8+",
+        "Medic 8+",
+        "END"
+      ]
+    },
+    "4": {
+      "description": "You take part in a major interdisciplinary project. Gain one of Science 1, Engineer 1, Medic 1 or Electronics 1.",
+      "tokens": []
+    },
+    "5": {
+      "description": "You present a paper or give a lecture that is well-received. Gain DM+1 to any one Benefit roll.",
+      "tokens": [
+        "DM+1"
+      ]
+    },
+    "6": {
+      "description": "You make a valuable Contact in academia, industry, or government.",
+      "tokens": [
+        "Contact"
+      ]
+    },
+    "8": {
+      "description": "You are given specialised training or fellowship. Roll EDU 8+ to gain one level in any Science specialty of your choice.",
+      "tokens": [
+        "Roll EDU 8+",
+        "EDU"
+      ]
+    },
+    "9": {
+      "description": "A rival researcher tries to scoop your work. Roll INT 8+ to publish first; on success, gain DM+2 to your next Advancement. On failure, gain a Rival.",
+      "tokens": [
+        "Rival",
+        "Roll INT 8+",
+        "DM+2",
+        "INT"
+      ]
+    },
+    "10": {
+      "description": "Your research or practice attracts the notice of a powerful patron. Gain an Ally and DM+2 to your next Advancement check.",
+      "tokens": [
+        "Ally",
+        "DM+2"
+      ]
+    },
+    "11": {
+      "description": "You are invited to join a major institution or expedition. Either gain one level of Admin, Advocate or Diplomat, or DM+4 to your next Advancement roll.",
+      "tokens": [
+        "DM+4"
+      ]
+    },
+    "12": {
+      "description": "Your work is of Imperial significance \u2014 a breakthrough, discovery or cure. You are automatically promoted and gain DM+2 to any one Benefit roll.",
+      "tokens": [
+        "DM+2",
+        "automatically promoted"
+      ]
+    }
+  }
+}

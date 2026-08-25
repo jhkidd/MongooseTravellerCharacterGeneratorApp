@@ -1,0 +1,151 @@
+{
+  "id": "citizen",
+  "name": "Citizen",
+  "description": "Individuals serving in a corporation, bureaucracy or industry, or who are making a new life on an untamed planet.",
+  "qualification": {
+    "characteristic": "EDU",
+    "target": 5,
+    "modifiers": [{"description": "DM-1 for every previous career", "type": "per_previous_career", "dm": -1}]
+  },
+  "assignments": {
+    "corporate": {
+      "name": "Corporate",
+      "description": "You are an executive or manager in a large corporation.",
+      "survival": {"characteristic": "SOC", "target": 6},
+      "advancement": {"characteristic": "INT", "target": 6}
+    },
+    "worker": {
+      "name": "Worker",
+      "description": "You are a blue collar worker on an industrial world.",
+      "survival": {"characteristic": "END", "target": 4},
+      "advancement": {"characteristic": "EDU", "target": 8}
+    },
+    "colonist": {
+      "name": "Colonist",
+      "description": "You are building a new life on a recently settled world that still needs taming.",
+      "survival": {"characteristic": "INT", "target": 7},
+      "advancement": {"characteristic": "END", "target": 5}
+    }
+  },
+  "skill_tables": {
+    "personal_development": {
+      "name": "Personal Development",
+      "1": "EDU +1",
+      "2": "INT +1",
+      "3": "Carouse",
+      "4": "Gambler",
+      "5": "Drive",
+      "6": "Jack-of-all-Trades"
+    },
+    "service_skills": {
+      "name": "Service Skills",
+      "note": "Use your assignment skill table for basic training, not service skills.",
+      "1": "Drive",
+      "2": "Flyer",
+      "3": "Streetwise",
+      "4": "Melee",
+      "5": "Steward",
+      "6": "Profession"
+    },
+    "advanced_education": {
+      "name": "Advanced Education",
+      "requires_edu": 10,
+      "1": "Art",
+      "2": "Advocate",
+      "3": "Diplomat",
+      "4": "Language",
+      "5": "Electronics (computers)",
+      "6": "Medic"
+    },
+    "corporate": {
+      "name": "Corporate",
+      "assignment_only": "corporate",
+      "1": "Advocate",
+      "2": "Admin",
+      "3": "Broker",
+      "4": "Electronics (computers)",
+      "5": "Diplomat",
+      "6": "Leadership"
+    },
+    "worker": {
+      "name": "Worker",
+      "assignment_only": "worker",
+      "1": "Drive",
+      "2": "Mechanic",
+      "3": "Electronics",
+      "4": "Engineer",
+      "5": "Profession",
+      "6": "Science"
+    },
+    "colonist": {
+      "name": "Colonist",
+      "assignment_only": "colonist",
+      "1": "Animals",
+      "2": "Athletics",
+      "3": "Jack-of-all-Trades",
+      "4": "Drive",
+      "5": "Survival",
+      "6": "recon"
+    }
+  },
+  "ranks": {
+    "corporate": {
+      "0": {"title": null, "bonus": null},
+      "1": {"title": null, "bonus": null},
+      "2": {"title": "Manager", "bonus": "Admin 1"},
+      "3": {"title": null, "bonus": null},
+      "4": {"title": "Senior Manager", "bonus": "Advocate 1"},
+      "5": {"title": null, "bonus": null},
+      "6": {"title": "Director", "bonus": "SOC +1"}
+    },
+    "worker": {
+      "0": {"title": null, "bonus": null},
+      "1": {"title": null, "bonus": null},
+      "2": {"title": "Technician", "bonus": "Profession 1"},
+      "3": {"title": null, "bonus": null},
+      "4": {"title": "Craftsman", "bonus": "Mechanic 1"},
+      "5": {"title": null, "bonus": null},
+      "6": {"title": "Master Technician", "bonus": "Engineer 1"}
+    },
+    "colonist": {
+      "0": {"title": null, "bonus": null},
+      "1": {"title": null, "bonus": null},
+      "2": {"title": "Settler", "bonus": "Survival 1"},
+      "3": {"title": null, "bonus": null},
+      "4": {"title": "Explorer", "bonus": "Navigation 1"},
+      "5": {"title": null, "bonus": null},
+      "6": {"title": null, "bonus": "Gun Combat 1"}
+    }
+  },
+  "mishaps": {
+    "1": "Severely injured (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+    "2": "You are harassed and your life ruined by a criminal gang. Gain the gang as an enemy.",
+    "3": "Hard times caused by a lack of interstellar trade costs you your job. Lose one SOC.",
+    "4": "Your business is investigated by the planetary authorities (or your colony suffers interference from interests offworld). Co-operate and the business or colony is shut down but you gain DM+2 to the qualification roll for your next career as a reward for your aid. Refuse and gain an Ally.",
+    "5": "A revolution, attack or other unusual event throws your life into chaos, forcing you to leave the planet. Roll streetwise 8+. If you succeed, increase any skill you have by one level.",
+    "6": "Injured. Roll on the Injury Table."
+  },
+  "events": {
+    "2": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+    "3": "Political upheaval strikes your homeworld and you are caught up in the revolution. Gain either Advocate 1, Persuade 1, Explosives 1 or Streetwise 1. Roll whichever skill you chose 8+. If you succeed you come out on the winning side and gain DM+2 to your next advancement roll. Fail and you suffer DM-2 on your next Survival roll.",
+    "4": "You spend time maintaining and using heavy vehicles, either as part of your job or as a hobby. Increase Mechanic, Drive, Electronics, Flyer or Engineer by one level.",
+    "5": "You business expands, your corporation grows or the colony thrives. Gain DM+1 to any one Benefit roll.",
+    "6": "You are given advanced training in a specialist field. Roll EDU 10+ to gain any one skill of your choice at level 1.",
+    "7": "Life Event. Roll on the Life Events Table.",
+    "8": "You learn something you should not have - a corporate secret, a political scandal - which you can profit from illegally. If you choose to do so, then you gain DM+1 to a benefit roll from this career and gain Streetwise 1, Deception 1 or a criminal Contact. If you refuse you gain nothing.",
+    "9": "You are rewarded for your diligence or cunning. Gain DM+2 to your next advancement roll.",
+    "10": "You gain experience in a technical field as a computer operator or surveyor. Increase Electronics or Engineer by one level.",
+    "11": "You befriend a superior in the corporation or colony. Gain an Ally. Either gain Diplomat 1 or DM+4 to your next advancement roll thanks to their aid.",
+    "12": "You rise to a position of power in your colony or corporation. You are automatically promoted."
+  },
+  "mustering_out": {
+    "1": {"cash": 2000, "benefit": "Ship Share"},
+    "2": {"cash": 5000, "benefit": "Ally"},
+    "3": {"cash": 10000, "benefit": "INT +1"},
+    "4": {"cash": 10000, "benefit": "Gun"},
+    "5": {"cash": 10000, "benefit": "EDU +1"},
+    "6": {"cash": 50000, "benefit": "Two Ship Shares"},
+    "7": {"cash": 100000, "benefit": "TAS Membership"}
+  },
+  "complete": true
+}

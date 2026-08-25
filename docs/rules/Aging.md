@@ -2,6 +2,17 @@ The effects of ageing begin when a Traveller reaches 34 years of age (at the end
 At the end of the fourth term, and at the end of every term thereafter, the Traveller must roll 2D on the Ageing Table. Use the Traveller's total number of terms as a negative DM on this table; the older you are, the heavier the effects of ageing will weigh upon you.
 The Traveller may choose which characteristics are affected by aging.
 
+| 2D | Effect of Ageing |
+|---|---|
+| -6 or lower | Reduce 3 physical characteristics by 2, and one mental characteristic by 1 |
+| -5 | Reduce 3 physical characteristics by 2 |
+| -4 | Reduce 2 physical characteristics by 2, and another physical characteristic by 1 |
+| -3 | Reduce 1 physical characteristic by 2, and another 2 physical characteristics by 1 |
+| -2 | Reduce 3 physical characteristics by 1 |
+| -1 | Reduce 2 physical characteristics by 1 |
+| 0 | Reduce 1 physical characteristics by 1 |
+| 1 or higher | No effect |
+
 ## Ageing Crisis
 If any characteristic is reduced to O, then the Traveller suffers an ageing crisis. The Traveller dies unless they pay 1D x Cr10000 for medical care, which will bring any characteristics back up to 1. The Traveller automatically fails any Qualification rolls from now on.
 

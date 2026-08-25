@@ -1,0 +1,998 @@
+{
+  "id": "marine",
+  "name": "Marine",
+  "description": "Members of the armed fighting forces carried aboard starships, marines deal with piracy and boarding actions in space, defend starports and bases belonging to the navy and supplement ground forces such as the army.",
+  "qualification": {
+    "characteristic": "END",
+    "target": 6,
+    "modifiers": [
+      {
+        "type": "previousCareers",
+        "dmPer": -1
+      },
+      {
+        "type": "age",
+        "threshold": 30,
+        "dm": -2
+      }
+    ]
+  },
+  "commission": {
+    "characteristic": "SOC",
+    "target": 8
+  },
+  "assignments": [
+    {
+      "id": "support",
+      "name": "Support",
+      "description": "You are a quartermaster, engineer or battlefield mechanic in the marines.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 5
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 7
+      }
+    },
+    {
+      "id": "star-marine",
+      "name": "Star Marine",
+      "description": "You are trained to fight boarding actions and capture enemy vessels.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 6
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 6
+      }
+    },
+    {
+      "id": "ground-assault",
+      "name": "Ground Assault",
+      "description": "You are kicked out of a spacecraft in high orbit and told to 'capture that planet'.",
+      "survivalCheck": {
+        "characteristic": "END",
+        "target": 7
+      },
+      "advancementCheck": {
+        "characteristic": "EDU",
+        "target": 5
+      }
+    }
+  ],
+  "skillTables": [
+    {
+      "id": "personal-development",
+      "name": "Personal Development",
+      "entries": {
+        "1": {
+          "type": "characteristic",
+          "characteristic": "STR",
+          "value": 1
+        },
+        "2": {
+          "type": "characteristic",
+          "characteristic": "DEX",
+          "value": 1
+        },
+        "3": {
+          "type": "characteristic",
+          "characteristic": "END",
+          "value": 1
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Gambler"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Unarmed"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Blade"
+        }
+      }
+    },
+    {
+      "id": "service-skills",
+      "name": "Service Skills",
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Athletics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Tactics"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Heavy Weapons"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Stealth"
+        }
+      }
+    },
+    {
+      "id": "advanced-education",
+      "name": "Advanced Education",
+      "restriction": {
+        "type": "minEdu",
+        "value": 8
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Medic"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Survival"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Explosives"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Engineer"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Pilot"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Navigation"
+        }
+      }
+    },
+    {
+      "id": "officer",
+      "name": "Officer",
+      "restriction": {
+        "type": "officer"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Tactics"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Admin"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Advocate"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Diplomat"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Leadership"
+        }
+      }
+    },
+    {
+      "id": "support-skills",
+      "name": "Support",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "support"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Mechanic"
+        },
+        "3": {
+          "type": "choice",
+          "options": [
+            {
+              "type": "skill",
+              "skill": "Drive"
+            },
+            {
+              "type": "skill",
+              "skill": "Flyer"
+            }
+          ]
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Medic"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Heavy Weapons"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        }
+      }
+    },
+    {
+      "id": "star-marine-skills",
+      "name": "Star Marine",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "star-marine"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Athletics"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Gunner"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Blade"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Electronics"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        }
+      }
+    },
+    {
+      "id": "ground-assault-skills",
+      "name": "Ground Assault",
+      "restriction": {
+        "type": "assignment",
+        "assignmentId": "ground-assault"
+      },
+      "entries": {
+        "1": {
+          "type": "skill",
+          "skill": "Vacc Suit"
+        },
+        "2": {
+          "type": "skill",
+          "skill": "Heavy Weapons"
+        },
+        "3": {
+          "type": "skill",
+          "skill": "Recon"
+        },
+        "4": {
+          "type": "skill",
+          "skill": "Melee",
+          "specialty": "Blade"
+        },
+        "5": {
+          "type": "skill",
+          "skill": "Tactics",
+          "specialty": "Military"
+        },
+        "6": {
+          "type": "skill",
+          "skill": "Gun Combat"
+        }
+      }
+    }
+  ],
+  "ranks": {
+    "type": "split",
+    "tracks": {
+      "enlisted": {
+        "0": {
+          "title": "Marine",
+          "bonus": {
+            "type": "pickOne",
+            "prompt": "Choose your bonus:",
+            "options": [
+              {
+                "label": "Gun Combat 1",
+                "effect": {
+                  "type": "gainSkill",
+                  "skill": "Gun Combat",
+                  "level": 1
+                }
+              },
+              {
+                "label": "Melee (blade) 1",
+                "effect": {
+                  "type": "gainSpecialty",
+                  "skill": "Melee",
+                  "specialty": "Blade",
+                  "level": 1
+                }
+              }
+            ]
+          }
+        },
+        "1": {
+          "title": "Lance Corporal",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Gun Combat",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Corporal"
+        },
+        "3": {
+          "title": "Lance Sergeant",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Leadership",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": "Sergeant"
+        },
+        "5": {
+          "title": "Gunnery Sergeant",
+          "bonus": {
+            "type": "modCharacteristic",
+            "characteristic": "END",
+            "value": 1
+          }
+        },
+        "6": {
+          "title": "Sergeant Major"
+        }
+      },
+      "officer": {
+        "0": {
+          "title": ""
+        },
+        "1": {
+          "title": "Lieutenant",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Leadership",
+            "level": 1
+          }
+        },
+        "2": {
+          "title": "Captain"
+        },
+        "3": {
+          "title": "Force Commander",
+          "bonus": {
+            "type": "gainSkill",
+            "skill": "Tactics",
+            "level": 1
+          }
+        },
+        "4": {
+          "title": "Lieutenant Colonel"
+        },
+        "5": {
+          "title": "Colonel",
+          "bonus": {
+            "type": "ensureCharacteristic",
+            "characteristic": "SOC",
+            "minimum": 10,
+            "fallback": {
+              "type": "modCharacteristic",
+              "characteristic": "SOC",
+              "value": 1
+            }
+          }
+        },
+        "6": {
+          "title": "Brigadier"
+        }
+      }
+    }
+  },
+  "mishaps": {
+    "1": {
+      "description": "Severely injured in action (treat as a result of 2 on the Injury Table). Alternatively, roll twice on the Injury Table and take the lower result.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are severely injured. Choose how to resolve your injuries.",
+        "options": [
+          {
+            "label": "Take the severity of a result of 2 (Severely injured)",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "fixedResult": 2
+              }
+            ]
+          },
+          {
+            "label": "Roll twice on the Injury table and take the lower result",
+            "effects": [
+              {
+                "type": "rollOnTable",
+                "table": "injury",
+                "modifier": "takeLower"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "description": "A mission goes wrong; you and several others are captured and mistreated by the enemy. Due to your injuries, you are discharged early. Gain your jailer as an Enemy and reduce your STR and DEX by one because of your injuries",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "gainContact",
+            "contactType": "enemy"
+          },
+          {
+            "type": "modCharacteristic",
+            "characteristic": "STR",
+            "value": -1
+          },
+          {
+            "type": "modCharacteristic",
+            "characteristic": "DEX",
+            "value": -1
+          }
+        ]
+      }
+    },
+    "3": {
+      "description": "A mission goes wrong and you are stranded behind enemy lines. Increase Stealth or Survival by one level but, due to the mission's failure, you are ejected from the service.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "pickOne",
+            "prompt": "Choose which skill to increase by one level:",
+            "options": [
+              {
+                "label": "Stealth",
+                "effect": {
+                  "type": "increaseSkill",
+                  "skill": "Stealth"
+                }
+              },
+              {
+                "label": "Survival",
+                "effect": {
+                  "type": "increaseSkill",
+                  "skill": "Survival"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "4": {
+      "description": "You are ordered to take part in a black ops mission that goes against your conscience. If you refuse you are ejected from the service. If you accept you may stay with the marines but gain the lone survivor as an Enemy.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are ordered to take part in a black ops mission that goes against your conscience.",
+        "options": [
+          {
+            "label": "Refuse",
+            "effects": [
+              {
+                "type": "ejectFromCareer"
+              }
+            ]
+          },
+          {
+            "label": "Accept (stay with the marines, but gain an Enemy)",
+            "effects": [
+              {
+                "type": "gainContact",
+                "contactType": "enemy"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "5": {
+      "description": "You are tormented by a quarrel with an officer or fellow marine. Gain that character as a Rival as they drive you out of the service.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "gainContact",
+            "contactType": "rival"
+          }
+        ]
+      }
+    },
+    "6": {
+      "description": "Injured. Roll on the Injury Table.",
+      "effects": {
+        "type": "compound",
+        "effects": [
+          {
+            "type": "ejectFromCareer"
+          },
+          {
+            "type": "rollOnTable",
+            "table": "injury"
+          }
+        ]
+      }
+    }
+  },
+  "events": {
+    "2": {
+      "description": "Disaster! Roll on the Mishap Table, but you are not ejected from this career.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "mishap"
+      }
+    },
+    "3": {
+      "description": "Trapped behind enemy lines, you have to survive on your own. Gain one of Survival 1, Stealth 1, Deception 1 or Streetwise 1.",
+      "effects": {
+        "type": "pickSkill",
+        "options": [
+          "Survival",
+          "Stealth",
+          "Deception",
+          "Streetwise"
+        ],
+        "level": 1
+      }
+    },
+    "4": {
+      "description": "You are assigned to the security staff of a space station. Increase Vacc Suit or Athletics (dexterity) by one level.",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Choose which skill to increase by one level:",
+        "options": [
+          {
+            "label": "Vacc Suit",
+            "effect": {
+              "type": "increaseSkill",
+              "skill": "Vacc Suit"
+            }
+          },
+          {
+            "label": "Athletics (Dexterity)",
+            "effect": {
+              "type": "gainSpecialty",
+              "skill": "Athletics",
+              "specialty": "Dexterity",
+              "level": 1
+            }
+          }
+        ]
+      }
+    },
+    "5": {
+      "description": "You are given advanced training in a specialist field. Roll EDU 8+ to gain any one skill of you your at level 1.",
+      "effects": {
+        "type": "skillCheck",
+        "characteristic": "EDU",
+        "target": 8,
+        "success": {
+          "type": "pickSkill",
+          "options": [
+            "Athletics",
+            "Vacc Suit",
+            "Tactics",
+            "Heavy Weapons",
+            "Gun Combat",
+            "Stealth",
+            "Medic",
+            "Survival",
+            "Explosives",
+            "Engineer",
+            "Pilot",
+            "Navigation"
+          ],
+          "level": 1
+        },
+        "failure": {
+          "type": "none"
+        }
+      }
+    },
+    "6": {
+      "description": "You are assigned to an assault on an enemy fortress. Roll Melee or Gun Combat 8+ and gain Tactics (military) or Leadership if you succeed. In you fail, you are injured and lose 1 point from any physical characteristic.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You are assigned to an assault on an enemy fortress.",
+        "options": [
+          {
+            "label": "Roll Melee 8+",
+            "effects": [
+              {
+                "type": "skillCheck",
+                "skill": "Melee",
+                "target": 8,
+                "success": {
+                  "type": "pickOne",
+                  "prompt": "Choose your reward:",
+                  "options": [
+                    {
+                      "label": "Tactics (Military) 1",
+                      "effect": {
+                        "type": "gainSpecialty",
+                        "skill": "Tactics",
+                        "specialty": "Military",
+                        "level": 1
+                      }
+                    },
+                    {
+                      "label": "Leadership 1",
+                      "effect": {
+                        "type": "gainSkill",
+                        "skill": "Leadership",
+                        "level": 1
+                      }
+                    }
+                  ]
+                },
+                "failure": {
+                  "type": "pickOne",
+                  "prompt": "Choose which physical characteristic is reduced:",
+                  "options": [
+                    {
+                      "label": "STR -1",
+                      "effect": {
+                        "type": "modCharacteristic",
+                        "characteristic": "STR",
+                        "value": -1
+                      }
+                    },
+                    {
+                      "label": "DEX -1",
+                      "effect": {
+                        "type": "modCharacteristic",
+                        "characteristic": "DEX",
+                        "value": -1
+                      }
+                    },
+                    {
+                      "label": "END -1",
+                      "effect": {
+                        "type": "modCharacteristic",
+                        "characteristic": "END",
+                        "value": -1
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "label": "Roll Gun Combat 8+",
+            "effects": [
+              {
+                "type": "skillCheck",
+                "skill": "Gun Combat",
+                "target": 8,
+                "success": {
+                  "type": "pickOne",
+                  "prompt": "Choose your reward:",
+                  "options": [
+                    {
+                      "label": "Tactics (Military) 1",
+                      "effect": {
+                        "type": "gainSpecialty",
+                        "skill": "Tactics",
+                        "specialty": "Military",
+                        "level": 1
+                      }
+                    },
+                    {
+                      "label": "Leadership 1",
+                      "effect": {
+                        "type": "gainSkill",
+                        "skill": "Leadership",
+                        "level": 1
+                      }
+                    }
+                  ]
+                },
+                "failure": {
+                  "type": "pickOne",
+                  "prompt": "Choose which physical characteristic is reduced:",
+                  "options": [
+                    {
+                      "label": "STR -1",
+                      "effect": {
+                        "type": "modCharacteristic",
+                        "characteristic": "STR",
+                        "value": -1
+                      }
+                    },
+                    {
+                      "label": "DEX -1",
+                      "effect": {
+                        "type": "modCharacteristic",
+                        "characteristic": "DEX",
+                        "value": -1
+                      }
+                    },
+                    {
+                      "label": "END -1",
+                      "effect": {
+                        "type": "modCharacteristic",
+                        "characteristic": "END",
+                        "value": -1
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "7": {
+      "description": "Life Event. Roll on the Life Events Table.",
+      "effects": {
+        "type": "rollOnTable",
+        "table": "life-events"
+      }
+    },
+    "8": {
+      "description": "You on the front lines of a planetary assault and occupation. Gain one of Recon 1, Gun Combat 1, Leadership 1 or Electronics (comms) 1.",
+      "effects": {
+        "type": "pickOne",
+        "prompt": "Choose your reward:",
+        "options": [
+          {
+            "label": "Recon 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Recon",
+              "level": 1
+            }
+          },
+          {
+            "label": "Gun Combat 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Gun Combat",
+              "level": 1
+            }
+          },
+          {
+            "label": "Leadership 1",
+            "effect": {
+              "type": "gainSkill",
+              "skill": "Leadership",
+              "level": 1
+            }
+          },
+          {
+            "label": "Electronics (Comms) 1",
+            "effect": {
+              "type": "gainSpecialty",
+              "skill": "Electronics",
+              "specialty": "Comms",
+              "level": 1
+            }
+          }
+        ]
+      }
+    },
+    "9": {
+      "description": "A mission goes disastrously wrong due to your commander's error or incompetence but you survive. If you reeport you commanding officer for their failure then you gain DM+2 to your next advancement roll and gain the officer as an Enemy. If you say nothing and protect them, gain them as an Ally.",
+      "effects": {
+        "type": "choice",
+        "prompt": "A mission goes disastrously wrong due to your commanders error, but you survive.",
+        "options": [
+          {
+            "label": "Report your commanding officer",
+            "effects": [
+              {
+                "type": "gainAdvancementDM",
+                "value": 2
+              },
+              {
+                "type": "gainContact",
+                "contactType": "enemy"
+              }
+            ]
+          },
+          {
+            "label": "Say nothing and protect them",
+            "effects": [
+              {
+                "type": "gainContact",
+                "contactType": "ally"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "10": {
+      "description": "You are assigned to a black ops mission. Gain DM+2 to you next advancement roll.",
+      "effects": {
+        "type": "gainAdvancementDM",
+        "value": 2
+      }
+    },
+    "11": {
+      "description": "Your commanding officer takes an interest in your career. Either gain Tactics 1 or DM+4 to your next advancement roll thanks to their aid.",
+      "effects": {
+        "type": "choice",
+        "prompt": "Your commanding officer takes an interest in your career.",
+        "options": [
+          {
+            "label": "Gain Tactics 1",
+            "effects": [
+              {
+                "type": "gainSkill",
+                "skill": "Tactics",
+                "level": 1
+              }
+            ]
+          },
+          {
+            "label": "Gain DM+4 to next Advancement",
+            "effects": [
+              {
+                "type": "gainAdvancementDM",
+                "value": 4
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "12": {
+      "description": "You display heroism in battle. You may gain a promotion or a sommission automatically.",
+      "effects": {
+        "type": "choice",
+        "prompt": "You display heroism in battle! You may gain a promotion or a commission.",
+        "options": [
+          {
+            "label": "Take a commission (become officer rank 1)",
+            "effects": [
+              {
+                "type": "autoPromote"
+              }
+            ]
+          },
+          {
+            "label": "Take a promotion (advance in current track)",
+            "effects": [
+              {
+                "type": "autoPromote"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "musteringOut": {
+    "cash": {
+      "1": 2000,
+      "2": 5000,
+      "3": 5000,
+      "4": 10000,
+      "5": 20000,
+      "6": 30000,
+      "7": 40000
+    },
+    "benefits": {
+      "1": {
+        "description": "Armour",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Armour"
+        }
+      },
+      "2": {
+        "description": "INT +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "INT",
+          "value": 1
+        }
+      },
+      "3": {
+        "description": "EDU +1",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "EDU",
+          "value": 1
+        }
+      },
+      "4": {
+        "description": "Weapon",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "Weapon"
+        }
+      },
+      "5": {
+        "description": "TAS Membership",
+        "effects": {
+          "type": "gainEquipment",
+          "item": "TAS Membership"
+        }
+      },
+      "6": {
+        "description": "Armour or END +1",
+        "effects": {
+          "type": "pickOne",
+          "prompt": "Choose your benefit:",
+          "options": [
+            {
+              "label": "Armour",
+              "effect": {
+                "type": "gainEquipment",
+                "item": "Armour"
+              }
+            },
+            {
+              "label": "END +1",
+              "effect": {
+                "type": "modCharacteristic",
+                "characteristic": "END",
+                "value": 1
+              }
+            }
+          ]
+        }
+      },
+      "7": {
+        "description": "SOC +2",
+        "effects": {
+          "type": "modCharacteristic",
+          "characteristic": "SOC",
+          "value": 2
+        }
+      }
+    }
+  }
+}

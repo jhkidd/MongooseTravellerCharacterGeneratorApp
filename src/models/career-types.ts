@@ -94,4 +94,6 @@ export interface CareerData {
   events: Record<number, EventEntry>;
   musteringOut: MusteringOutTable;
   isSpecial?: boolean;
+  /** When true, Basic Training draws from the assignment's own skill table instead of Service Skills. */
+  basicTrainingUsesAssignmentSkills?: boolean;
 }

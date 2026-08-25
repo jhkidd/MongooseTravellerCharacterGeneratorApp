@@ -1,0 +1,89 @@
+{
+  "mishaps": {
+    "2": {
+      "description": "You are arrested and sent to prison. You must muster out, and any Benefit rolls from this term are forfeit.",
+      "tokens": []
+    },
+    "3": {
+      "description": "A job goes spectacularly wrong. Gain an Enemy and lose all Benefit rolls from this term.",
+      "tokens": [
+        "Enemy"
+      ]
+    },
+    "4": {
+      "description": "You betray \u2014 or are betrayed by \u2014 a partner in crime. Gain them as an Enemy.",
+      "tokens": [
+        "Enemy"
+      ]
+    },
+    "5": {
+      "description": "A rival criminal organisation targets you and you are forced to flee or go straight. Muster out.",
+      "tokens": []
+    }
+  },
+  "events": {
+    "3": {
+      "description": "A job goes wrong and you are pursued by the law. Roll Stealth 8+ or Deception 8+ to escape. On failure, roll on the Mishap Table (not ejected). Either way, gain an Enemy in law enforcement.",
+      "tokens": [
+        "Enemy",
+        "Roll Stealth 8+",
+        "Deception 8+"
+      ]
+    },
+    "4": {
+      "description": "You befriend a fence, crime boss, or fellow criminal. Gain a Contact or Ally in the underworld.",
+      "tokens": [
+        "Contact",
+        "Ally"
+      ]
+    },
+    "5": {
+      "description": "You pull off a lucrative heist. Gain DM+2 to any one Benefit roll.",
+      "tokens": [
+        "DM+2"
+      ]
+    },
+    "6": {
+      "description": "You spend time working the shadows of a particular world. Gain one of Streetwise 1, Stealth 1, Deception 1 or Persuade 1.",
+      "tokens": []
+    },
+    "8": {
+      "description": "You are given a delicate job by a major criminal syndicate. Roll Stealth 8+ or Deception 8+; on success, gain a Contact in the syndicate and DM+2 to your next Advancement. On failure, gain an Enemy and roll on the Mishap Table (not ejected).",
+      "tokens": [
+        "Contact",
+        "Enemy",
+        "Roll Stealth 8+",
+        "Deception 8+",
+        "DM+2"
+      ]
+    },
+    "9": {
+      "description": "You clash with law enforcement. Roll Streetwise 8+ or Gun Combat 8+ to escape; on failure, gain an Enemy in the Agents and a Rival on the streets.",
+      "tokens": [
+        "Enemy",
+        "Rival",
+        "Roll Streetwise 8+",
+        "Gun Combat 8+"
+      ]
+    },
+    "10": {
+      "description": "You earn a reputation in the underworld. Gain DM+2 to your next Advancement roll.",
+      "tokens": [
+        "DM+2"
+      ]
+    },
+    "11": {
+      "description": "You acquire specialist knowledge or equipment. Either gain one level of Gun Combat, Stealth, Electronics or Melee, or DM+4 to your next Advancement roll.",
+      "tokens": [
+        "DM+4"
+      ]
+    },
+    "12": {
+      "description": "You pull off a caper that becomes legendary. You are automatically promoted and gain DM+2 to any one Benefit roll.",
+      "tokens": [
+        "DM+2",
+        "automatically promoted"
+      ]
+    }
+  }
+}
